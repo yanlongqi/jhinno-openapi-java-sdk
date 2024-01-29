@@ -16,7 +16,7 @@
 ```xml
 <dependency>
     <groupId>com.jhinno</groupId>
-    <artifactId>jhinno-sdk-openapi</artifactId>
+    <artifactId>jhinno-openapi-java-sdk</artifactId>
     <version>6.0.0</version>
 </dependency>
 ```
