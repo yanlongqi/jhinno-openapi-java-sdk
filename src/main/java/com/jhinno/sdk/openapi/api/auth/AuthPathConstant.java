@@ -1,4 +1,4 @@
-package com.jhinno.sdk.openapi.constant;
+package com.jhinno.sdk.openapi.api.auth;
 
 /**
  * @author yanlongqi

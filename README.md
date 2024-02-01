@@ -1,12 +1,10 @@
 # Jhinno OpenAPI SDK for Java
 
----
-
 针对Java的景行API SDK使Java开发人员能够轻松使用景行API接口。您可以在几分钟内开始使用Maven或下载一个zip文件。
 
 ## 必要条件
 
-- Java 1.6 or later
+- Java 1.8 or later
 - Maven
 
 ## 安装
