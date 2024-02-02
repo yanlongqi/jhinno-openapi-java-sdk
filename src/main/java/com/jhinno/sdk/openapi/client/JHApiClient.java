@@ -1,7 +1,7 @@
 package com.jhinno.sdk.openapi.client;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jhinno.sdk.openapi.ClientErrorCode;
 import com.jhinno.sdk.openapi.ClientException;
 import org.apache.commons.lang3.StringUtils;
@@ -21,9 +21,9 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
-import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.KeyManagementException;
@@ -216,8 +216,9 @@ public class JHApiClient {
      */
     public <T> T request(HttpRequestBase httpRequest, Map<String, String> headers, TypeReference<T> type) {
         try {
-            String result = EntityUtils.toString(request(httpRequest, headers));
-            return type.parseObject(result);
+            InputStream content = request(httpRequest, headers).getContent();
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(content, type);
         } catch (Exception e) {
             throw new ClientException(e.getMessage());
         }
@@ -309,7 +310,9 @@ public class JHApiClient {
         HttpPost httpPost = new HttpPost(baseUrl + path);
         try {
             if (body != null) {
-                httpPost.setEntity(new StringEntity(JSONObject.toJSONString(body), "utf-8"));
+                ObjectMapper mapper = new ObjectMapper();
+                String bodyStr = mapper.writeValueAsString(body);
+                httpPost.setEntity(new StringEntity(bodyStr, "utf-8"));
             }
             return request(httpPost, headers, type);
         } catch (Exception e) {
@@ -336,7 +339,9 @@ public class JHApiClient {
         HttpPut httpPost = new HttpPut(baseUrl + path);
         try {
             if (body != null) {
-                httpPost.setEntity(new StringEntity(JSONObject.toJSONString(body), "utf-8"));
+                ObjectMapper mapper = new ObjectMapper();
+                String bodyStr = mapper.writeValueAsString(body);
+                httpPost.setEntity(new StringEntity(bodyStr, "utf-8"));
             }
             return request(httpPost, headers, type);
         } catch (Exception e) {

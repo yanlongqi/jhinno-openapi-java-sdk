@@ -6,19 +6,21 @@ import org.junit.Test;
 
 /**
  * 鉴权相关测试累
+ *
  * @author yanlongqi
  * @date 2024/2/1 18:06
  */
 public class AuthApiTest {
 
+    public static final JHApiClient client = JHApiClient.build("https://192.168.87.25/appform");
+
     /**
-     * 启动会话
+     * 测试获取token
      */
     @Test
-    public void testStartApp() {
-        JHApiClient client = JHApiClient.build("https://192.168.87.25/appform");
+    public void testGetToken() {
         JHAppApiExecution jhAppApiExecution = new JHAppApiExecution(client);
         String token = jhAppApiExecution.getToken("jhadmin");
-        System.out.println(token);
+        System.out.println("token:" + token);
     }
 }

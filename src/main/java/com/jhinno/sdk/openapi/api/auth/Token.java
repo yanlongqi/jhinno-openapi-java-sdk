@@ -1,11 +1,14 @@
 package com.jhinno.sdk.openapi.api.auth;
 
+import lombok.Data;
+
 /**
  * 请求令牌，用户请求其他接口
  *
  * @author yanlongqi
  * @date 2024/1/31 10:30
  */
+@Data
 public class Token {
 
     /**
@@ -13,21 +16,4 @@ public class Token {
      */
     private String token;
 
-    /**
-     * 获取令牌
-     *
-     * @return 令牌
-     */
-    public String getToken() {
-        return token;
-    }
-
-    /**
-     * 设置令牌
-     *
-     * @param token 令牌
-     */
-    public void setToken(String token) {
-        this.token = token;
-    }
 }

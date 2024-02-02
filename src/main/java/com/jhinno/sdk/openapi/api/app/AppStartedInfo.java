@@ -1,7 +1,6 @@
 package com.jhinno.sdk.openapi.api.app;
 
-import com.alibaba.fastjson2.JSON;
-import lombok.Getter;
+import lombok.Data;
 
 /**
  * 会话启动信息
@@ -9,7 +8,7 @@ import lombok.Getter;
  * @author yanlongqi
  * @date 2024/2/1 18:39
  */
-@Getter
+@Data
 public class AppStartedInfo {
 
     /**
@@ -30,9 +29,4 @@ public class AppStartedInfo {
      * 会话id
      */
     private String desktopId;
-
-//    @Override
-//    public String toString() {
-//        return JSON.toJSONString(this);
-//    }
 }

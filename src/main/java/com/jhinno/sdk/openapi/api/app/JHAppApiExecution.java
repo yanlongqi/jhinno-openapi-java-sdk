@@ -1,7 +1,7 @@
 package com.jhinno.sdk.openapi.api.app;
 
 import cn.hutool.core.collection.CollectionUtil;
-import com.alibaba.fastjson2.TypeReference;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.CommonConstant;
 import com.jhinno.sdk.openapi.ServiceException;
 import com.jhinno.sdk.openapi.api.JHApiExecution;
