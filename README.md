@@ -19,6 +19,34 @@
 </dependency>
 ```
 
+## 使用
+```java
+
+public class DemoUserSDK {
+
+    /**
+     * JHApiClient 是一个HTTP连接池，开发者需要复用
+     * 其中https://192.168.87.25/appform为景行API服务的地址
+     */
+    private static final JHApiClient client = JHApiClient.build("https://192.168.87.25/appform");
+
+
+    public static void main(String[] args) {
+
+        // 初始化一个调用调用景行会话服务接口执行器
+        JHAppApiExecution jhAppApiExecution = new JHAppApiExecution(client);
+
+        // 调用启动会话的接口
+        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("jhadmin", "linux_desktop", new AppStartRequest());
+
+        // 打印接口的调用结果
+        System.out.println(appStartedInfo);
+    }
+
+}
+
+```
+
 ## 构建
 一旦您检出代码，就可以使用Maven构建它。使用以下命令进行构建：
 ```shell

@@ -9,7 +9,7 @@ public class AuthPathConstant {
     /**
      * 获取用户token
      */
-    public static final String AUTH_TOKEN = "/ws/api/auth/token";
+    public static final String AUTH_TOKEN_PATH = "/ws/api/auth/token";
 
     /**
      * 注销token

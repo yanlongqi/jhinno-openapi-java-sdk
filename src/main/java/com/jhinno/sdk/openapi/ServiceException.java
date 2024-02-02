@@ -29,9 +29,19 @@ package com.jhinno.sdk.openapi;
 public class ServiceException extends RuntimeException {
 
     /**
+     * 请求错误码
+     */
+    private int errorCode;
+
+    /**
      * 错误信息
      */
     private String errorMessage;
+
+    /**
+     * 请求的路径
+     */
+    private String requestPath;
 
     /**
      * 创建一个默认的实例
@@ -44,21 +54,60 @@ public class ServiceException extends RuntimeException {
     /**
      * 创建一个包含错误消息的实例。
      *
+     * @param requestPath  请求路径
+     * @param errorCode    错误码
      * @param errorMessage 错误信息
      */
-    public ServiceException(String errorMessage) {
-        this(errorMessage, null);
+    public ServiceException(String requestPath, int errorCode, String errorMessage) {
+        this(requestPath, errorCode, errorMessage, null);
     }
 
 
     /**
      * 创建一个包含错误消息和异常的实例
      *
+     * @param requestPath  请求路径
+     * @param errorCode    错误码
      * @param errorMessage 错误信息
      * @param cause        一个异常
      */
-    public ServiceException(String errorMessage, Throwable cause) {
+    public ServiceException(String requestPath, int errorCode, String errorMessage, Throwable cause) {
         super(null, cause);
         this.errorMessage = errorMessage;
+        this.requestPath = requestPath;
+        this.errorCode = errorCode;
+    }
+
+
+    /**
+     * 获取请求码
+     *
+     * @return 请求码
+     */
+    public int getErrorCode() {
+        return errorCode;
+    }
+
+    /**
+     * 获取错信息
+     *
+     * @return 错误信息
+     */
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    /**
+     * 获取请求路径
+     *
+     * @return 请求路径
+     */
+    public String getRequestPath() {
+        return requestPath;
+    }
+
+    @Override
+    public String getMessage() {
+        return String.format("%s\n[请求路径]: %s\n[错误码]: %s", errorMessage, requestPath, errorCode);
     }
 }

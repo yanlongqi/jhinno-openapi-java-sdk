@@ -21,4 +21,15 @@ public class CommonConstant {
      * 默认的token有效时间（单位：分钟）
      */
     public static final int DEFAULT_TOKEN_EFFECTIVE_TIME = 30;
+
+
+    /**
+     * token 默认剩余时间
+     */
+    public static final int DEFAULT_TOKEN_RESIDUE_TIME = 5;
+
+    /**
+     * 获取token时AES加密的默认key
+     */
+    public static final String DEFAULT_AES_KEY = "jin5no@aqec8gtw6";
 }

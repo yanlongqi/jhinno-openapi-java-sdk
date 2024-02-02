@@ -20,17 +20,17 @@ public class DefaultHttpClientConfig {
 
 
     /**
-     * 默认socket连接超时的时间
+     * 默认socket连接超时的时间(单位：秒)
      */
     public static final int SOCKET_TIMEOUT = 5000;
 
     /**
-     * 默认连接超时的时间
+     * 默认连接超时的时间(单位：秒)
      */
     public static final int CONNECT_TIMEOUT = 5000;
 
     /**
-     * 默认请求超时的时间
+     * 默认请求超时的时间(单位：秒)
      */
     public static final int CONNECTION_REQUEST_TIMEOUT = 5000;
 }

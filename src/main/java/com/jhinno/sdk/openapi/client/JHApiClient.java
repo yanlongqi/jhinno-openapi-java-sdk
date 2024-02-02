@@ -42,12 +42,14 @@ public class JHApiClient {
 
     /**
      * 基础的请求URL地址
-     * 如：https://192.168.3.12/appform
+     * <p>
+     * 如：<a href="https://192.168.3.12/appform">https://192.168.3.12/appform</a>
+     * </p>
      */
-    private String baseUrl;
+    private final String baseUrl;
 
     /**
-     * 初始化一个JHApiClient的实例，值得注意的是该实例只能内部创建
+     * 初始化一个JHApiClient的实例，可使用自定义的客户端
      *
      * @param baseUrl             景行接口服务的基础地址
      * @param closeableHttpClient 可关闭的HTTP客户端
@@ -66,7 +68,7 @@ public class JHApiClient {
 
 
     /**
-     * 每次发送请求的配置，如果该配置未进行设置则走{@link DefaultHttpClientConfig｝中的默认配置
+     * 每次发送请求的配置，如果该配置未进行设置则走 {@link DefaultHttpClientConfig｝ 中的默认配置
      */
     private RequestConfig requestConfig;
 
@@ -85,7 +87,7 @@ public class JHApiClient {
 
     /**
      * <p>
-     * 通过{@link DefaultHttpClientConfig｝默认配置的最大连接数和服务每次能并行接收的请求数量构建一个JHApiClient实例
+     * 通过 {@link DefaultHttpClientConfig｝ 默认配置的最大连接数和服务每次能并行接收的请求数量构建一个JHApiClient实例
      * </p>
      *
      * @param baseUrl 景行接口服务的基础地址
@@ -96,7 +98,7 @@ public class JHApiClient {
     }
 
     /**
-     * 通过外部传入的{@link CloseableHttpClient｝构建一个请求客户端
+     * 通过外部传入的 {@link CloseableHttpClient｝ 构建一个请求客户端
      * <p>
      *
      * @param httpClient 请求连接池
@@ -151,9 +153,9 @@ public class JHApiClient {
      * </p>
      *
      * <p>
-     * {@link JHApiClient ｝ 默认只配置了 socket连接超时的时间(socketTimeout) 、连接超时的时间(connectTimeout)、
-     * 请求超时的时间(connectionRequestTimeout)这三项，其默认配置在{@link DefaultHttpClientConfig｝中。
-     * 如果你要自定义你自己的配置，则可以通过{@link HttpClients｝构建自己的RequestConfig来请求接口
+     * {@link JHApiClient｝ 默认只配置了 socket连接超时的时间(socketTimeout) 、连接超时的时间(connectTimeout)、
+     * 请求超时的时间(connectionRequestTimeout)这三项，其默认配置在{@link DefaultHttpClientConfig｝ 中。
+     * 如果你要自定义你自己的配置，则可以通过{@link HttpClients｝ 构建自己的RequestConfig来请求接口
      * </p>
      *
      * @param requestConfig HTTP请求的配置

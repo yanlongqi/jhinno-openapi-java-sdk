@@ -1,5 +1,7 @@
 package com.jhinno.sdk.openapi;
 
+import lombok.Getter;
+
 /**
  * <p>
  * 这个异常标识传入的SDK方法的参数错误
@@ -17,12 +19,8 @@ package com.jhinno.sdk.openapi;
  * @author yanlongqi
  * @date 2024/1/31 10:36
  */
+@Getter
 public class ArgsException extends RuntimeException {
-
-    /**
-     * 用户名
-     */
-    private String username;
 
     /**
      * 错误信息
@@ -69,15 +67,6 @@ public class ArgsException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return String.format("[ErrorMessage]:%s", errorMessage);
-    }
-
-    /**
-     * 获取一个错误信息
-     *
-     * @return 错误信息
-     */
-    public String getErrorMessage() {
         return errorMessage;
     }
 
