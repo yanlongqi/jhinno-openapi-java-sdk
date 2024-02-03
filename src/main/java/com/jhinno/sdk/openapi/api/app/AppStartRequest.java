@@ -1,6 +1,8 @@
 package com.jhinno.sdk.openapi.api.app;
 
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 启动会话的请求参数
@@ -21,7 +23,7 @@ public class AppStartRequest {
 
 
     /**
-     * 工作路径
+     * 工作路径（会话启动的路径）
      */
     private String cwd;
 

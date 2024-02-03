@@ -6,6 +6,7 @@
 
 - Java 1.8 or later
 - Maven
+- JH_Appform_6.0_Release
 
 ## 安装
 
