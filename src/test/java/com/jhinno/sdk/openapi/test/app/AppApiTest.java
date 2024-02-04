@@ -1,7 +1,7 @@
 package com.jhinno.sdk.openapi.test.app;
 
 import com.jhinno.sdk.openapi.api.app.*;
-import com.jhinno.sdk.openapi.client.JHApiClient;
+import com.jhinno.sdk.openapi.test.JHClientConfig;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -16,16 +16,11 @@ import java.util.List;
 
 public class AppApiTest {
 
-    /**
-     * 初始化JHApi客户端
-     */
-    public static final JHApiClient client = JHApiClient.build("https://192.168.0.22/appform");
-
 
     /**
      * 获得一个调用应用接口的执行器
      */
-    public static final JHAppApiExecution jhAppApiExecution = new JHAppApiExecution(client);
+    public static final JHAppApiExecution jhAppApiExecution = new JHAppApiExecution(JHClientConfig.client);
 
     /**
      * 测测试使用自定义的参数启动jhadmin的Linux桌面

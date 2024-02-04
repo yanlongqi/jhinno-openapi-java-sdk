@@ -17,7 +17,7 @@ public class SessionInfo {
     /**
      * 最后使用时间
      */
-    private String lastUseTime;
+    private Date lastUseTime;
     /**
      * 转移操作员权限
      */
@@ -67,7 +67,7 @@ public class SessionInfo {
     /**
      * 创建时间
      */
-    private String createDate;
+    private Date createDate;
     /**
      * 密级
      */

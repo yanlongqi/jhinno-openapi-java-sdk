@@ -32,6 +32,7 @@ import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
@@ -303,6 +304,10 @@ public class JHApiClient {
                 urlBuilder.append(entry.getKey()).append("=");
                 if (value instanceof String) {
                     urlBuilder.append(URLEncoder.encode((String) value, "utf-8"));
+                }
+                if (value instanceof Date) {
+                    SimpleDateFormat format = new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN);
+                    urlBuilder.append(URLEncoder.encode(format.format(value), "utf-8"));
                 } else {
                     urlBuilder.append(value);
                 }
