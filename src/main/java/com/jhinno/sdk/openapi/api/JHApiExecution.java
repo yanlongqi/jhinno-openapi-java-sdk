@@ -5,12 +5,15 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
 import com.jhinno.sdk.openapi.ServiceException;
+import com.jhinno.sdk.openapi.api.app.AppStartedInfo;
 import com.jhinno.sdk.openapi.api.auth.AuthPathConstant;
 import com.jhinno.sdk.openapi.api.auth.Token;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -103,12 +106,8 @@ public class JHApiExecution {
             String base64 = aes.encryptBase64(String.format("%s,%s", username, System.currentTimeMillis()));
             params.put("username", base64);
             String url = JHApiClient.getUrl(AuthPathConstant.AUTH_TOKEN_PATH, params);
-            ResponseResult<Token> result = jhApiClient.get(url, new TypeReference<ResponseResult<Token>>() {
+            Token token = get(url, new TypeReference<ResponseResult<Token>>() {
             });
-            if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
-                throw new ServiceException(AuthPathConstant.AUTH_TOKEN_PATH, result.getCode(), result.getMessage());
-            }
-            Token token = result.getData();
             tokenInfo = new TokenInfo();
             tokenInfo.setUserName(username);
             tokenInfo.setToken(token.getToken());
@@ -136,9 +135,78 @@ public class JHApiExecution {
      * @return 请求头
      */
     protected Map<String, String> getHeaders(String username) {
+        if (StringUtils.isBlank(username)) {
+            return new HashMap<>();
+        }
         Map<String, String> headers = new HashMap<>();
         headers.put("token", getToken(username));
         return headers;
+    }
+
+    /**
+     * 发起一个匿名的GET请求
+     *
+     * @param path 请求路径
+     * @param type 响应数据类型
+     * @param <T>  数据类型
+     * @return 响应数据
+     */
+    public <T> T get(String path, TypeReference<ResponseResult<T>> type) {
+        return get(path, null, type);
+    }
+
+    /**
+     * 发起携带token的GET请求
+     *
+     * @param username 用户名
+     * @param path     请求路径
+     * @param type     响应的数据类型
+     * @param <T>      数据类型
+     * @return 返回的数据
+     */
+    public <T> T get(String path, String username, TypeReference<ResponseResult<T>> type) {
+        ResponseResult<T> result = jhApiClient.get(path, getHeaders(username), type);
+        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
+            throw new ServiceException(AuthPathConstant.AUTH_TOKEN_PATH, result.getCode(), result.getMessage());
+        }
+        return result.getData();
+    }
+
+
+    /**
+     * 发起一个有返回值的POST请求
+     *
+     * @param path     请求路径
+     * @param username 用户名
+     * @param body     请求体
+     * @param type     强求提的数据类型
+     * @param <R>      返回的数据类型
+     * @param <B>      请求体的数据类型
+     * @return 请求后的数据
+     */
+    public <R, B> R post(String path, String username, B body, TypeReference<ResponseResult<R>> type) {
+        ResponseResult<R> result = jhApiClient.post(path, body, getHeaders(username), type);
+        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
+            throw new ServiceException(path, result.getCode(), result.getMessage());
+        }
+        return result.getData();
+    }
+
+
+    /**
+     * 发起一个没有返回值的POST请求
+     *
+     * @param path     请求路径
+     * @param username 用户名
+     * @param body     请求体
+     * @param <B>      请求体数据类型
+     */
+    public <B> void post(String path, String username, B body) {
+        ResponseResult<?> result = jhApiClient.post(path, body, getHeaders(username), new TypeReference<ResponseResult<?>>() {
+        });
+        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
+            throw new ServiceException(path, result.getCode(), result.getMessage());
+        }
     }
 
 }

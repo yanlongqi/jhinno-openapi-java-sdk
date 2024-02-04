@@ -2,13 +2,13 @@ package com.jhinno.sdk.openapi.api.app;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.jhinno.sdk.openapi.CommonConstant;
 import com.jhinno.sdk.openapi.ServiceException;
 import com.jhinno.sdk.openapi.api.JHApiExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,14 +37,10 @@ public class JHAppApiExecution extends JHApiExecution {
      */
     public AppStartedInfo desktopStart(String username, String appId, AppStartRequest appStartRequest) {
         String path = AppPathConstant.APPS_START_PATH.replace("{appId}", appId);
-        ResponseResult<List<AppStartedInfo>> result = jhApiClient.post(path, appStartRequest, getHeaders(username), new TypeReference<ResponseResult<List<AppStartedInfo>>>() {
+        List<AppStartedInfo> data = post(path, username, appStartRequest, new TypeReference<ResponseResult<List<AppStartedInfo>>>() {
         });
-        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
-            throw new ServiceException(path, result.getCode(), result.getMessage());
-        }
-        List<AppStartedInfo> data = result.getData();
         if (CollectionUtil.isEmpty(data)) {
-            throw new ServiceException(path, result.getCode(), "获取到的会话信息为空");
+            throw new ServiceException(path, 500, "获取到的会话信息为空");
         }
         return data.get(0);
     }
@@ -68,18 +64,35 @@ public class JHAppApiExecution extends JHApiExecution {
      *
      * @return 会话列表
      */
-    public List<Map<String, Object>> getDesktopList(String username) {
-        ResponseResult<List<Map<String, Object>>> result = jhApiClient.get(
-                AppPathConstant.APPS_SESSIONS_ALL_PATH,
-                getHeaders(username),
-                new TypeReference<ResponseResult<List<Map<String, Object>>>>() {
-                });
-        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
-            throw new ServiceException(AppPathConstant.APPS_SESSIONS_ALL_PATH, result.getCode(), result.getMessage());
-        }
-        return result.getData();
-
+    public List<SessionInfo> getDesktopList(String username) {
+        return get(AppPathConstant.APPS_SESSIONS_ALL_PATH, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
+        });
     }
 
+
+    /**
+     * 使用参数查询会话列表
+     *
+     * <p>
+     * 注：sessionIds 和 sessionName 不能同时为空
+     * </p>
+     *
+     * @param username    用户名
+     * @param sessionIds  会话id列表 （非必填）
+     * @param sessionName 会话名称 （非必填）
+     * @return 会话列表
+     */
+    public List<SessionInfo> getDesktopsByParams(String username, List<String> sessionIds, String sessionName) {
+        Map<String, Object> params = new HashMap<>(2);
+        if (CollectionUtil.isNotEmpty(sessionIds)) {
+            params.put("sessionIds", String.join(",", sessionIds));
+        }
+        if (StringUtils.isNotBlank(sessionName)) {
+            params.put("sessionName", sessionName);
+        }
+        String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_PATH, params);
+        return get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
+        });
+    }
 
 }

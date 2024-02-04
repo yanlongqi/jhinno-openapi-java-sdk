@@ -1,5 +1,6 @@
 package com.jhinno.sdk.openapi.client;
 
+import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jhinno.sdk.openapi.ClientErrorCode;
@@ -29,8 +30,10 @@ import java.net.URLEncoder;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 /**
  * 提供请求的工具
@@ -48,6 +51,12 @@ public class JHApiClient {
      */
     private final String baseUrl;
 
+
+    /**
+     * 对象转换器
+     */
+    private ObjectMapper mapper;
+
     /**
      * 初始化一个JHApiClient的实例，可使用自定义的客户端
      *
@@ -58,6 +67,9 @@ public class JHApiClient {
         this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
         this.closeableHttpClient = closeableHttpClient;
         this.requestConfig = RequestConfig.custom().setSocketTimeout(DefaultHttpClientConfig.SOCKET_TIMEOUT).setConnectTimeout(DefaultHttpClientConfig.CONNECT_TIMEOUT).setConnectionRequestTimeout(DefaultHttpClientConfig.CONNECTION_REQUEST_TIMEOUT).build();
+        mapper = new ObjectMapper();
+        mapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
+        mapper.setDateFormat(new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN));
     }
 
 
@@ -147,6 +159,16 @@ public class JHApiClient {
         }
     }
 
+
+    /**
+     * 设置自定义的jackson序列化配置
+     *
+     * @param mapper 序列化器
+     */
+    public void setMapper(ObjectMapper mapper) {
+        this.mapper = mapper;
+    }
+
     /**
      * <p>
      * 设置一个HTTP请求的配置
@@ -217,7 +239,6 @@ public class JHApiClient {
     public <T> T request(HttpRequestBase httpRequest, Map<String, String> headers, TypeReference<T> type) {
         try {
             InputStream content = request(httpRequest, headers).getContent();
-            ObjectMapper mapper = new ObjectMapper();
             return mapper.readValue(content, type);
         } catch (Exception e) {
             throw new ClientException(e.getMessage());
@@ -310,7 +331,6 @@ public class JHApiClient {
         HttpPost httpPost = new HttpPost(baseUrl + path);
         try {
             if (body != null) {
-                ObjectMapper mapper = new ObjectMapper();
                 String bodyStr = mapper.writeValueAsString(body);
                 httpPost.setEntity(new StringEntity(bodyStr, "utf-8"));
             }
@@ -339,7 +359,6 @@ public class JHApiClient {
         HttpPut httpPost = new HttpPut(baseUrl + path);
         try {
             if (body != null) {
-                ObjectMapper mapper = new ObjectMapper();
                 String bodyStr = mapper.writeValueAsString(body);
                 httpPost.setEntity(new StringEntity(bodyStr, "utf-8"));
             }

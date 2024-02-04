@@ -17,4 +17,9 @@ public class AppPathConstant {
      * 查询会列表
      */
     public static final String APPS_SESSIONS_ALL_PATH = "/ws/api/apps/sessions/all";
+
+    /**
+     * 使用参数查询会话列表
+     */
+    public static final String APPS_SESSIONS_PATH = "/ws/api/apps/sessions";
 }

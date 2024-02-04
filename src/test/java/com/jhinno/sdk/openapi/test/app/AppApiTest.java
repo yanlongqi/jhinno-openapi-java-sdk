@@ -3,11 +3,11 @@ package com.jhinno.sdk.openapi.test.app;
 import com.jhinno.sdk.openapi.api.app.AppStartRequest;
 import com.jhinno.sdk.openapi.api.app.AppStartedInfo;
 import com.jhinno.sdk.openapi.api.app.JHAppApiExecution;
+import com.jhinno.sdk.openapi.api.app.SessionInfo;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import org.junit.Test;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 会话启动相关单元测试
@@ -21,7 +21,7 @@ public class AppApiTest {
     /**
      * 初始化JHApi客户端
      */
-    public static final JHApiClient client = JHApiClient.build("https://192.168.87.25/appform");
+    public static final JHApiClient client = JHApiClient.build("https://192.168.0.22/appform");
 
 
     /**
@@ -55,7 +55,16 @@ public class AppApiTest {
      */
     @Test
     public void testGetSessionsList() {
-        List<Map<String, Object>> desktopList = jhAppApiExecution.getDesktopList("jhadmin");
+        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopList("jhadmin");
+        System.out.println(desktopList);
+    }
+
+    /**
+     * 测试根据参数查询会话列表
+     */
+    @Test
+    public void testGetDesktopsByParams() {
+        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsByParams("jhadmin", null, "Windows桌面");
         System.out.println(desktopList);
     }
 }
