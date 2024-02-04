@@ -32,4 +32,9 @@ public class CommonConstant {
      * 获取token时AES加密的默认key
      */
     public static final String DEFAULT_AES_KEY = "jin5no@aqec8gtw6";
+
+    /**
+     * 字符逗号
+     */
+    public static final String NORMAL_CHARACTER_COMMA = ",";
 }

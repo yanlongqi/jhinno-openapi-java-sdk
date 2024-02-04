@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
 import org.apache.http.config.Registry;
@@ -216,12 +217,13 @@ public class JHApiClient {
         }
         try {
             HttpResponse response = closeableHttpClient.execute(httpRequest);
+            int statusCode = response.getStatusLine().getStatusCode();
             if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
                 httpRequest.releaseConnection();
-                throw new ClientException("发送HTTP请求失败");
+                throw new ClientException("发送HTTP请求失败，请求码：" + statusCode, ClientErrorCode.REQUEST_ERROR);
             }
             return response.getEntity();
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new ClientException(e.getMessage());
         }
 
@@ -240,7 +242,7 @@ public class JHApiClient {
         try {
             InputStream content = request(httpRequest, headers).getContent();
             return mapper.readValue(content, type);
-        } catch (Exception e) {
+        } catch (IOException e) {
             throw new ClientException(e.getMessage());
         }
 
@@ -306,7 +308,7 @@ public class JHApiClient {
                 }
                 urlBuilder.append("&");
             } catch (UnsupportedEncodingException e) {
-                throw new ClientException("url参数编码失败", ClientErrorCode.UNKNOWN_HOST, e);
+                throw new ClientException("url参数编码失败", ClientErrorCode.UNKNOWN, e);
             }
         }
         urlBuilder.setLength(urlBuilder.length() - 1);

@@ -5,15 +5,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
 import com.jhinno.sdk.openapi.ServiceException;
-import com.jhinno.sdk.openapi.api.app.AppStartedInfo;
 import com.jhinno.sdk.openapi.api.auth.AuthPathConstant;
 import com.jhinno.sdk.openapi.api.auth.Token;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Type;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -167,7 +164,7 @@ public class JHApiExecution {
     public <T> T get(String path, String username, TypeReference<ResponseResult<T>> type) {
         ResponseResult<T> result = jhApiClient.get(path, getHeaders(username), type);
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
-            throw new ServiceException(AuthPathConstant.AUTH_TOKEN_PATH, result.getCode(), result.getMessage());
+            throw new ServiceException(path, result.getCode(), result.getMessage());
         }
         return result.getData();
     }
@@ -207,6 +204,64 @@ public class JHApiExecution {
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
             throw new ServiceException(path, result.getCode(), result.getMessage());
         }
+    }
+
+
+    /**
+     * 发起一个没有请求体，没有数据返回的POST请求
+     *
+     * @param path     请求路径
+     * @param username 用户名
+     */
+    public void post(String path, String username) {
+        post(path, username, null);
+    }
+
+
+    /**
+     * 发起一个有返回值的PUT请求
+     *
+     * @param path     请求路径
+     * @param username 用户名
+     * @param body     请求体数据
+     * @param type     响应数据类型
+     * @param <R>      返回数据
+     * @param <B>      请求体数据
+     * @return 返回数据
+     */
+    public <R, B> R put(String path, String username, B body, TypeReference<ResponseResult<R>> type) {
+        ResponseResult<R> result = jhApiClient.put(path, body, getHeaders(username), type);
+        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
+            throw new ServiceException(path, result.getCode(), result.getMessage());
+        }
+        return result.getData();
+    }
+
+    /**
+     * 发一个没有返回值的PUT请求
+     *
+     * @param path     请求路径
+     * @param username 用户名
+     * @param body     请求体数据
+     * @param <B>      请求体数据类型
+     */
+    public <B> void put(String path, String username, B body) {
+        ResponseResult<?> result = jhApiClient.put(path, body, getHeaders(username), new TypeReference<ResponseResult<?>>() {
+        });
+        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
+            throw new ServiceException(path, result.getCode(), result.getMessage());
+        }
+    }
+
+
+    /**
+     * 发起一个没有请求体，没有数据返回的PUT请求
+     *
+     * @param path     请求路径
+     * @param username 用户名
+     */
+    public void put(String path, String username) {
+        put(path, username, null);
     }
 
 }

@@ -29,4 +29,9 @@ public class AppStartedInfo {
      * 会话id
      */
     private String desktopId;
+
+    /**
+     * 作业id（有可能出现，但不是太明白）
+     */
+    private String jobId;
 }

@@ -22,10 +22,6 @@ package com.jhinno.sdk.openapi;
  */
 public class ClientException extends RuntimeException {
 
-    /**
-     * 请求id
-     */
-    private String requestId;
 
     /**
      * 错误编号
@@ -51,7 +47,7 @@ public class ClientException extends RuntimeException {
      * @param errorMessage 错误信息
      */
     public ClientException(String errorMessage) {
-        this(errorMessage, null);
+        this(errorMessage, ClientErrorCode.UNKNOWN);
     }
 
     /**
@@ -73,7 +69,6 @@ public class ClientException extends RuntimeException {
         super(null, cause);
         this.errorMessage = errorMessage;
         this.errorCode = ClientErrorCode.UNKNOWN;
-        this.requestId = ClientErrorCode.UNKNOWN;
     }
 
     /**
@@ -81,25 +76,11 @@ public class ClientException extends RuntimeException {
      *
      * @param errorMessage 错误信息
      * @param errorCode    错误编码
-     * @param requestId    请求id
      */
-    public ClientException(String errorMessage, String errorCode, String requestId) {
-        this(errorMessage, errorCode, requestId, null);
+    public ClientException(String errorMessage, String errorCode) {
+        this(errorMessage, errorCode, null);
     }
 
-    /**
-     * 创建包含错误消息、错误代码、请求Id和异常的实例。
-     *
-     * @param errorMessage 错误信息
-     * @param errorCode    错误编码
-     * @param requestId    请求id
-     * @param cause        一个异常
-     */
-    public ClientException(String errorMessage, String errorCode, String requestId, Throwable cause) {
-        this(errorMessage, cause);
-        this.errorCode = errorCode;
-        this.requestId = requestId;
-    }
 
     /**
      * 创建包含错误消息、错误代码、异常的实例。
@@ -111,15 +92,6 @@ public class ClientException extends RuntimeException {
     public ClientException(String errorMessage, String errorCode, Throwable cause) {
         this(errorMessage, cause);
         this.errorCode = errorCode;
-    }
-
-    /**
-     * 获取请求id。
-     *
-     * @return 请求Id
-     */
-    public String getRequestId() {
-        return requestId;
     }
 
     /**
@@ -142,11 +114,6 @@ public class ClientException extends RuntimeException {
 
     @Override
     public String getMessage() {
-        return String.format(
-                "%s\n[ErrorCode]: %s\n[RequestId]:%s",
-                getErrorMessage(),
-                errorCode != null ? errorCode : "",
-                requestId != null ? requestId : ""
-        );
+        return String.format("%s\n[ErrorCode]: %s", getErrorMessage(), errorCode != null ? errorCode : "");
     }
 }

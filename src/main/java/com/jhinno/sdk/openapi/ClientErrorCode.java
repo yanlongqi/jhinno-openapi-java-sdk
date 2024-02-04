@@ -1,5 +1,7 @@
 package com.jhinno.sdk.openapi;
 
+import org.omg.CosNaming.NamingContextPackage.NotFound;
+
 /**
  * 客户端错误相关常亮的定义
  *
@@ -51,4 +53,10 @@ public class ClientErrorCode {
      * SSL异常
      */
     public static final String SSL_EXCEPTION = "SslException";
+
+
+    /**
+     * 资源不存在
+     */
+    public static final String REQUEST_ERROR = "RequestError";
 }
