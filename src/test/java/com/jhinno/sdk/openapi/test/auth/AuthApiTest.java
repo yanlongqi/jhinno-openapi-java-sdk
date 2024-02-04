@@ -12,14 +12,19 @@ import org.junit.Test;
  */
 public class AuthApiTest {
 
+    JHAppApiExecution jhAppApiExecution = new JHAppApiExecution(JHClientConfig.client);
 
     /**
      * 测试获取token
      */
     @Test
     public void testGetToken() {
-        JHAppApiExecution jhAppApiExecution = new JHAppApiExecution(JHClientConfig.client);
-        String token = jhAppApiExecution.getToken("jhadmin");
+        String token = jhAppApiExecution.getToken("lqyan");
         System.out.println("token:" + token);
+    }
+
+    @Test
+    public void testLogout(){
+        jhAppApiExecution.logout("lqyan");
     }
 }

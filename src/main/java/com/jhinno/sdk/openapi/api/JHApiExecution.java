@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 定义一个请求的执行器，
@@ -49,7 +50,7 @@ public class JHApiExecution {
     /**
      * 用户令牌的缓存
      */
-    private static final Map<String, TokenInfo> TOKEN_INFO_MAP = new HashMap<>(10);
+    private static final Map<String, TokenInfo> TOKEN_INFO_MAP = new ConcurrentHashMap<>(20);
 
     /**
      * 设置在JHApiClient实例的实例
@@ -264,4 +265,47 @@ public class JHApiExecution {
         put(path, username, null);
     }
 
+
+    /**
+     * 发起一个DELETE请求，有数据返回
+     *
+     * @param path     请求路径
+     * @param username 用户名
+     * @param type     响应类型
+     * @param <R>      响应数据类型
+     * @return 响应数据
+     */
+    public <R> R delete(String path, String username, TypeReference<ResponseResult<R>> type) {
+        ResponseResult<R> result = jhApiClient.delete(path, getHeaders(username), type);
+        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
+            throw new ServiceException(path, result.getCode(), result.getMessage());
+        }
+        return result.getData();
+    }
+
+
+    /**
+     * 发起一个DELETE请求，没有数据返回
+     *
+     * @param path     请求路劲
+     * @param username 用户名
+     */
+    public void delete(String path, String username) {
+        ResponseResult<?> result = jhApiClient.delete(path, getHeaders(username), new TypeReference<ResponseResult<?>>() {
+        });
+        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
+            throw new ServiceException(path, result.getCode(), result.getMessage());
+        }
+    }
+
+
+    /**
+     * 退出用户的登录，释放许可
+     *
+     * @param username 用户名
+     */
+    public void logout(String username) {
+        delete(AuthPathConstant.AUTH_LOGOUT, username);
+        TOKEN_INFO_MAP.remove(username);
+    }
 }
