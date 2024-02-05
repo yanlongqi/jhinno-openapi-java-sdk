@@ -1,5 +1,6 @@
 package com.jhinno.sdk.openapi.api.file;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
@@ -116,7 +117,7 @@ public class JHFileApiExecution extends JHApiExecution {
      * @param isForce  是否强制创建（非必传，默认：false）
      * @return 新建后的文件路径
      */
-    public FilePathInfo mkdir(String username, String dirPath, Boolean isForce) {
+    public String mkdir(String username, String dirPath, Boolean isForce) {
         if (StringUtils.isBlank(dirPath)) {
             throw new ArgsException("dirPath不能为空！");
         }
@@ -125,8 +126,12 @@ public class JHFileApiExecution extends JHApiExecution {
         if (isForce != null) {
             body.put("isForce", isForce.toString());
         }
-        return post(FilePathConstant.FILE_MKDIR_PATH, username, body, new TypeReference<ResponseResult<FilePathInfo>>() {
+        Map<String, String> result = post(FilePathConstant.FILE_MKDIR_PATH, username, body, new TypeReference<ResponseResult<Map<String, String>>>() {
         });
+        if (CollectionUtil.isEmpty(result)) {
+            return null;
+        }
+        return result.get("dirPath");
     }
 
 
@@ -137,7 +142,7 @@ public class JHFileApiExecution extends JHApiExecution {
      * @param dirPath  文件路径
      * @return 新建后的文件路径
      */
-    public FilePathInfo mkdir(String username, String dirPath) {
+    public String mkdir(String username, String dirPath) {
         return mkdir(username, dirPath, null);
     }
 
@@ -149,14 +154,18 @@ public class JHFileApiExecution extends JHApiExecution {
      * @param filePath 文件路径
      * @return 新的文件路径
      */
-    public FilePathInfo mkFile(String username, String filePath) {
+    public String mkFile(String username, String filePath) {
         if (StringUtils.isBlank(filePath)) {
             throw new ArgsException("filePath不能为空！");
         }
         Map<String, Object> body = new HashMap<>(1);
         body.put("filePath", filePath);
-        return post(FilePathConstant.FILE_MKFILE_PATH, username, body, new TypeReference<ResponseResult<FilePathInfo>>() {
+        Map<String, String> result = post(FilePathConstant.FILE_MKFILE_PATH, username, body, new TypeReference<ResponseResult<Map<String, String>>>() {
         });
+        if (CollectionUtil.isEmpty(result)) {
+            return null;
+        }
+        return result.get("dirPath");
     }
 
     /**
@@ -217,15 +226,19 @@ public class JHFileApiExecution extends JHApiExecution {
      * @param filePath 文件路径
      * @return 文件地址信息
      */
-    public DownloadInfo getFileDownloadUrl(String username, String filePath) {
+    public String getFileDownloadUrl(String username, String filePath) {
         if (StringUtils.isBlank(filePath)) {
             throw new ArgsException("filePath不能为空！");
         }
         Map<String, Object> params = new HashMap<>(1);
         params.put("filePath", filePath);
         String path = JHApiClient.getUrl(FilePathConstant.FILE_DOWNLOAD_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<DownloadInfo>>() {
+        Map<String, String> downloadInfo = get(path, username, new TypeReference<ResponseResult<Map<String, String>>>() {
         });
+        if (CollectionUtil.isEmpty(downloadInfo)) {
+            return null;
+        }
+        return downloadInfo.get("url");
     }
 
     /**

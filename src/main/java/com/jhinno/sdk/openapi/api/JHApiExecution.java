@@ -6,7 +6,6 @@ import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
 import com.jhinno.sdk.openapi.ServiceException;
 import com.jhinno.sdk.openapi.api.auth.AuthPathConstant;
-import com.jhinno.sdk.openapi.api.auth.Token;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import org.apache.commons.lang3.StringUtils;
 
@@ -104,11 +103,11 @@ public class JHApiExecution {
             String base64 = aes.encryptBase64(String.format("%s,%s", username, System.currentTimeMillis()));
             params.put("username", base64);
             String url = JHApiClient.getUrl(AuthPathConstant.AUTH_TOKEN_PATH, params);
-            Token token = get(url, new TypeReference<ResponseResult<Token>>() {
+            Map<String, String> token = get(url, new TypeReference<ResponseResult<Map<String, String>>>() {
             });
             tokenInfo = new TokenInfo();
             tokenInfo.setUserName(username);
-            tokenInfo.setToken(token.getToken());
+            tokenInfo.setToken(token.get("token"));
             tokenInfo.setCurrentTimestamp(System.currentTimeMillis());
             TOKEN_INFO_MAP.put(username, tokenInfo);
         }

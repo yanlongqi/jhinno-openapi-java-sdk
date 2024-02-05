@@ -328,18 +328,18 @@ public class JHAppApiExecution extends JHApiExecution {
      *
      * @param username 应户名
      * @param appName  应用名
-     * @return 应用链接信息
+     * @return 应用链接地址
      */
-    public AppUrlInfo getAppUrl(String username, String appName) {
+    public String getAppUrl(String username, String appName) {
         if (StringUtils.isBlank(appName)) {
             throw new ArgsException("appName为必填字段");
         }
         String path = AppPathConstant.APPS_GET_URL_PATH.replace("{appName}", appName);
-        List<AppUrlInfo> apps = get(path, username, new TypeReference<ResponseResult<List<AppUrlInfo>>>() {
+        List<Map<String, String>> apps = get(path, username, new TypeReference<ResponseResult<List<Map<String, String>>>>() {
         });
         if (CollectionUtil.isEmpty(apps)) {
             throw new ServiceException(path, 500, "应用信息为空！");
         }
-        return apps.get(0);
+        return apps.get(0).get("url");
     }
 }
