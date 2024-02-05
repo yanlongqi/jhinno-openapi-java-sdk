@@ -64,8 +64,4 @@ public class FilePathConstant {
      */
     public static final String FILE_UNCOMPRESS_PATH = "/ws/api/files/uncompress";
 
-    /**
-     * 浏览文件
-     */
-    public static final String FILE_BROWSE_PATH = "/ws/api/browseFile";
 }

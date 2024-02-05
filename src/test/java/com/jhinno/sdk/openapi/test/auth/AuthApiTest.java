@@ -19,7 +19,7 @@ public class AuthApiTest {
      */
     @Test
     public void testGetToken() {
-        String token = jhAppApiExecution.getToken("lqyan");
+        String token = jhAppApiExecution.getToken("jhadmin");
         System.out.println("token:" + token);
     }
 

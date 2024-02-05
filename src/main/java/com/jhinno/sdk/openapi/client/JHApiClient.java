@@ -1,5 +1,6 @@
 package com.jhinno.sdk.openapi.client;
 
+import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,7 +10,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.*;
 import org.apache.http.config.Registry;
@@ -28,12 +28,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -204,18 +204,14 @@ public class JHApiClient {
             throw new ClientException("httpRequest不能为空");
         }
         httpRequest.setConfig(requestConfig);
-        if (headers == null) {
-            headers = new HashMap<>();
-        }
-        // 默认请求json数据
-        if (StringUtils.isBlank(headers.get("Content-type"))) {
-            headers.put("Content-type", "application/json");
-        }
 
         // 添加请求头
-        for (Map.Entry<String, String> entry : headers.entrySet()) {
-            httpRequest.setHeader(entry.getKey(), entry.getValue());
+        if (CollectionUtil.isNotEmpty(headers)) {
+            for (Map.Entry<String, String> entry : headers.entrySet()) {
+                httpRequest.setHeader(entry.getKey(), entry.getValue());
+            }
         }
+
         try {
             HttpResponse response = closeableHttpClient.execute(httpRequest);
             int statusCode = response.getStatusLine().getStatusCode();
@@ -263,7 +259,7 @@ public class JHApiClient {
         if (StringUtils.isBlank(path)) {
             throw new RuntimeException("url不能为空");
         }
-        HttpGet httpGet = new HttpGet(baseUrl + path);
+        HttpGet httpGet = new HttpGet(getUrl(path));
         return request(httpGet, headers, type);
     }
 
@@ -303,9 +299,8 @@ public class JHApiClient {
                 }
                 urlBuilder.append(entry.getKey()).append("=");
                 if (value instanceof String) {
-                    urlBuilder.append(URLEncoder.encode((String) value, "utf-8"));
-                }
-                if (value instanceof Date) {
+                    urlBuilder.append(URLEncoder.encode((String) value, StandardCharsets.UTF_8.name()));
+                } else if (value instanceof Date) {
                     SimpleDateFormat format = new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN);
                     urlBuilder.append(URLEncoder.encode(format.format(value), "utf-8"));
                 } else {
@@ -318,6 +313,17 @@ public class JHApiClient {
         }
         urlBuilder.setLength(urlBuilder.length() - 1);
         return urlBuilder.toString();
+    }
+
+
+    /**
+     * 获取完整的请求路径
+     *
+     * @param path 文件路径
+     * @return 请求URL
+     */
+    public String getUrl(String path) {
+        return baseUrl + path;
     }
 
     /**
@@ -335,7 +341,7 @@ public class JHApiClient {
         if (StringUtils.isBlank(path)) {
             throw new RuntimeException("path不能为空");
         }
-        HttpPost httpPost = new HttpPost(baseUrl + path);
+        HttpPost httpPost = new HttpPost(getUrl(path));
         try {
             if (body != null) {
                 String bodyStr = mapper.writeValueAsString(body);
@@ -363,7 +369,7 @@ public class JHApiClient {
         if (StringUtils.isBlank(path)) {
             throw new RuntimeException("url不能为空");
         }
-        HttpPut httpPost = new HttpPut(baseUrl + path);
+        HttpPut httpPost = new HttpPut(getUrl(path));
         try {
             if (body != null) {
                 String bodyStr = mapper.writeValueAsString(body);
@@ -416,7 +422,7 @@ public class JHApiClient {
         if (StringUtils.isBlank(path)) {
             throw new RuntimeException("url不能为空");
         }
-        HttpDelete httpDelete = new HttpDelete(baseUrl + path);
+        HttpDelete httpDelete = new HttpDelete(getUrl(path));
         return request(httpDelete, headers, type);
     }
 

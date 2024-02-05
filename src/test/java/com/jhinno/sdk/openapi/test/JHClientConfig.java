@@ -13,6 +13,6 @@ public class JHClientConfig {
     /**
      * 初始化JHApi客户端
      */
-    public static final JHApiClient client = JHApiClient.build("https://192.168.0.22/appform");
+    public static final JHApiClient client = JHApiClient.build("https://192.168.87.25/appform");
 
 }

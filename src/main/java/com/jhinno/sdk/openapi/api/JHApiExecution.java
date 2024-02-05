@@ -132,13 +132,27 @@ public class JHApiExecution {
      * @param username 用户名
      * @return 请求头
      */
-    protected Map<String, String> getHeaders(String username) {
-        if (StringUtils.isBlank(username)) {
-            return new HashMap<>();
-        }
+    protected Map<String, String> getHeaders(String username, boolean isContentType) {
         Map<String, String> headers = new HashMap<>();
+        // 默认请求json数据
+        if (isContentType) {
+            headers.put("Content-type", "application/json");
+        }
+        if (StringUtils.isBlank(username)) {
+            return headers;
+        }
         headers.put("token", getToken(username));
         return headers;
+    }
+
+    /**
+     * 构建一个带token的请求头
+     *
+     * @param username 用户名
+     * @return 请求头
+     */
+    protected Map<String, String> getHeaders(String username) {
+        return getHeaders(username, true);
     }
 
     /**
