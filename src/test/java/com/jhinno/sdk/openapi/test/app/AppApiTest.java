@@ -2,7 +2,6 @@ package com.jhinno.sdk.openapi.test.app;
 
 import cn.hutool.core.lang.ConsoleTable;
 import com.jhinno.sdk.openapi.api.app.*;
-import com.jhinno.sdk.openapi.api.file.FileInfo;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
 import org.junit.Test;
 

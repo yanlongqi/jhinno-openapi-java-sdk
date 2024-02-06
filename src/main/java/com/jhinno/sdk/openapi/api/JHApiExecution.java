@@ -205,6 +205,20 @@ public class JHApiExecution {
 
 
     /**
+     * 发起一个有返回值的POST请求
+     *
+     * @param path     请求路径
+     * @param username 用户名
+     * @param type     强求提的数据类型
+     * @param <R>      返回的数据类型
+     * @return 请求后的数据
+     */
+    public <R> R post(String path, String username, TypeReference<ResponseResult<R>> type) {
+        return post(path, username, null, type);
+    }
+
+
+    /**
      * 发起一个没有返回值的POST请求
      *
      * @param path     请求路径
@@ -228,7 +242,8 @@ public class JHApiExecution {
      * @param username 用户名
      */
     public void post(String path, String username) {
-        post(path, username, null);
+        post(path, username, new TypeReference<ResponseResult<?>>() {
+        });
     }
 
 
@@ -249,6 +264,20 @@ public class JHApiExecution {
             throw new ServiceException(path, result.getCode(), result.getMessage());
         }
         return result.getData();
+    }
+
+
+    /**
+     * 发起一个有返回值的PUT请求
+     *
+     * @param path     请求路径
+     * @param username 用户名
+     * @param type     强求提的数据类型
+     * @param <R>      返回的数据类型
+     * @return 请求后的数据
+     */
+    public <R> R put(String path, String username, TypeReference<ResponseResult<R>> type) {
+        return put(path, username, null, type);
     }
 
     /**
@@ -275,7 +304,8 @@ public class JHApiExecution {
      * @param username 用户名
      */
     public void put(String path, String username) {
-        put(path, username, null);
+        put(path, username, new TypeReference<ResponseResult<?>>() {
+        });
     }
 
 

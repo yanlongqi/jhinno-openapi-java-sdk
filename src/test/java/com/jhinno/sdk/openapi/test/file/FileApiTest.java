@@ -79,10 +79,7 @@ public class FileApiTest {
 
 
     /**
-     * 测试新建文件
-     * <p>
-     * 当前接口请求执行失败
-     * </p>
+     * 测试新建文件（接口执行失败）
      */
     @Test
     public void testMkFile() {
@@ -102,7 +99,7 @@ public class FileApiTest {
 
 
     /**
-     * 测试伤上传文件，不覆盖源文件
+     * 测试伤上传文件，（不覆盖源文件，如果isCover是true，上传后的文件有数字下标）
      */
     @Test
     public void testUploadFileNoCover() throws IOException {
@@ -116,7 +113,7 @@ public class FileApiTest {
      */
     @Test
     public void testGetFileDownloadUrl() {
-        System.out.println(execution.getFileDownloadUrl("jhadmin", "$HOME/temp/双色球.xls"));
+        System.out.println(execution.getFileDownloadUrl("jhadmin", "$HOME/aa2a.sh"));
     }
 
 
