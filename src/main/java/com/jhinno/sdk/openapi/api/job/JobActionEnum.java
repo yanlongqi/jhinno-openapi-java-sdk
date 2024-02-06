@@ -53,6 +53,9 @@ public enum JobActionEnum {
      * @throws ArgsException action的类型不存在的异常
      */
     public static JobActionEnum getJobAction(String action) {
+        if (StringUtils.isBlank(action)) {
+            throw new ArgsException("操作标识不能为空！");
+        }
         for (JobActionEnum value : values()) {
             if (StringUtils.equals(action, value.getAction())) {
                 return value;

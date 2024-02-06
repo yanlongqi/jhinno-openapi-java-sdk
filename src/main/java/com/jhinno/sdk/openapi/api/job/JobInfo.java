@@ -36,22 +36,8 @@ public class JobInfo {
     /**
      * 作业状态
      * <p>
-     * 可能的取值：<br/>
-     * <ol>
-     *      <li>RUN（运行）</li>
-     *      <li>PEND（等待）</li>
-     *      <li>PSUSP（等待中挂起）</li>
-     *      <li>USUSP（用户挂起）</li>
-     *      <li>SSUSP（系统挂起）</li>
-     *      <li>ZOMBI（僵尸）</li>
-     *      <li>DONE（完成）</li>
-     *      <li>EXIT（退出）</li>
-     *      <li>UNKNOWN#UNKWN（状态不明）</li>
-     * </ol>
-     *
-     * </p>
-     * <p>
-     * 数组作业（及arrayJob="true"）时status的类型是一个map<br/>
+     * 可能的取值见：{@link JobStatusEnum}<br/>
+     * 如果作业是数组作业（即arrayJob="true"）时status的类型是一个map类型<br/>
      * 如：{"done":1,"run":12}
      * </p>
      */

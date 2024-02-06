@@ -2,6 +2,7 @@ package com.jhinno.sdk.openapi.test.job;
 
 import com.jhinno.sdk.openapi.api.job.JHJobApiExecution;
 import com.jhinno.sdk.openapi.api.job.JobHistoryInfo;
+import com.jhinno.sdk.openapi.api.job.JobStatusEnum;
 import com.jhinno.sdk.openapi.api.job.PageJobInfo;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
 import org.junit.Test;
@@ -47,7 +48,7 @@ public class JobApiTest {
      */
     @Test
     public void testGetJobPage() {
-        PageJobInfo jhadmin = execution.getJobPage("jhadmin", 1, 5, null, null, null);
+        PageJobInfo jhadmin = execution.getJobPage("jhadmin", 1, 5, null, JobStatusEnum.DONE, null);
         System.out.println(jhadmin);
     }
 
@@ -73,7 +74,7 @@ public class JobApiTest {
      */
     @Test
     public void testGetJobsByStatus() {
-        System.out.println(execution.getJobsByStatus("jhadmin", "DONE", 1, 10));
+        System.out.println(execution.getJobsByStatus("jhadmin", JobStatusEnum.DONE, 1, 10));
     }
 
 

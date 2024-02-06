@@ -85,8 +85,9 @@ public class JHJobApiExecution extends JHApiExecution {
      * @param status    作业状态（非必填）
      * @param condition 自定义条件（非必填）
      * @return 作业列表
+     * @see JobStatusEnum
      */
-    public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, String status, Map<String, Object> condition) {
+    public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, JobStatusEnum status, Map<String, Object> condition) {
         Map<String, Object> params = new HashMap<>(5);
         if (page != null) {
             params.put("page", page);
@@ -97,8 +98,8 @@ public class JHJobApiExecution extends JHApiExecution {
         if (StringUtils.isNotBlank(name)) {
             params.put("jobName", name);
         }
-        if (StringUtils.isBlank(status)) {
-            params.put("status", status);
+        if (status != null) {
+            params.put("status", status.getStatus());
         }
         if (CollectionUtil.isNotEmpty(condition)) {
             params.put("condition", JSONUtil.toJsonStr(params));
@@ -108,6 +109,22 @@ public class JHJobApiExecution extends JHApiExecution {
         });
     }
 
+    /**
+     * 分页查询作业列表
+     * <p>作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件</p
+     *
+     * @param username  用户名
+     * @param page      页码（非必填，默认：1）
+     * @param pageSize  每页大小（非必填，默认：20）
+     * @param name      作业名（非必填）
+     * @param status    作业状态（非必填），取值见{@link JobStatusEnum#getJobStatus(String)}
+     * @param condition 自定义条件（非必填）
+     * @return 作业列表
+     * @see JobStatusEnum
+     */
+    public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, String status, Map<String, Object> condition) {
+        return getJobPage(username, page, pageSize, name, JobStatusEnum.getJobStatus(status), condition);
+    }
 
     /**
      * 查询作业详情
@@ -157,18 +174,7 @@ public class JHJobApiExecution extends JHApiExecution {
     /**
      * 分页检索作业状态
      * <p>
-     * status（作业状态）的取值如下：
-     * <ol>
-     *      <li>RUN（运行）</li>
-     *      <li>PEND（等待）</li>
-     *      <li>PSUSP（等待中挂起）</li>
-     *      <li>USUSP（用户挂起）</li>
-     *      <li>SSUSP（系统挂起）</li>
-     *      <li>ZOMBI（僵尸）</li>
-     *      <li>DONE（完成）</li>
-     *      <li>EXIT（退出）</li>
-     *      <li>UNKNOWN#UNKWN（状态不明）</li>
-     * </ol>
+     * 可通过{@link JobStatusEnum#getJobStatus(String)} 获得{@link JobStatusEnum}
      *
      * @param username 用户名
      * @param status   作业状态
@@ -176,8 +182,8 @@ public class JHJobApiExecution extends JHApiExecution {
      * @param pageSize 分页大小
      * @return 作业列表
      */
-    public List<JobInfo> getJobsByStatus(String username, String status, Integer page, Integer pageSize) {
-        if (StringUtils.isBlank(status)) {
+    public List<JobInfo> getJobsByStatus(String username, JobStatusEnum status, Integer page, Integer pageSize) {
+        if (status == null) {
             throw new ArgsException("status不能为空！");
         }
         Map<String, Object> params = new HashMap<>(3);
@@ -187,9 +193,24 @@ public class JHJobApiExecution extends JHApiExecution {
         if (pageSize != null) {
             params.put("pageSize", pageSize);
         }
-        String path = JHApiClient.getUrl(JobPathConstant.JOB_LIST_BY_STATUS_PATH.replace("{status}", status), params);
+        String path = JHApiClient.getUrl(JobPathConstant.JOB_LIST_BY_STATUS_PATH.replace("{status}", status.getStatus()), params);
         return get(path, username, new TypeReference<ResponseResult<List<JobInfo>>>() {
         });
+    }
+
+
+    /**
+     * 作业的状态（必填），
+     *
+     * @param username 用户名
+     * @param status   作业状态，取值见{@link JobStatusEnum#getStatus()}
+     * @param page     页码
+     * @param pageSize 分页大小
+     * @return 作业列表
+     * @see JobStatusEnum
+     */
+    public List<JobInfo> getJobsByStatus(String username, String status, Integer page, Integer pageSize) {
+        return getJobsByStatus(username, JobStatusEnum.getJobStatus(status), page, pageSize);
     }
 
 
@@ -283,7 +304,6 @@ public class JHJobApiExecution extends JHApiExecution {
 
 
     /**
-     * +
      * 查询制定作业的作业历史
      *
      * @param username 用户名
