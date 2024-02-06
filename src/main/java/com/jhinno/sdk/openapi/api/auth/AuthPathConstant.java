@@ -1,6 +1,8 @@
 package com.jhinno.sdk.openapi.api.auth;
 
 /**
+ * 鉴权相关接口路径
+ *
  * @author yanlongqi
  * @date 2024/1/29 10:32
  */

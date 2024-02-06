@@ -15,6 +15,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
+ * 会话启动相关接口执行器
+ *
  * @author yanlongqi
  * @date 2024/2/1 16:26
  */
