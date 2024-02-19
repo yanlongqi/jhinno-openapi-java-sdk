@@ -11,12 +11,10 @@
 - Java 1.8 or later
 - Maven
 
-## SDK与Appform的版本对应情况
+## 支持的Appform的版本
 
-| jhinno-openapi-java-sdk | Appform                    | 
-|-------------------------|----------------------------|
-| 1.0.0                   | JH_Appform_6.0_Release     |
-| 1.0.0                   | JH_Appform_6.0_SP1_Release |
+1. JH_Appform_6.0_Release
+2. JH_Appform_6.0_SP1_Release
 
 ## 安装
 
