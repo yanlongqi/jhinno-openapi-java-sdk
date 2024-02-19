@@ -9,32 +9,10 @@
 
 ## SDK与Appform的版本对应情况
 
-<table>
-    <thead>
-        <tr>
-            <td>jhinno-openapi-java-sdk</td>
-            <td>下载地址</td>
-            <td>Appform</td>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td rowspan="2">1.0.0</td>
-            <td rowspan="2">
-                <p>
-                    <a href="http://192.168.87.22:8000/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0.jar">jhinno-openapi-java-sdk-6.0.0.jar</a>
-                </p>
-                <p>
-                    <a href="http://192.168.87.22:8000/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0-SNAPSHOT.jar">jhinno-openapi-java-sdk-6.0.0-source.jar</a>
-                </p>
-            </td>
-            <td>JH_Appform_6.0_Release</td>
-        </tr>
-        <tr>
-            <td>JH_Appform_6.0_SP1_Release</td>
-        </tr>
-    </tbody>
-</table>
+| jhinno-openapi-java-sdk | Appform                    | 
+|-------------------------|----------------------------|
+| 1.0.0                   | JH_Appform_6.0_Release     |
+| 1.0.0                   | JH_Appform_6.0_SP1_Release |
 
 ## 安装
 
@@ -59,7 +37,10 @@ mvn install:install-file -Dfile=<path-to-file-jar>/jhinno-openapi-java-sdk-1.0.0
 mvn install:install-file -Dfile=<path-to-file-source-jar>/jhinno-openapi-java-sdk-1.0.0-source.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
 # 例如
 mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
+mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0-source.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
 ```
+
+> 注: 其中 jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看SDK代码的注释。
 
 然后在`pom.xml`添加
 
