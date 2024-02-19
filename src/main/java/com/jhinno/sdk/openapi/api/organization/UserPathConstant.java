@@ -21,9 +21,8 @@ public class UserPathConstant {
 
 
     /**
-     * 充值用户密码
+     * 用户密码操作
      */
     public static final String USERS_RESET_PASSWORD_PATH = "/ws/api/users/{username}/password/password_reset";
-
 
 }
