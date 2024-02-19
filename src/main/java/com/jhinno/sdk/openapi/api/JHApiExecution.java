@@ -1,6 +1,7 @@
 package com.jhinno.sdk.openapi.api;
 
 import cn.hutool.crypto.symmetric.AES;
+import cn.hutool.http.ContentType;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
@@ -143,14 +144,15 @@ public class JHApiExecution {
     /**
      * 构建一个带token的请求头
      *
-     * @param username 用户名
+     * @param username      用户名
+     * @param isContentType 是否携带默认的Content-type，默认为{@link ContentType#JSON}
      * @return 请求头
      */
     protected Map<String, String> getHeaders(String username, boolean isContentType) {
         Map<String, String> headers = new HashMap<>();
         // 默认请求json数据
         if (isContentType) {
-            headers.put("Content-type", "application/json");
+            headers.put("Content-type", ContentType.JSON.getValue());
         }
         if (StringUtils.isBlank(username)) {
             return headers;

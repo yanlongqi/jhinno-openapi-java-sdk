@@ -17,14 +17,14 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.release.version>6.0.0-SNAPSHOT</project.release.version>
+        <project.release.version>1.0.0-SNAPSHOT</project.release.version>
     </properties>
 
     <profiles>
         <profile>
             <id>product</id>
             <properties>
-                <project.release.version>6.0.0</project.release.version>
+                <project.release.version>1.0.0</project.release.version>
             </properties>
         </profile>
     </profiles>
@@ -120,10 +120,21 @@
             </plugin>
 
             <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.18.0.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <sourceDirectory>src/main/java</sourceDirectory>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.10.4</version>
                 <configuration>
+                    <sourcepath>target/generated-sources/delombok</sourcepath>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <docencoding>${project.build.sourceEncoding}</docencoding>
                     <charset>${project.build.sourceEncoding}</charset>

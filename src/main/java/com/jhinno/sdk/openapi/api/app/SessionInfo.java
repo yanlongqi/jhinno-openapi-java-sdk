@@ -1,6 +1,5 @@
 package com.jhinno.sdk.openapi.api.app;
 
-import com.sun.java.swing.plaf.windows.resources.windows;
 import lombok.Data;
 
 import java.util.Date;

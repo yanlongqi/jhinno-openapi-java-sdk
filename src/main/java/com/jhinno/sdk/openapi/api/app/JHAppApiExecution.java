@@ -66,6 +66,7 @@ public class JHAppApiExecution extends JHApiExecution {
      * 注：开启密集后，仅能查看自己的会话和比自己密级低的会话
      * </p>
      *
+     * @param username 用户名
      * @return 会话列表
      */
     public List<SessionInfo> getDesktopList(String username) {
@@ -223,6 +224,7 @@ public class JHAppApiExecution extends JHApiExecution {
     /**
      * 连接会话
      *
+     * @param username  用户名
      * @param sessionId 会话拆
      * @return JHClient协议链接信息
      */

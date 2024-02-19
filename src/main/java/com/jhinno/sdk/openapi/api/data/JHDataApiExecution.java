@@ -35,6 +35,7 @@ public class JHDataApiExecution extends JHApiExecution {
     /**
      * 根据用户scope查询数据目录列表
      *
+     * @param username 用户名
      * @return 用户数据目录列表
      */
     public List<SpoolerDataInfo> getSpoolersData(String username) {
