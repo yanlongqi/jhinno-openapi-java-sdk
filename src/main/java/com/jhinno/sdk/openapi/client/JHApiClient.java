@@ -100,10 +100,8 @@ public class JHApiClient {
     }
 
     /**
+     * 通过{@link DefaultHttpClientConfig｝默认配置的最大连接数和服务每次能并行接收的请求数量构建一个JHApiClient实例
      * <p>
-     * 通过 {@link DefaultHttpClientConfig｝ 默认配置的最大连接数和服务每次能并行接收的请求数量构建一个JHApiClient实例
-     * </p>
-     *
      * @param baseUrl 景行接口服务的基础地址
      * @return JHApiClient的实例
      */
@@ -112,9 +110,8 @@ public class JHApiClient {
     }
 
     /**
-     * 通过外部传入的 {@link CloseableHttpClient｝ 构建一个请求客户端
+     * 通过外部传入的{@link CloseableHttpClient｝构建一个请求客户端.
      * <p>
-     *
      * @param httpClient 请求连接池
      * @param baseUrl    景行接口服务的基础地址
      * @return JHApiClient的实例
@@ -179,7 +176,7 @@ public class JHApiClient {
      * <p>
      * {@link JHApiClient｝ 默认只配置了 socket连接超时的时间(socketTimeout) 、连接超时的时间(connectTimeout)、
      * 请求超时的时间(connectionRequestTimeout)这三项，其默认配置在{@link DefaultHttpClientConfig｝ 中。
-     * 如果你要自定义你自己的配置，则可以通过{@link HttpClients｝ 构建自己的RequestConfig来请求接口
+     * 如果你要自定义你自己的配置，则可以通过{@link HttpClients｝构建自己的RequestConfig来请求接口
      * </p>
      *
      * @param requestConfig HTTP请求的配置

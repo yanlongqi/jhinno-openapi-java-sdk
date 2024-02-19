@@ -64,7 +64,6 @@ public class JHAppApiExecution extends JHApiExecution {
      * 查询当前用户的会话列表（管理员则查看所有用户的会话）
      * <p>
      * 注：开启密集后，仅能查看自己的会话和比自己密级低的会话
-     * </p>
      *
      * @param username 用户名
      * @return 会话列表

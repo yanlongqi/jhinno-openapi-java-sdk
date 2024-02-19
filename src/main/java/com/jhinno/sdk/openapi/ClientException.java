@@ -3,21 +3,14 @@ package com.jhinno.sdk.openapi;
 import lombok.Getter;
 
 /**
+ * <p>这个异常是客户端访问景行API时抛出的异常。
+ * <p>{@link RuntimeException｝表示景行API客户端任何异常的类。
+ * 一般情况下，{@link RuntimeException｝要么发生在发送请求之前，要么发生在收到OSS服务器端的响应之后。
+ * 例如：如果在尝试发送请求时网络断开，则SDK将抛出{@link RuntimeException｝实例。
+ * <p>{@link ServiceException｝是从景行API响应的错误代码转换而来的。
+ * 例如，当请求的接口参数错误时，SDK会抛出一个｛@link ServiceException｝或其子类实例。
+ * 并带有特定的错误代码，调用者可以用特定的逻辑来处理.
  * <p>
- * 这个异常是客户端访问景行API时抛出的异常。
- * </p>
- *
- * <p>
- * {@link ClientException｝表示景行API客户端任何异常的类。
- * 一般情况下，{@link ClientException｝要么发生在发送请求之前，要么发生在收到OSS服务器端的响应之后。
- * 例如：如果在尝试发送请求时网络断开，则SDK将抛出{@link ClientException｝实例。
- * </p>
- *
- * <p>
- * {@link ServiceException｝是从景行API响应的错误代码转换而来的。
- * 例如，当请求的接口参数错误时，SDK会抛出一个｛@link ServiceException｝或其子类实例，
- * 并带有特定的错误代码，调用者可以用特定的逻辑来处理。
- * </p>
  *
  * @author yanlongqi
  * @date 2024/1/30 11:27

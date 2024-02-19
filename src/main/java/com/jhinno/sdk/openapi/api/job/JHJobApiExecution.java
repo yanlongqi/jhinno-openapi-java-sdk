@@ -76,7 +76,7 @@ public class JHJobApiExecution extends JHApiExecution {
 
     /**
      * 分页查询作业列表
-     * <p>作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件</p
+     * <p>作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件</p>
      *
      * @param username  用户名
      * @param page      页码（非必填，默认：1）
@@ -111,7 +111,7 @@ public class JHJobApiExecution extends JHApiExecution {
 
     /**
      * 分页查询作业列表
-     * <p>作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件</p
+     * <p>作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件</p>
      *
      * @param username  用户名
      * @param page      页码（非必填，默认：1）

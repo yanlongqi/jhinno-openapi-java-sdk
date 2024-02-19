@@ -39,18 +39,15 @@ public class AppStartRequest {
     /**
      * <p>
      * 请求获取到的JHClient协议链接的过期目标时间。（必填）
-     * </p>
      * <p>
      * 注意：
-     * </p>
+     * <p>
      * 1. 该时间戳是获取到的加密串的过期时间，需要传入一个未来的时间
      * （如：当前是2024-02-01 17:53:12，假设加密串5分钟之后过期，则该参数为：20240101175812）
-     * </p>
      * <p>
      * 2. 该时间错由景行的JHClient进行验证，并不是在服务端进行验证，
      * 所以为了防止客户端的时间和服务器的时间不一致而导会话不能启动，
      * 因此此字段尽量在浏览器的生成
-     * </p>
      */
     private String currentTimestamp;
 
@@ -65,11 +62,8 @@ public class AppStartRequest {
      * 启动参数
      * <p>
      * 例如启动一个demo.exe 该demo.exe需要传入用户名，在命令行的的操作为 demo.exe -u admin
-     * </p>
-     *
      * <p>
      * 此处传入的参数则为："-u admin"
-     * </p>
      */
     private String param;
 

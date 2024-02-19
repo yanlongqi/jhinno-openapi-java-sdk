@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * 用户相关接口执行器
- * <br/>
+ * <p>
  * 注：要调用以下接口，传入的username必须有user_manager的权限
  *
  * @author yanlongqi

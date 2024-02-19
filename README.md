@@ -56,13 +56,26 @@ mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0-source.jar 
 方法二：直接在`pom.xml`引用jar
 
 ```xml
-<!-- 其中${path-to-file}为jar的位置 -->
+<!-- 其中{path-to-file}为jar的位置 -->
 <dependency>
     <groupId>com.jhinno</groupId>
     <artifactId>jhinno-openapi-java-sdk</artifactId>
     <version>1.0.0</version>
     <scope>system</scope>
-    <systemPath>${path-to-file}</systemPath>
+    <systemPath>{path-to-file}</systemPath>
+</dependency>
+```
+
+例如
+
+```xml
+<!-- 其中{path-to-file}为jar的位置 -->
+<dependency>
+    <groupId>com.jhinno</groupId>
+    <artifactId>jhinno-openapi-java-sdk</artifactId>
+    <version>1.0.0</version>
+    <scope>system</scope>
+    <systemPath>D:/</systemPath>
 </dependency>
 ```
 

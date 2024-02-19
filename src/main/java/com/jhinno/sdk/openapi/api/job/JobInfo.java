@@ -36,10 +36,11 @@ public class JobInfo {
     /**
      * 作业状态
      * <p>
-     * 可能的取值见：{@link JobStatusEnum}<br/>
-     * 如果作业是数组作业（即arrayJob="true"）时status的类型是一个map类型<br/>
+     * 可能的取值见：{@link JobStatusEnum}
+     * <p>
+     * 如果作业是数组作业（即arrayJob="true"）时status的类型是一个map类型
+     * <p>
      * 如：{"done":1,"run":12}
-     * </p>
      */
     private Object status;
 
