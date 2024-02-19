@@ -75,6 +75,7 @@ public class DemoUserSDK {
     /**
      * JHApiClient 是一个HTTP连接池，开发者需要复用
      * 其中https://192.168.87.25/appform为景行API服务的地址
+     * 注意: JHApiClient为内置的http连接池，系统只需要初始化一份即可（单例调用）。
      */
     private static final JHApiClient client = JHApiClient.build("https://192.168.87.25/appform");
 
