@@ -5,19 +5,34 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
 import com.jhinno.sdk.openapi.ServiceException;
+import com.jhinno.sdk.openapi.api.app.JHAppApiExecution;
 import com.jhinno.sdk.openapi.api.auth.AuthPathConstant;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import org.apache.commons.lang3.StringUtils;
+import com.jhinno.sdk.openapi.api.app.AppPathConstant;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 定义一个请求的执行器，
+ * 定义一个请求的执行器，该执行器是一个可以执行任何景行API接口（包含定制新增的接口，特殊接口除外，如有需求，可自行修改源码）
+ * <p>
+ * 注：接口都需要传入username来获取接口调用的token，匿名调用的接口可将username传为null
+ * </p>
+ *
+ * <p>
+ * 对于定制接口，可参考以下步骤封装调用方法
+ * </p>
+ * <ol>
+ *     <li>定义一个const类同来存放接口的路径，方便后期的维护，如：{@link AppPathConstant}</li>
+ *     <li>继承{@link JHApiExecution}，如：{@link JHAppApiExecution}</li>
+ *     <li>参考{@link JHAppApiExecution}中封装的方法，调用{@link JHApiExecution}中的get、post、put、delete等对新的接口封装</li>
+ * </ol>
  *
  * @author yanlongqi
  * @date 2024/1/30 19:39
+ * @see JHAppApiExecution
  */
 public class JHApiExecution {
 
