@@ -1,5 +1,7 @@
 package com.jhinno.sdk.openapi;
 
+import lombok.Getter;
+
 /**
  * <p>
  * 这个异常是客户端访问景行API时抛出的异常。
@@ -20,6 +22,7 @@ package com.jhinno.sdk.openapi;
  * @author yanlongqi
  * @date 2024/1/30 11:27
  */
+@Getter
 public class ClientException extends RuntimeException {
 
 
@@ -92,24 +95,6 @@ public class ClientException extends RuntimeException {
     public ClientException(String errorMessage, String errorCode, Throwable cause) {
         this(errorMessage, cause);
         this.errorCode = errorCode;
-    }
-
-    /**
-     * 获取错误代码。
-     *
-     * @return 错误代码
-     */
-    public String getErrorCode() {
-        return errorCode;
-    }
-
-    /**
-     * 获取错误消息。
-     *
-     * @return 字符串中的错误消息
-     */
-    public String getErrorMessage() {
-        return errorMessage;
     }
 
     @Override

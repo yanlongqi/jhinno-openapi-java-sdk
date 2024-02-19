@@ -1,12 +1,14 @@
 package com.jhinno.sdk.openapi;
 
+import lombok.Getter;
+
 /**
  * <p>
  * 这是表示任何预期或意外的景行API服务器端错误的基本异常类。
  * </p>
  *
  * <p>
- * {@link ServiceException｝是从景行API响应的错误代码转换而来的。
+ * {@link ServiceException｝ 是从景行API响应的错误代码转换而来的。
  * 例如，当请求的接口参数错误时，SDK会抛出一个｛@link ServiceException｝或其子类实例，
  * 并带有特定的错误代码，调用者可以用特定的逻辑来处理。
  * </p>
@@ -26,6 +28,7 @@ package com.jhinno.sdk.openapi;
  * @author yanlongqi
  * @date 2024/1/30 11:35
  */
+@Getter
 public class ServiceException extends RuntimeException {
 
     /**
@@ -78,33 +81,6 @@ public class ServiceException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-
-    /**
-     * 获取请求码
-     *
-     * @return 请求码
-     */
-    public int getErrorCode() {
-        return errorCode;
-    }
-
-    /**
-     * 获取错信息
-     *
-     * @return 错误信息
-     */
-    public String getErrorMessage() {
-        return errorMessage;
-    }
-
-    /**
-     * 获取请求路径
-     *
-     * @return 请求路径
-     */
-    public String getRequestPath() {
-        return requestPath;
-    }
 
     @Override
     public String getMessage() {
