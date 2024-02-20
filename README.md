@@ -2,7 +2,7 @@
 
 针对Java的景行API SDK使Java开发人员能够轻松使用景行API接口。您可以在几分钟内开始使用Maven或jar文件使用它。
 
-- [仓库地址；https://github.com/yanlongqi/jhinno-openapi-java-sdk](https://github.com/yanlongqi/jhinno-openapi-java-sdk)
+- [仓库地址：https://github.com/yanlongqi/jhinno-openapi-java-sdk](https://github.com/yanlongqi/jhinno-openapi-java-sdk)
 - [开发文档：https://jhinno-sdk-doc.yuchat.top/apidocs](https://jhinno-sdk-doc.yuchat.top/apidocs)
 - [最新jar包：jhinno-openapi-java-sdk-1.0.0.jar](https://jhinno-jenkins.yuchat.top/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0.jar)
 - [最新源码包：jhinno-openapi-java-sdk-1.0.0-sources.jar](https://jhinno-jenkins.yuchat.top/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0-sources.jar)
@@ -20,6 +20,32 @@
 ## 安装
 
 建议在您的项目中使用Jhinno OpenAPI SDK for Java的方法是从Maven中使用它。导入方法如下：
+
+添加仓库地址（改方案为备用方案，后续会上传至Maven中央仓库，目前不影响正常使用）
+
+```xml
+
+<repositories>
+    <repository>
+        <id>jhinno-nexus</id>
+        <name>jhinno-nexus</name>
+        <url>https://jhinno-nexus.yuchat.top/repository/maven-releases</url>
+    </repository>
+</repositories>
+```
+
+添加依赖
+
+```xml
+
+<dependency>
+    <groupId>com.jhinno</groupId>
+    <artifactId>jhinno-openapi-java-sdk</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+如果您没有网络，则可以使用以下方法：
 
 方法一：通过命令将jar包导入本地Maven仓库
 
