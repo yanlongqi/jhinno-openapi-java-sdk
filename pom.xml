@@ -95,9 +95,13 @@
 
     <distributionManagement>
         <repository>
-            <id>yuchat</id>
-            <url>http://192.168.3.101/repository/maven-jhinno/</url>
+            <id>jhinno-releases</id>
+            <url>http://192.168.87.22:8081/repository/maven-releases</url>
         </repository>
+        <snapshotRepository>
+            <id>jhinno-snapshots</id>
+            <url>http://192.168.87.22:8081/repository/maven-snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
 
     <build>
