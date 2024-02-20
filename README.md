@@ -19,18 +19,7 @@
 
 ## 安装
 
-建议在您的项目中使用Jhinno OpenAPI SDK for Java的方法是从Maven中使用它。导入如下：
-
-```xml
-
-<dependency>
-    <groupId>com.jhinno</groupId>
-    <artifactId>jhinno-openapi-java-sdk</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
-对于没有网络的用户，可以使用以下方法使用：
+建议在您的项目中使用Jhinno OpenAPI SDK for Java的方法是从Maven中使用它。导入方法如下：
 
 方法一：通过命令将jar包导入本地Maven仓库
 
