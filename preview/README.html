@@ -1,0 +1,210 @@
+<html>
+  <head>
+	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>i5ting_ztree_toc:</title>
+		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
+	  <style>
+		pre {
+		    counter-reset: line-numbering;
+		    border: solid 1px #d9d9d9;
+		    border-radius: 0;
+		    background: #fff;
+		    padding: 0;
+		    line-height: 23px;
+		    margin-bottom: 30px;
+		    white-space: pre;
+		    overflow-x: auto;
+		    word-break: inherit;
+		    word-wrap: inherit;
+		}
+
+		pre a::before {
+		  content: counter(line-numbering);
+		  counter-increment: line-numbering;
+		  padding-right: 1em; /* space after numbers */
+		  width: 25px;
+		  text-align: right;
+		  opacity: 0.7;
+		  display: inline-block;
+		  color: #aaa;
+		  background: #eee;
+		  margin-right: 16px;
+		  padding: 2px 10px;
+		  font-size: 13px;
+		  -webkit-touch-callout: none;
+		  -webkit-user-select: none;
+		  -khtml-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  user-select: none;
+		}
+
+		pre a:first-of-type::before {
+		  padding-top: 10px;
+		}
+
+		pre a:last-of-type::before {
+		  padding-bottom: 10px;
+		}
+
+		pre a:only-of-type::before {
+		  padding: 10px;
+		}
+
+		.highlight { background-color: #ffffcc } /* RIGHT */
+		</style>
+  </head>
+  <body>
+	  <div>
+				<div style='width:25%;'>
+						<ul id="tree" class="ztree" style='width:100%'>
+
+						</ul>
+				</div>
+        <div id='readme' style='width:70%;margin-left:20%;'>
+          	<article class='markdown-body'>
+            	<h1 id="jhinno-openapi-sdk-for-java">Jhinno OpenAPI SDK for Java</h1>
+<p>针对Java的景行API SDK使Java开发人员能够轻松使用景行API接口。您可以在几分钟内开始使用Maven或下载一个jar文件。</p>
+<ul>
+<li><a href="https://jhinno-sdk-doc.yuchat.top/apidocs">开发文档：https://jhinno-sdk-doc.yuchat.top/apidocs</a></li>
+<li><a href="https://jhinno-jenkins.yuchat.top/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0.jar">最新jar包：jhinno-openapi-java-sdk-1.0.0.jar</a></li>
+<li><a href="https://jhinno-jenkins.yuchat.top/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0-sources.jar">最新源码包：jhinno-openapi-java-sdk-1.0.0-sources.jar</a></li>
+</ul>
+<h2 id="-">必要条件</h2>
+<ul>
+<li>Java 1.8 or later</li>
+<li>Maven</li>
+</ul>
+<h2 id="-appform-">支持的Appform的版本</h2>
+<ol>
+<li>JH_Appform_6.0_Release</li>
+<li>JH_Appform_6.0_SP1_Release</li>
+</ol>
+<h2 id="-">安装</h2>
+<p>建议在您的项目中使用Jhinno OpenAPI SDK for Java的方法是从Maven中使用它。导入如下：</p>
+<pre><code class="lang-xml">
+&lt;dependency&gt;
+    &lt;groupId&gt;com.jhinno&lt;/groupId&gt;
+    &lt;artifactId&gt;jhinno-openapi-java-sdk&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>对于没有网络的用户，可以使用以下方法使用：</p>
+<p>方法一：通过命令将jar包导入本地Maven仓库</p>
+<pre><code class="lang-shell"># 其中&lt;path-to-file-jar&gt;为jar的路径，&lt;path-to-file-source-jar&gt;为源码路径
+mvn install:install-file -Dfile=&lt;path-to-file-jar&gt;/jhinno-openapi-java-sdk-1.0.0.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
+mvn install:install-file -Dfile=&lt;path-to-file-source-jar&gt;/jhinno-openapi-java-sdk-1.0.0-source.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
+# 例如
+mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
+mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0-source.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
+</code></pre>
+<blockquote>
+<p>注: 其中 jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看SDK代码的注释。</p>
+</blockquote>
+<p>然后在<code>pom.xml</code>添加</p>
+<pre><code class="lang-xml">
+&lt;dependency&gt;
+    &lt;groupId&gt;com.jhinno&lt;/groupId&gt;
+    &lt;artifactId&gt;jhinno-openapi-java-sdk&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>方法二：直接在<code>pom.xml</code>引用jar</p>
+<pre><code class="lang-xml">&lt;!-- 其中{path-to-file}为jar的位置 --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.jhinno&lt;/groupId&gt;
+    &lt;artifactId&gt;jhinno-openapi-java-sdk&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;scope&gt;system&lt;/scope&gt;
+    &lt;systemPath&gt;{path-to-file}&lt;/systemPath&gt;
+&lt;/dependency&gt;
+</code></pre>
+<p>例如</p>
+<pre><code class="lang-xml">&lt;!-- 其中{path-to-file}为jar的位置 --&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.jhinno&lt;/groupId&gt;
+    &lt;artifactId&gt;jhinno-openapi-java-sdk&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;scope&gt;system&lt;/scope&gt;
+    &lt;systemPath&gt;D:/jar/jhinno-openapi-java-sdk-1.0.0.jar&lt;/systemPath&gt;
+&lt;/dependency&gt;
+</code></pre>
+<h2 id="-">使用</h2>
+<p>在<code>com.jhinno.sdk.openapi.api</code>包下面对应<code>app</code>、<code>data</code>、<code>file</code>、<code>job</code>、<code>organization</code>这几个子包，分别代表景行<code>Appform</code>
+的应用、作业数据、文件、作业操作、组织等接口资源。开发者只需要使用接口的执行器（<code>JHxxxApiExecution</code>
+）即可使用资源，如：<code>JHAppApiExecution</code></p>
+<p>具体的使用步骤如下：</p>
+<ol>
+<li>创建一个<code>JHApiClient</code>客户端，此为HTTP连接池，为确保资源浪费，需保证全局唯一，每次创建执行器都使用个客户端。</li>
+<li>创建接口的执行器，即：<code>JHxxxApiExecution</code>，如：<code>JHAppApiExecution</code>。</li>
+<li>调用接口执行器的方法，使用景行接口资源，如下代码片段。</li>
+</ol>
+<pre><code class="lang-java">
+public class DemoUserSDK {
+
+    /**
+     * JHApiClient 是一个HTTP连接池，开发者需要复用
+     * 其中https://192.168.87.25/appform为景行API服务的地址
+     * 注意: JHApiClient为内置的http连接池，系统只需要初始化一份即可（单例调用）。
+     */
+    private static final JHApiClient client = JHApiClient.build(&quot;https://192.168.87.25/appform&quot;);
+
+
+    public static void main(String[] args) {
+
+        // 初始化一个调用调用景行会话服务接口执行器
+        JHAppApiExecution jhAppApiExecution = new JHAppApiExecution(client);
+
+        // 调用启动会话的接口
+        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart(&quot;jhadmin&quot;, &quot;linux_desktop&quot;, new AppStartRequest());
+
+        // 打印接口的调用结果
+        System.out.println(appStartedInfo);
+    }
+
+}
+
+</code></pre>
+<h2 id="-">构建</h2>
+<p>一旦您检出代码，就可以使用Maven构建它。使用以下命令进行构建：</p>
+<pre><code class="lang-shell">mvn clean install -DskipTests
+</code></pre>
+<h2 id="-">代码提交</h2>
+<ul>
+<li>代码必须格式化，使用IDEA自带的格式即可；</li>
+<li>请求路径必须放在一个单独的const类中统一维护，具体可参考现有代码提交；</li>
+<li>封装新的接口是需要继承<code>JHApiExecution</code>，调用父类的辅助方法辅助封装；</li>
+</ul>
+<h2 id="-">作者</h2>
+<ul>
+<li><a href="https://github.com/yanlongqi">yanlongqi</a></li>
+</ul>
+<h2 id="-">支持</h2>
+<ul>
+<li>电话（同微信）：18794888087</li>
+<li>邮箱：<a href="mailto:lqyan@jhinno.com">lqyan@jhinno.com</a></li>
+</ul>
+
+          	</article>
+        </div>
+		</div>
+  </body>
+</html>
+<script type="text/javascript" src="toc/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="toc/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="toc/js/ztree_toc.js"></script>
+<script type="text/javascript" src="toc_conf.js"></script>
+
+<SCRIPT type="text/javascript" >
+<!--
+$(document).ready(function(){
+    var css_conf = eval(markdown_panel_style);
+    $('#readme').css(css_conf)
+    
+    var conf = eval(jquery_ztree_toc_opts);
+		$('#tree').ztree_toc(conf);
+});
+//-->
+</SCRIPT>

@@ -5,11 +5,12 @@ import lombok.Getter;
 /**
  * 这个异常标识传入的SDK方法的参数错误
  * <p>
- * 通常情况下{@link ClientException｝开发者额外处理它，因为它通常出现在开发的时候，
+ * 通常情况下{@link ArgsException｝开发者额外处理它，因为它通常出现在开发的时候，
  * <p>
  * 例如： 调用重命名文件的接口，要求源文件路径和新的文件名是必填的参数，
- * 如果开发者在调用的过程中没填装个参数，则程序会抛出 {@link ClientException｝
+ * 如果开发者在调用的过程中没填装个参数，则程序会抛出 {@link ArgsException｝
  * <p>
+ *
  * @author yanlongqi
  * @date 2024/1/31 10:36
  */

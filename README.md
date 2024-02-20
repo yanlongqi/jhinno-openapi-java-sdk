@@ -1,7 +1,8 @@
 # Jhinno OpenAPI SDK for Java
 
-针对Java的景行API SDK使Java开发人员能够轻松使用景行API接口。您可以在几分钟内开始使用Maven或下载一个jar文件。
+针对Java的景行API SDK使Java开发人员能够轻松使用景行API接口。您可以在几分钟内开始使用Maven或jar文件使用它。
 
+- [仓库地址；https://github.com/yanlongqi/jhinno-openapi-java-sdk](https://github.com/yanlongqi/jhinno-openapi-java-sdk)
 - [开发文档：https://jhinno-sdk-doc.yuchat.top/apidocs](https://jhinno-sdk-doc.yuchat.top/apidocs)
 - [最新jar包：jhinno-openapi-java-sdk-1.0.0.jar](https://jhinno-jenkins.yuchat.top/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0.jar)
 - [最新源码包：jhinno-openapi-java-sdk-1.0.0-sources.jar](https://jhinno-jenkins.yuchat.top/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0-sources.jar)
@@ -126,10 +127,10 @@ public class DemoUserSDK {
 一旦您检出代码，就可以使用Maven构建它。使用以下命令进行构建：
 
 ```shell
-mvn clean install -DskipTests
+mvn clean install -DskipTests -P product
 ```
 
-## 代码提交
+## 代码贡献
 
 - 代码必须格式化，使用IDEA自带的格式即可；
 - 请求路径必须放在一个单独的const类中统一维护，具体可参考现有代码提交；
