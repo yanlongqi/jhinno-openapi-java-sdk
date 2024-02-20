@@ -77,11 +77,21 @@ mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0-source.jar 
     <artifactId>jhinno-openapi-java-sdk</artifactId>
     <version>1.0.0</version>
     <scope>system</scope>
-    <systemPath>D:/</systemPath>
+    <systemPath>D:/jar/jhinno-openapi-java-sdk-1.0.0.jar</systemPath>
 </dependency>
 ```
 
 ## 使用
+
+在`com.jhinno.sdk.openapi.api`包下面对应`app`、`data`、`file`、`job`、`organization`这几个子包，分别代表景行`Appform`
+的应用、作业数据、文件、作业操作、组织等接口资源。开发者只需要使用接口的执行器（`JHxxxApiExecution`
+）即可使用资源，如：`JHAppApiExecution`
+
+具体的使用步骤如下：
+
+1. 创建一个`JHApiClient`客户端，此为HTTP连接池，为确保资源浪费，需保证全局唯一，每次创建执行器都使用个客户端。
+2. 创建接口的执行器，即：`JHxxxApiExecution`，如：`JHAppApiExecution`。
+3. 调用接口执行器的方法，使用景行接口资源，如下代码片段。
 
 ```java
 
@@ -128,3 +138,8 @@ mvn clean install -DskipTests
 ## 作者
 
 - [yanlongqi](https://github.com/yanlongqi)
+
+## 支持
+
+- 电话（同微信）：18794888087
+- 邮箱：lqyan@jhinno.com
