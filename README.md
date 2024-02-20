@@ -52,10 +52,8 @@
 ```shell
 # 其中<path-to-file-jar>为jar的路径，<path-to-file-source-jar>为源码路径
 mvn install:install-file -Dfile=<path-to-file-jar>/jhinno-openapi-java-sdk-1.0.0.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
-mvn install:install-file -Dfile=<path-to-file-source-jar>/jhinno-openapi-java-sdk-1.0.0-source.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
 # 例如
 mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
-mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0-source.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
 ```
 
 > 注: 其中 jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看SDK代码的注释。
