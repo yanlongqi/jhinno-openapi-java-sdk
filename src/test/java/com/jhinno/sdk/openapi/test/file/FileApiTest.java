@@ -99,7 +99,7 @@ public class FileApiTest {
 
 
     /**
-     * 测试伤上传文件，（不覆盖源文件，如果isCover是true，上传后的文件有数字下标）
+     * 测试上传文件，（不覆盖源文件，如果isCover是true，上传后的文件有数字下标）
      */
     @Test
     public void testUploadFileNoCover() throws IOException {

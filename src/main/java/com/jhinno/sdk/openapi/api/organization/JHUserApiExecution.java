@@ -1,6 +1,7 @@
 package com.jhinno.sdk.openapi.api.organization;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.api.JHApiExecution;
 import com.jhinno.sdk.openapi.api.PageResult;
 import com.jhinno.sdk.openapi.api.ResponseResult;
@@ -71,6 +72,9 @@ public class JHUserApiExecution extends JHApiExecution {
      * @param userInfo 用户信息
      */
     public void updateUser(String username, AddUpdateUserInfo userInfo) {
+        if (StringUtils.isBlank(userInfo.getUserName())) {
+            throw new ArgsException("userInfo中userName的值不能为空");
+        }
         String path = UserPathConstant.USERS_USERNAME_PATH.replace("{username}", userInfo.getUserName());
         put(path, username, userInfo);
     }
@@ -80,9 +84,9 @@ public class JHUserApiExecution extends JHApiExecution {
      * 修改或重置用户密码
      *
      * <ul>
-     *     <li>当type值为{@link UpdateUserPasswordType#FORCE_UPDATE_PASSWORD_TYPE} 时会怎样</li>
-     *     <li>当type值为{@link UpdateUserPasswordType#RESET_UPDATE_PASSWORD_TYPE} 时会怎样</li>
-     *     <li>当type值为空时会怎样</li>
+     *     <li>当type值为{@link UpdateUserPasswordType#FORCE_UPDATE_PASSWORD_TYPE}重置密码后用户再次登录需要修改密码</li>
+     *     <li>当type值为{@link UpdateUserPasswordType#RESET_UPDATE_PASSWORD_TYPE}重置用户的密码</li>
+     *     <li>当type值为空时修改用户密码</li>
      * </ul>
      * 参数怎么传，还需进一步确认，此处需要增加三个重构，方便开发者调用
      *
@@ -93,6 +97,9 @@ public class JHUserApiExecution extends JHApiExecution {
      * @param type                   类型，（非必填，取值见{@link UpdateUserPasswordType}）
      */
     public void updateUserPassword(String username, String updatePasswordUsername, String oldPassword, String password, String type) {
+        if (StringUtils.isBlank(updatePasswordUsername)) {
+            throw new ArgsException("updatePasswordUsername不能为空");
+        }
         String path = UserPathConstant.USERS_RESET_PASSWORD_PATH.replace("{username}", updatePasswordUsername);
         Map<String, Object> params = new HashMap<>(4);
         if (StringUtils.isNotBlank(oldPassword)) {
@@ -148,6 +155,9 @@ public class JHUserApiExecution extends JHApiExecution {
      * @param deleteUsername 被删除的用户名
      */
     public void deleteUser(String username, String deleteUsername) {
+        if (StringUtils.isBlank(deleteUsername)) {
+            throw new ArgsException("deleteUsername不能为空");
+        }
         delete(UserPathConstant.USERS_USERNAME_PATH.replace("{username}", deleteUsername), username);
     }
 

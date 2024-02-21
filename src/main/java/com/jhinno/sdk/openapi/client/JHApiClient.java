@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.ClientErrorCode;
 import com.jhinno.sdk.openapi.ClientException;
 import org.apache.commons.lang3.StringUtils;
@@ -102,6 +103,7 @@ public class JHApiClient {
     /**
      * 通过{@link DefaultHttpClientConfig｝默认配置的最大连接数和服务每次能并行接收的请求数量构建一个JHApiClient实例
      * <p>
+     *
      * @param baseUrl 景行接口服务的基础地址
      * @return JHApiClient的实例
      */
@@ -112,6 +114,7 @@ public class JHApiClient {
     /**
      * 通过外部传入的{@link CloseableHttpClient｝构建一个请求客户端.
      * <p>
+     *
      * @param httpClient 请求连接池
      * @param baseUrl    景行接口服务的基础地址
      * @return JHApiClient的实例
@@ -254,7 +257,7 @@ public class JHApiClient {
      */
     public <T> T get(String path, Map<String, String> headers, TypeReference<T> type) {
         if (StringUtils.isBlank(path)) {
-            throw new RuntimeException("url不能为空");
+            throw new ArgsException("url不能为空");
         }
         HttpGet httpGet = new HttpGet(getUrl(path));
         return request(httpGet, headers, type);
@@ -336,7 +339,7 @@ public class JHApiClient {
      */
     public <T, K> T post(String path, K body, Map<String, String> headers, TypeReference<T> type) {
         if (StringUtils.isBlank(path)) {
-            throw new RuntimeException("path不能为空");
+            throw new ArgsException("path不能为空");
         }
         HttpPost httpPost = new HttpPost(getUrl(path));
         try {
@@ -346,7 +349,7 @@ public class JHApiClient {
             }
             return request(httpPost, headers, type);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new ClientException(e.getMessage());
         }
     }
 
@@ -364,7 +367,7 @@ public class JHApiClient {
      */
     public <T, K> T put(String path, K body, Map<String, String> headers, TypeReference<T> type) {
         if (StringUtils.isBlank(path)) {
-            throw new RuntimeException("url不能为空");
+            throw new ArgsException("url不能为空");
         }
         HttpPut httpPost = new HttpPut(getUrl(path));
         try {
@@ -374,7 +377,7 @@ public class JHApiClient {
             }
             return request(httpPost, headers, type);
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new ClientException(e.getMessage());
         }
     }
 
@@ -417,7 +420,7 @@ public class JHApiClient {
      */
     public <T> T delete(String path, Map<String, String> headers, TypeReference<T> type) {
         if (StringUtils.isBlank(path)) {
-            throw new RuntimeException("url不能为空");
+            throw new ArgsException("url不能为空");
         }
         HttpDelete httpDelete = new HttpDelete(getUrl(path));
         return request(httpDelete, headers, type);

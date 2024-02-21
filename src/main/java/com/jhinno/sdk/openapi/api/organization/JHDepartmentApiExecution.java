@@ -1,9 +1,11 @@
 package com.jhinno.sdk.openapi.api.organization;
 
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.api.JHApiExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -47,8 +49,7 @@ public class JHDepartmentApiExecution extends JHApiExecution {
      * @param departmentInfo 部门信息
      */
     public void addDepartment(String username, AddUpdateDepartment departmentInfo) {
-        String path = DepartmentPathConstant.DEPARTMENT_NAME_PATH.replace("{depName}", departmentInfo.getDepName());
-        post(path, username, departmentInfo);
+        post(DepartmentPathConstant.DEPARTMENT_PATH, username, departmentInfo);
     }
 
 
@@ -59,6 +60,9 @@ public class JHDepartmentApiExecution extends JHApiExecution {
      * @param departmentInfo 部门信息
      */
     public void updateDepartment(String username, AddUpdateDepartment departmentInfo) {
+        if (StringUtils.isBlank(departmentInfo.getDepName())) {
+            throw new ArgsException("departmentInfo中的depName不能为空！");
+        }
         String path = DepartmentPathConstant.DEPARTMENT_NAME_PATH.replace("{depName}", departmentInfo.getDepName());
         put(path, username, departmentInfo);
     }
@@ -71,6 +75,9 @@ public class JHDepartmentApiExecution extends JHApiExecution {
      * @param departmentName 部门名称
      */
     public void deleteDepartment(String username, String departmentName) {
+        if (StringUtils.isBlank(departmentName)) {
+            throw new ArgsException("departmentName不能为空！");
+        }
         String path = DepartmentPathConstant.DEPARTMENT_NAME_PATH.replace("{depName}", departmentName);
         delete(path, username);
     }
