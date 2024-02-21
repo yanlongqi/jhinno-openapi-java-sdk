@@ -1,6 +1,6 @@
 # Jhinno OpenAPI SDK for Java
 
-针对Java的景行API SDK使Java开发人员能够轻松使用景行API接口。您可以在几分钟内开始使用Maven或jar文件使用它。
+针对Java的景行API SDK使Java开发人员能够轻松使用景行API接口。您可以在几分钟内开始通过Maven或jar文件使用它。
 
 - [仓库地址：https://github.com/yanlongqi/jhinno-openapi-java-sdk](https://github.com/yanlongqi/jhinno-openapi-java-sdk)
 - [开发文档：https://jhinno-sdk-doc.yuchat.top/apidocs](https://jhinno-sdk-doc.yuchat.top/apidocs)
