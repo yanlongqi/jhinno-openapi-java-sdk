@@ -41,7 +41,7 @@ public class JHAppApiExecution extends JHApiExecution {
      * <p>
      * 开发阶段，主要有一下几种方式：
      * <ul>
-     *     <li>使用js的 `window.open({@link AppStartedInfo#getJhappUrl()})`</li>
+     *     <li>使用js的 `window.open("{@link AppStartedInfo#getJhappUrl()}")`</li>
      *     <li>使用HTML的a标签的href</li>
      *     <li>使用HTML的iframe标签的src</li>
      * </ul>
@@ -76,6 +76,8 @@ public class JHAppApiExecution extends JHApiExecution {
 
     /**
      * 使用默认参数启动应用
+     * <p>
+     * 该方法的使用说明说明详情见{@link JHAppApiExecution#desktopStart(String, String, AppStartRequest)}的注释
      *
      * @param username 用户名
      * @param appId    应用id
