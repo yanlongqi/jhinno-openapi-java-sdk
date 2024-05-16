@@ -33,6 +33,31 @@ public class JHAppApiExecution extends JHApiExecution {
 
     /**
      * 启动一个会话
+     * <p>
+     * 改方法返回一个重要的参数{@link AppStartedInfo#getJhappUrl()}（拉起景行客户端协议的URL）。
+     * <p>
+     * 测试：将该URL复制粘贴到浏览器的地址栏进行访问即可启动会话。
+     *
+     * <p>
+     * 开发阶段，主要有一下几种方式：
+     * <ul>
+     *     <li>使用js的 `window.open({@link AppStartedInfo#getJhappUrl()})`</li>
+     *     <li>使用HTML的a标签的href</li>
+     *     <li>使用HTML的iframe标签的src</li>
+     * </ul>
+     * 以下是使用的伪代码：
+     * <pre class="code">
+     *  // 使用a标签实例代码
+     *  var a = document.createElement("a");
+     *  a.href = "{@link AppStartedInfo#getJhappUrl()}";
+     *  a.click();
+     * </pre>
+     * <pre class="code">
+     *  // 使用iframe标签实例代码
+     *  var iframe = document.createElement("iframe");
+     *  iframe.style.display = "none";
+     *  iframe.src = "{@link AppStartedInfo#getJhappUrl()}";
+     * </pre>
      *
      * @param username        用户名
      * @param appId           应用拆
