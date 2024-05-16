@@ -69,7 +69,7 @@ mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0.jar -Dgroup
 </dependency>
 ```
 
-方法二：直接在`pom.xml`引用jar
+方法二：直接在`pom.xml`引用jar(改方法可能会出现一些莫名其妙的问题，所以不建议使用)
 
 ```xml
 <!-- 其中{path-to-file}为jar的位置 -->
@@ -135,12 +135,45 @@ public class DemoUserSDK {
 
 ```
 
+## 支持SDK的扩展
+
+如果是基于景行定制的接口，本SDK没有包含这些方法，因此您可以基于`JHApiExecution`快速进行扩展，具体的扩展步骤如下：
+
+- 新建需要扩展的执行器命名为`JHxxxApiExecution`，并继承`JHApiExecution`；
+- 编写基于接口调用的方法；
+
+父类提供了封装好的`get`、`post`、`put`、`delete`方法，可以直接使用，而不考虑token的问题
+
+```java
+/**
+ * 注意：一下代码为伪代码，需要根据实际的情况进行修改，其示例代码可参照SDK中JHApiExecution子类的实现
+ */
+public class JHAppApiExecution extends JHApiExecution {
+
+    /**
+     * 获取一个执行器的实例
+     *
+     * @param jhApiClient 请求的客户端
+     */
+    public JHAppApiExecution(JHApiClient jhApiClient) {
+        super(jhApiClient);
+    }
+
+    public XxxDTO getXXXX(String username, String demoParams) {
+
+        return get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
+        });
+    }
+}
+
+```
+
 ## 构建
 
 一旦您检出代码，就可以使用Maven构建它。使用以下命令进行构建：
 
 ```shell
-mvn clean install -DskipTests -P product
+mvn clean package -DskipTests -P product
 ```
 
 ## 代码贡献
