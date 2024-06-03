@@ -21,7 +21,9 @@
 
 建议在您的项目中使用Jhinno OpenAPI SDK for Java的方法是从Maven中使用它。导入方法如下：
 
-添加仓库地址（改方案为备用方案，后续会上传至Maven中央仓库，目前不影响正常使用）
+方法一：通过Maven仓库安装
+
+> 添加仓库地址（改方案为备用方案，后续会上传至Maven中央仓库，目前不影响正常使用）
 
 ```xml
 
@@ -45,18 +47,18 @@
 </dependency>
 ```
 
-如果您没有网络，则可以使用以下方法：
-
-方法一：通过命令将jar包导入本地Maven仓库
+方法二：通过命令将jar包导入本地Maven仓库
 
 ```shell
-# 其中<path-to-file-jar>为jar的路径，<path-to-file-source-jar>为源码路径
-mvn install:install-file -Dfile=<path-to-file-jar>/jhinno-openapi-java-sdk-1.0.0.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
+# 其中<path-to-dir>为jar的路径，<path-to-dir>为jar包路径
+mvn install:install-file -Dfile="<path-to-dir>/jhinno-openapi-java-sdk-1.0.0.jar" -Dsources="<path-to-dir>/jhinno-openapi-java-sdk-1.0.0-sources.jar"
 # 例如
-mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0.jar -DgroupId=com.jhinno -DartifactId=jhinno-openapi-java-sdk -Dversion=1.0.0 -Dpackaging=jar
+mvn install:install-file -Dfile="E:/下载/jhinno-openapi-java-sdk-1.0.0.jar" -Dsources="E:/下载/jhinno-openapi-java-sdk-1.0.0-sources.jar"
 ```
 
-> 注: 其中 jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看SDK代码的注释。
+> 注: 
+> - jhinno-openapi-java-sdk-x.x.x.jar 为SDK的jar包。
+> - jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看SDK代码的注释。
 
 然后在`pom.xml`添加
 
@@ -69,7 +71,7 @@ mvn install:install-file -Dfile=D:/jar/jhinno-openapi-java-sdk-1.0.0.jar -Dgroup
 </dependency>
 ```
 
-方法二：直接在`pom.xml`引用jar(改方法可能会出现一些莫名其妙的问题，所以不建议使用)
+方法三：直接在`pom.xml`引用jar(改方法可能会出现一些莫名其妙的问题，所以不建议使用)
 
 ```xml
 <!-- 其中{path-to-file}为jar的位置 -->

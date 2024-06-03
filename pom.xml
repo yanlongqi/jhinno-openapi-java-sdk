@@ -6,7 +6,7 @@
 
     <groupId>com.jhinno</groupId>
     <artifactId>jhinno-openapi-java-sdk</artifactId>
-    <version>${project.release.version}</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>Jhinno OpenAPI SDK for Java</name>
     <description>The Jhinno OpenAPI SDK for Java used for accessing Jhinno OpenApi Service</description>
@@ -17,19 +17,10 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.release.version>1.0.0-SNAPSHOT</project.release.version>
         <maven.javadoc.failOnError>false</maven.javadoc.failOnError>
         <maven.test.skip>true</maven.test.skip>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>product</id>
-            <properties>
-                <project.release.version>1.0.0</project.release.version>
-            </properties>
-        </profile>
-    </profiles>
 
     <dependencies>
         <dependency>
@@ -100,10 +91,6 @@
             <id>jhinno-releases</id>
             <url>http://192.168.87.22:8081/repository/maven-releases</url>
         </repository>
-        <snapshotRepository>
-            <id>jhinno-snapshots</id>
-            <url>http://192.168.87.22:8081/repository/maven-snapshots</url>
-        </snapshotRepository>
     </distributionManagement>
 
     <build>
