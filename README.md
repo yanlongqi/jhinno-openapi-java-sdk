@@ -51,9 +51,9 @@
 
 ```shell
 # 其中<path-to-dir>为jar的路径，<path-to-dir>为jar包路径
-mvn install:install-file -Dfile="<path-to-dir>/jhinno-openapi-java-sdk-1.0.0.jar" -Dsources="<path-to-dir>/jhinno-openapi-java-sdk-1.0.0-sources.jar"
+mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="<path-to-dir>/jhinno-openapi-java-sdk-1.0.0.jar" -Dsources="<path-to-dir>/jhinno-openapi-java-sdk-1.0.0-sources.jar"
 # 例如
-mvn install:install-file -Dfile="E:/下载/jhinno-openapi-java-sdk-1.0.0.jar" -Dsources="E:/下载/jhinno-openapi-java-sdk-1.0.0-sources.jar"
+mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/下载/jhinno-openapi-java-sdk-1.0.0.jar" -Dsources="E:/下载/jhinno-openapi-java-sdk-1.0.0-sources.jar"
 ```
 
 > 注: 
