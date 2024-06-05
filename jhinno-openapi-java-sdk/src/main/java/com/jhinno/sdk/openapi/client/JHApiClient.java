@@ -66,10 +66,22 @@ public class JHApiClient {
      */
     private ObjectMapper mapper;
 
+    /**
+     * HTTP的连接客户端
+     */
+    private CloseableHttpClient closeableHttpClient;
+
+
+    /**
+     * 每次发送请求的配置，如果该配置未进行设置则走 {@link DefaultHttpClientConfig｝ 中的默认配置
+     */
+    private RequestConfig requestConfig;
+
     private int socketTimeout = DefaultHttpClientConfig.SOCKET_TIMEOUT;
     private int connectTimeout = DefaultHttpClientConfig.CONNECT_TIMEOUT;
     private int connectRequestTimeout = DefaultHttpClientConfig.CONNECTION_REQUEST_TIMEOUT;
-
+    private int maxTotal = DefaultHttpClientConfig.MAX_TOTAL;
+    private int maxPerRout = DefaultHttpClientConfig.MAX_PER_ROUT;
     /**
      * 初始化一个JHApiClient的实例，可使用自定义的客户端
      *
@@ -86,6 +98,7 @@ public class JHApiClient {
     }
 
     public JHApiClient() {
+        closeableHttpClient = createHttpClients(maxTotal, maxPerRout);
         clientInit();
     }
 
@@ -104,18 +117,6 @@ public class JHApiClient {
         mapper.setDateFormat(new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN));
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
-
-    /**
-     * HTTP的连接客户端
-     */
-    private CloseableHttpClient closeableHttpClient;
-
-
-    /**
-     * 每次发送请求的配置，如果该配置未进行设置则走 {@link DefaultHttpClientConfig｝ 中的默认配置
-     */
-    private RequestConfig requestConfig;
-
 
     /**
      * 通过最大连接数和服务每次能并行接收的请求数量构建一个JHApiClient实例
@@ -137,8 +138,8 @@ public class JHApiClient {
      * @return JHApiClient的实例
      */
     public static JHApiClient build(String baseUrl) {
-        CloseableHttpClient client = createHttpClients(DefaultHttpClientConfig.MAX_TOTAL, DefaultHttpClientConfig.MAX_PER_ROUT);
-        return build(client, baseUrl, DefaultHttpClientConfig.SOCKET_TIMEOUT, DefaultHttpClientConfig.CONNECT_TIMEOUT, DefaultHttpClientConfig.CONNECTION_REQUEST_TIMEOUT);
+        CloseableHttpClient client = createHttpClients(com.jhinno.sdk.openapi.client.DefaultHttpClientConfig.MAX_TOTAL, com.jhinno.sdk.openapi.client.DefaultHttpClientConfig.MAX_PER_ROUT);
+        return build(client, baseUrl, com.jhinno.sdk.openapi.client.DefaultHttpClientConfig.SOCKET_TIMEOUT, com.jhinno.sdk.openapi.client.DefaultHttpClientConfig.CONNECT_TIMEOUT, com.jhinno.sdk.openapi.client.DefaultHttpClientConfig.CONNECTION_REQUEST_TIMEOUT);
     }
 
     /**
