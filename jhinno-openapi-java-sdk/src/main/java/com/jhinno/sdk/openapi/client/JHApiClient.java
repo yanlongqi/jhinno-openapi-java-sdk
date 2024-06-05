@@ -9,6 +9,7 @@ import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.ClientErrorCode;
 import com.jhinno.sdk.openapi.ClientException;
 import com.jhinno.sdk.openapi.api.auth.AuthPathConstant;
+import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -48,6 +49,7 @@ import java.util.TimeZone;
  * @author yanlongqi
  * @date 2024/1/29 10:31
  */
+@Data
 public class JHApiClient {
 
     /**
@@ -56,7 +58,7 @@ public class JHApiClient {
      * &#x5982;&#xFF1A;https://192.168.3.12/appform
      * </p>
      */
-    private final String baseUrl;
+    private String baseUrl;
 
 
     /**
@@ -64,15 +66,34 @@ public class JHApiClient {
      */
     private ObjectMapper mapper;
 
+    private int socketTimeout = DefaultHttpClientConfig.SOCKET_TIMEOUT;
+    private int connectTimeout = DefaultHttpClientConfig.CONNECT_TIMEOUT;
+    private int connectRequestTimeout = DefaultHttpClientConfig.CONNECTION_REQUEST_TIMEOUT;
+
     /**
      * 初始化一个JHApiClient的实例，可使用自定义的客户端
      *
      * @param baseUrl             景行接口服务的基础地址
      * @param closeableHttpClient 可关闭的HTTP客户端
      */
-    private JHApiClient(CloseableHttpClient closeableHttpClient, String baseUrl, int socketTimeout, int connectTimeout, int connectRequestTimeout) {
+    public JHApiClient(CloseableHttpClient closeableHttpClient, String baseUrl, int socketTimeout, int connectTimeout, int connectRequestTimeout) {
         this.baseUrl = baseUrl.endsWith("/") ? baseUrl.substring(0, baseUrl.length() - 1) : baseUrl;
         this.closeableHttpClient = closeableHttpClient;
+        this.socketTimeout = socketTimeout;
+        this.connectTimeout = connectTimeout;
+        this.connectRequestTimeout = connectRequestTimeout;
+        clientInit();
+    }
+
+    public JHApiClient() {
+        clientInit();
+    }
+
+
+    /**
+     * 初始化客户端
+     */
+    public void clientInit(){
         this.requestConfig = RequestConfig.custom()
                 .setSocketTimeout(socketTimeout)
                 .setConnectTimeout(connectTimeout)
@@ -81,14 +102,13 @@ public class JHApiClient {
         mapper = new ObjectMapper();
         mapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         mapper.setDateFormat(new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN));
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
-
 
     /**
      * HTTP的连接客户端
      */
-    private final CloseableHttpClient closeableHttpClient;
+    private CloseableHttpClient closeableHttpClient;
 
 
     /**
