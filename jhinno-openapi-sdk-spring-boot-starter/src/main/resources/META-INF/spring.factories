@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.jhinno.sdk.openapi.autoconfigure.JHOpenapiClientAutoConfigure,\
+  com.jhinno.sdk.openapi.autoconfigure.JHOpenapiExecutionAutoconfigure
