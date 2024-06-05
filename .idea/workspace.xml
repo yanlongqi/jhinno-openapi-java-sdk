@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="f56ca05b-44c8-4e8a-9296-ce5820371bc0" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhinno-openapi-sdk-spring-boot-starter/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhinno-openapi-sdk-spring-boot-starter/src/main/java/com/jhinno/sdk/openapi/autoconfigure/JHOpenapiClientAutoConfigure.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhinno-openapi-sdk-spring-boot-starter/src/main/java/com/jhinno/sdk/openapi/autoconfigure/JHOpenapiExecutionAutoconfigure.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhinno-openapi-sdk-spring-boot-starter/src/main/java/com/jhinno/sdk/openapi/autoconfigure/JHOpenapiProperties.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhinno-openapi-sdk-spring-boot-starter/src/main/java/com/jhinno/sdk/openapi/constant/CommonConstants.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhinno-openapi-sdk-spring-boot-starter/src/main/resources/META-INF/spring.factories" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/jhinno-openapi-sdk-spring-boot-starter/src/main/resources/META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/JavaSceneConfigState.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/encodings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/ArgsException.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/ArgsException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/ClientErrorCode.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/ClientErrorCode.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/ClientException.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/ClientException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/CommonConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/CommonConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/ServiceException.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/ServiceException.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/JHApiExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/JHApiExecution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/PageResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/PageResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/ResponseResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/ResponseResult.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/TokenInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/TokenInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/app/AppInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/app/AppInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/app/AppPathConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/app/AppPathConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/app/AppStartRequest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/app/AppStartRequest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/app/AppStartedInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/app/AppStartedInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/app/JHAppApiExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/app/JHAppApiExecution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/app/SessionInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/app/SessionInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/auth/AuthPathConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/auth/AuthPathConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/data/DataPathConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/data/DataPathConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/data/JHDataApiExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/data/JHDataApiExecution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/data/SpoolerDataInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/data/SpoolerDataInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/file/FileInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/file/FileInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/file/FilePathConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/file/FilePathConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/file/JHFileApiExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/file/JHFileApiExecution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/job/JHJobApiExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/job/JHJobApiExecution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/job/JobActionEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/job/JobActionEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/job/JobHistoryInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/job/JobHistoryInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/job/JobInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/job/JobInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/job/JobPathConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/job/JobPathConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/job/JobStatusEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/job/JobStatusEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/job/JobsActionEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/job/JobsActionEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/job/PageJobInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/job/PageJobInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/job/StageInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/job/StageInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/organization/AddUpdateDepartment.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/organization/AddUpdateDepartment.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/organization/AddUpdateUserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/organization/AddUpdateUserInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/organization/DepartmentPathConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/organization/DepartmentPathConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/organization/JHDepartmentApiExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/organization/JHDepartmentApiExecution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/organization/JHUserApiExecution.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/organization/JHUserApiExecution.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/organization/UpdateUserPasswordType.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/organization/UpdateUserPasswordType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/organization/UserInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/organization/UserInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/api/organization/UserPathConstant.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/api/organization/UserPathConstant.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/client/DefaultHttpClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/client/DefaultHttpClientConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/jhinno/sdk/openapi/client/JHApiClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/main/java/com/jhinno/sdk/openapi/client/JHApiClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/jhinno/sdk/openapi/test/JHClientConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/test/java/com/jhinno/sdk/openapi/test/JHClientConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/jhinno/sdk/openapi/test/app/AppApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/test/java/com/jhinno/sdk/openapi/test/app/AppApiTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/jhinno/sdk/openapi/test/auth/AuthApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/test/java/com/jhinno/sdk/openapi/test/auth/AuthApiTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/jhinno/sdk/openapi/test/data/DataApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/test/java/com/jhinno/sdk/openapi/test/data/DataApiTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/jhinno/sdk/openapi/test/file/FileApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/test/java/com/jhinno/sdk/openapi/test/file/FileApiTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/jhinno/sdk/openapi/test/job/JobApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/test/java/com/jhinno/sdk/openapi/test/job/JobApiTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/jhinno/sdk/openapi/test/organization/DepartmentApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/test/java/com/jhinno/sdk/openapi/test/organization/DepartmentApiTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/com/jhinno/sdk/openapi/test/organization/UserApiTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/jhinno-openapi-java-sdk/src/test/java/com/jhinno/sdk/openapi/test/organization/UserApiTest.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="mavenHome" value="$PROJECT_DIR$/../../../Program Files/apache-maven-3.8.5" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 2
+}]]></component>
+  <component name="ProjectId" id="2hPCZwckhZLgLVwKfxXQFZKQwSd" />
+  <component name="ProjectViewState">
+    <option name="openDirectoriesWithSingleClick" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "feat-20240604-springboot-starter",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "MavenSettings",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="mvn dependency:sources -DdownloadSources=true -DdownloadJavadocs=true" />
+    </option>
+  </component>
+  <component name="RunManager" selected="JUnit.FileApiTest.testGetFileList">
+    <configuration name="FileApiTest.testGetFileList" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jhinno-openapi-java-sdk" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.jhinno.sdk.openapi.test.file.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.jhinno.sdk.openapi.test.file" />
+      <option name="MAIN_CLASS_NAME" value="com.jhinno.sdk.openapi.test.file.FileApiTest" />
+      <option name="METHOD_NAME" value="testGetFileList" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FileApiTest.testMkdir" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jhinno-openapi-java-sdk" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.jhinno.sdk.openapi.test.file.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.jhinno.sdk.openapi.test.file" />
+      <option name="MAIN_CLASS_NAME" value="com.jhinno.sdk.openapi.test.file.FileApiTest" />
+      <option name="METHOD_NAME" value="testMkdir" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="FileApiTest.testRenameFile" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="jhinno-openapi-java-sdk" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.jhinno.sdk.openapi.test.file.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="com.jhinno.sdk.openapi.test.file" />
+      <option name="MAIN_CLASS_NAME" value="com.jhinno.sdk.openapi.test.file.FileApiTest" />
+      <option name="METHOD_NAME" value="testRenameFile" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.FileApiTest.testGetFileList" />
+        <item itemvalue="JUnit.FileApiTest.testMkdir" />
+        <item itemvalue="JUnit.FileApiTest.testRenameFile" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="f56ca05b-44c8-4e8a-9296-ce5820371bc0" name="Changes" comment="" />
+      <created>1717486386547</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1717486386547</updated>
+      <workItem from="1717486388258" duration="12165000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/jhinno-openapi-java-sdk/src/test/java/com/jhinno/sdk/openapi/test/file/FileApiTest.java</url>
+          <line>52</line>
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
