@@ -4,8 +4,7 @@
 
 - [仓库地址：https://github.com/yanlongqi/jhinno-openapi-java-sdk](https://github.com/yanlongqi/jhinno-openapi-java-sdk)
 - [开发文档：https://jhinno-sdk-doc.yuchat.top/apidocs](https://jhinno-sdk-doc.yuchat.top/apidocs)
-- [最新jar包：jhinno-openapi-java-sdk-1.0.0.jar](https://jhinno-jenkins.yuchat.top/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0.jar)
-- [最新源码包：jhinno-openapi-java-sdk-1.0.0-sources.jar](https://jhinno-jenkins.yuchat.top/job/jhinno-openapi-java-sdk/lastSuccessfulBuild/artifact/target/jhinno-openapi-java-sdk-1.0.0-sources.jar)
+- [jar包下载：https://github.com/yanlongqi/jhinno-openapi-java-sdk/releases](https://github.com/yanlongqi/jhinno-openapi-java-sdk/releases)
 
 ## 1.1 必要条件
 
