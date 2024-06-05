@@ -3,13 +3,13 @@ package com.jhinno.sdk.openapi.client;
 import cn.hutool.core.collection.CollectionUtil;
 import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.ClientErrorCode;
 import com.jhinno.sdk.openapi.ClientException;
 import com.jhinno.sdk.openapi.api.auth.AuthPathConstant;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -36,12 +36,8 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.Timestamp;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Map;
 import java.util.TimeZone;
@@ -85,6 +81,7 @@ public class JHApiClient {
         mapper = new ObjectMapper();
         mapper.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         mapper.setDateFormat(new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN));
+        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES,false);
     }
 
 
@@ -240,6 +237,11 @@ public class JHApiClient {
     }
 
 
+    /**
+     * 请求服务器的时间戳
+     *
+     * @return 服务器的时间戳
+     */
     public Long requestTimeMillis() {
         HttpGet httpGet = new HttpGet(getUrl(AuthPathConstant.PING));
         httpGet.setConfig(requestConfig);
