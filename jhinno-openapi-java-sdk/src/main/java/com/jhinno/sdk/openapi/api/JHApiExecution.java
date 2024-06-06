@@ -132,7 +132,7 @@ public class JHApiExecution {
         // 防止因为服务器时间的问题二导致token不可用，可以通过此配置提前获取token
         int tokenEffectiveTime = (tokenTimeout - tokenResidueTime) * 60 * 1000;
         // 如果是强制获取、用户令牌为空、用户令牌过期等，则获取令牌
-        if (isForce || tokenInfo == null || System.currentTimeMillis() - tokenInfo.getCurrentTimestamp() < tokenEffectiveTime) {
+        if (isForce || tokenInfo == null || System.currentTimeMillis() - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime) {
             Map<String, Object> params = new HashMap<>(2);
             params.put("timeout", tokenTimeout);
             long currentTimeMillis = isUsedServerTime ? jhApiClient.requestTimeMillis() : System.currentTimeMillis();

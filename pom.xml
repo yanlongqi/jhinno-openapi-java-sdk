@@ -6,7 +6,7 @@
 
     <groupId>com.jhinno</groupId>
     <artifactId>jhinno-openapi-java-sdk-parent</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
     <packaging>pom</packaging>
     <name>Jhinno OpenAPI SDK for Java parent</name>
     <description>The Jhinno OpenAPI SDK for Java used for accessing Jhinno OpenApi Service</description>
