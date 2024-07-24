@@ -1,9 +1,6 @@
 package com.jhinno.sdk.openapi.test.job;
 
-import com.jhinno.sdk.openapi.api.job.JHJobApiExecution;
-import com.jhinno.sdk.openapi.api.job.JobHistoryInfo;
-import com.jhinno.sdk.openapi.api.job.JobStatusEnum;
-import com.jhinno.sdk.openapi.api.job.PageJobInfo;
+import com.jhinno.sdk.openapi.api.job.*;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
 import org.junit.Test;
 
@@ -20,7 +17,7 @@ import java.util.Map;
  */
 public class JobApiTest {
 
-    private static final JHJobApiExecution execution = new JHJobApiExecution(JHClientConfig.client);
+    private static final JHJobApiExecution execution = (JHJobApiExecution) JHClientConfig.jhApiClientMap.get(JHJobApiExecution.class);
 
     /**
      * 测试提交作业
@@ -123,6 +120,15 @@ public class JobApiTest {
     public void testConnectJobSession() {
         Object o = execution.connectJobSession("jhadmin", "45");
         System.out.println(o);
+    }
+
+    /**
+     * 测试获取作业表单
+     */
+    @Test
+    public void testGetSimulationAppForm() {
+        List<JobAppFormItemInfo> simulationAppForm = execution.getSimulationAppForm("jhadmin", "common_sub");
+        System.out.println(simulationAppForm);
     }
 
 }

@@ -82,4 +82,10 @@ public class JobPathConstant {
      * 连接作业会话
      */
     public static final String JOB_CONNECT_SESSION_PATH = "/ws/api/jobs/{jobId}/connect";
+
+
+    /**
+     * 获取作业表单
+     */
+    public static final String JOB_GET_APP_FORM_PATH = "/ws/api/jobs/{appId}/form_params";
 }

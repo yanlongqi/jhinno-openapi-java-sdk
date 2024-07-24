@@ -384,4 +384,19 @@ public class JHJobApiExecution extends JHApiExecution {
         });
     }
 
+    /**
+     * 查询用户作业表单信息
+     *
+     * @param username 用户名
+     * @param appId    用户ID
+     */
+    public List<JobAppFormItemInfo> getSimulationAppForm(String username, String appId) {
+        if (StringUtils.isBlank(appId)) {
+            throw new ArgsException("appId不能为空！");
+        }
+        String path = JobPathConstant.JOB_GET_APP_FORM_PATH.replace("{appId}", appId);
+        return get(path, username, new TypeReference<ResponseResult<List<JobAppFormItemInfo>>>() {
+        });
+    }
+
 }
