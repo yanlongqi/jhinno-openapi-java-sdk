@@ -46,7 +46,7 @@ public class JHClientConfig {
             v.setAuthType(AuthType.ACCESS_SECRET_MODE);
             v.setAccessKey(ACCESS_KEY);
             v.setAccessKeySecret(ACCESS_KEY_SECRET);
-            // v.setUsedServerTime(true);
+            v.setUsedServerTime(true);
         });
     }
 

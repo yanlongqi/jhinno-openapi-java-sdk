@@ -13,7 +13,7 @@ import org.junit.Test;
  */
 public class DepartmentApiTest {
 
-    private static final JHDepartmentApiExecution execution = new JHDepartmentApiExecution(JHClientConfig.client);
+    private static final JHDepartmentApiExecution execution = (JHDepartmentApiExecution) JHClientConfig.jhApiClientMap.get(JHDepartmentApiExecution.class);
 
 
     /**

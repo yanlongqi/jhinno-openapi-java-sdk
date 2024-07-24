@@ -20,7 +20,7 @@ public class AppApiTest {
     /**
      * 获得一个调用应用接口的执行器
      */
-    public static final JHAppApiExecution jhAppApiExecution = new JHAppApiExecution(JHClientConfig.client);
+    public static final JHAppApiExecution jhAppApiExecution = (JHAppApiExecution) JHClientConfig.jhApiClientMap.get(JHAppApiExecution.class);
 
     /**
      * 测测试使用自定义的参数启动jhadmin的Linux桌面

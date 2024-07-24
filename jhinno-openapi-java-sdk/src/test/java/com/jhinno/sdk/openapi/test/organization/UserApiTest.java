@@ -15,7 +15,7 @@ import org.junit.Test;
  */
 public class UserApiTest {
 
-    private static final JHUserApiExecution execution = new JHUserApiExecution(JHClientConfig.client);
+    private static final JHUserApiExecution execution = (JHUserApiExecution) JHClientConfig.jhApiClientMap.get(JHUserApiExecution.class);
 
 
     /**
