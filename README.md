@@ -16,6 +16,7 @@
 1. JH_Appform_6.0_Release
 2. JH_Appform_6.0_SP1_Release
 3. JH_Appform_6.1_Release
+3. JH_Appform_6.2_Release（6.2以前用1.x.x版本）
 
 # 2. 快速开始
 
@@ -45,21 +46,21 @@
 ```shell
 
 # SDK Client的jar包的导入，其中<path-to-dir>为jar的路径，<path-to-dir>为jar包路径
-mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="<path-to-dir>/jhinno-openapi-java-sdk-1.0.0.jar" -Dsources="<path-to-dir>/jhinno-openapi-java-sdk-1.0.0-sources.jar"
+mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="<path-to-dir>/jhinno-openapi-java-sdk-x.x.x.jar" -Dsources="<path-to-dir>/jhinno-openapi-java-sdk-x.x.x-sources.jar"
 # 例如
-mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/下载/jhinno-openapi-java-sdk-1.0.0.jar" -Dsources="E:/下载/jhinno-openapi-java-sdk-1.0.0-sources.jar"
+mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/下载/jhinno-openapi-java-sdk-2.0.0.jar" -Dsources="E:/下载/jhinno-openapi-java-sdk-2.0.0-sources.jar"
 
 # SDK SpringBoot Starter的jar包的导入，其中<path-to-dir>为jar的路径，<path-to-dir>为jar包路径
 mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="<path-to-dir>/jhinno-openapi-sdk-spring-boot-starter-x.x.x.jar" -Dsources="<path-to-dir>/jhinno-openapi-sdk-spring-boot-starter-x.x.x-sources.jar"
 # 例如
-mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/下载/jhinno-openapi-sdk-spring-boot-starter-1.0.1.jar" -Dsources="E:/下载/jhinno-openapi-sdk-spring-boot-starter-1.0.1-sources.jar"
+mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/下载/jhinno-openapi-sdk-spring-boot-starter-2.0.0.jar" -Dsources="E:/下载/jhinno-openapi-sdk-spring-boot-starter-2.0.0-sources.jar"
 ```
 
 > 注:
 > - jhinno-openapi-java-sdk-x.x.x.jar 为SDK的jar包。
 > - jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看SDK代码的注释。
 > - jhinno-openapi-sdk-spring-boot-starter-x.x.x.jar 为SDK的spring-boot-starter的jar包。
-> - jhinno-openapi-sdk-spring-boot-starter-1.0.1-sources.jar 为SDK的spring-boot-starter的源码包。
+> - jhinno-openapi-sdk-spring-boot-starter-x.x.x-sources.jar 为SDK的spring-boot-starter的源码包。
 
 ### 2.1.2 引入`jhinno-openapi-sdk-spring-boot-starter`坐标
 
@@ -81,20 +82,27 @@ mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/
 ```yaml
 jhinno:
   openapi:
-    server-url: https://{appform服务器的地址}/appform
-    used-server-time: true
+    server-url: https://172.17.0.5/appform
+    access-key: xxxxx
+    access-key-secret: xxxx
+    auth-type: access_secret_mode
 ```
 
 #### 2.1.3.2  application.properties
 
 ```properties
 jhinno.openapi.server-url=https://{appform服务器的地址}/appform
-jhinno.openapi.used-server-time=true
+jhinno.openapi.access-key=xxxxx
+jhinno.openapi.access-key-secret=xxxx
+jhinno.openapi.auth-type=access_secret_mode
+
 ```
 
 > 注：
 > - 其中`jhinno.openapi.server-url`为景行接口服务的BaseUrl；
+> - `auth-type` 认证类型，`token_mode`(Token认证) 和 `access_secret_mode`（AccessKey认证）；Appform Release 6.2 `token_mode`作为过渡，将会弃用；
 > - `jhinno.openapi.used-server-time`是否获取服务器时间来请求token，关闭可提高获取token的时间，但打开有可能因为服务器时间不准确而导致token获取失败的问题。
+> - `access-key` 和 `access-key-secret` 作为访问接口的凭证，需要提供集成商名称、系统名称、负责人姓名、负责电话电话信息申请。
 > - 更多配置见`com.jhinno.sdk.openapi.autoconfigure.JHOpenapiProperties`源码。
 
 ### 2.1.4 使用
@@ -174,9 +182,10 @@ spring.xml添加以下内容
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <beans>
-    <bean id="apiClient" class="com.jhinno.sdk.openapi.client.JHApiClient">
-        <property name="baseUrl" value="https://172.17.0.5/appform"/>
+    <bean id="apiClient" class="com.jhinno.sdk.openapi.client.JHApiClient" init-method="initDefaultApiClient">
+        <constructor-arg value="https://172.17.0.5/appform"/>
     </bean>
+
     <bean id="appApiExecution" class="com.jhinno.sdk.openapi.api.app.JHAppApiExecution">
         <constructor-arg ref="apiClient"/>
     </bean>
@@ -226,17 +235,19 @@ public class DemoUserSDK {
 
 ### 2.3.1 安装
 
-- 同 2.2.1 安装一样 
+- 同 2.2.1 安装一样
 
 ### 2.3.2 引入`jhinno-openapi-java-sdk`坐标
+
 ```xml
 
 <dependency>
     <groupId>com.jhinno</groupId>
     <artifactId>jhinno-openapi-java-sdk</artifactId>
-    <version>1.0.1</version>
+    <version>2.0.0</version>
 </dependency>
 ```
+
 ### 2.3.3 使用
 
 在`com.jhinno.sdk.openapi.api`包下面对应`app`、`data`、`file`、`job`、`organization`这几个子包，分别代表景行`Appform`
@@ -255,16 +266,39 @@ public class DemoUserSDK {
 
     /**
      * JHApiClient 是一个HTTP连接池，开发者需要复用
-     * 其中https://192.168.87.25/appform为景行API服务的地址
+     * 其中https://172.17.0.5/appform为景行API服务的地址
      * 注意: JHApiClient为内置的http连接池，系统只需要初始化一份即可（单例调用）。
      */
-    private static final JHApiClient client = JHApiClient.build("https://192.168.87.25/appform");
+    public static final JHApiClient client = new JHApiClient("https://172.17.0.5/appform");
 
+    public static final Map<Class<? extends JHApiExecution>, JHApiExecution> jhApiClientMap = new HashMap<>();
+
+    public static final String ACCESS_KEY = "3f03747f147942bd8debd81b6c9c6a80";
+
+    public static final String ACCESS_KEY_SECRET = "e0681859b91c499eb1d2c8e09cea3242";
+
+    static {
+        client.initDefaultApiClient();
+        jhApiClientMap.put(JHAppApiExecution.class, new JHAppApiExecution());
+        jhApiClientMap.put(JHDataApiExecution.class, new JHDataApiExecution());
+        jhApiClientMap.put(JHFileApiExecution.class, new JHFileApiExecution());
+        jhApiClientMap.put(JHJobApiExecution.class, new JHJobApiExecution());
+        jhApiClientMap.put(JHDepartmentApiExecution.class, new JHDepartmentApiExecution());
+        jhApiClientMap.put(JHUserApiExecution.class, new JHUserApiExecution());
+
+        jhApiClientMap.forEach((k, v) -> {
+            v.setJhApiClient(client);
+            v.setAuthType(AuthType.ACCESS_SECRET_MODE);
+            v.setAccessKey(ACCESS_KEY);
+            v.setAccessKeySecret(ACCESS_KEY_SECRET);
+            v.setUsedServerTime(true);
+        });
+    }
 
     public static void main(String[] args) {
 
         // 初始化一个调用调用景行会话服务接口执行器
-        JHAppApiExecution jhAppApiExecution = new JHAppApiExecution(client);
+        JHAppApiExecution jhAppApiExecution = (JHAppApiExecution) jhApiClientMap.get(JHAppApiExecution.class);
 
         // 调用启动会话的接口
         AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("jhadmin", "linux_desktop", new AppStartRequest());
