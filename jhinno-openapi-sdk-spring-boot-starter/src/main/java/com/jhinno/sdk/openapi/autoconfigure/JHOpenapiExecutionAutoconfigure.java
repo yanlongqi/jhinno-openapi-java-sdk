@@ -12,9 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * openapi执行器自动配置
  *
@@ -29,25 +26,58 @@ public class JHOpenapiExecutionAutoconfigure {
     private final JHOpenapiProperties properties;
     private final JHApiClient client;
 
+
+    public void init(JHApiExecution apiExecution) {
+        apiExecution.setJhApiClient(client);
+        apiExecution.setForceGetToken(properties.isForceGetToken());
+        apiExecution.setAuthType(properties.getAuthType());
+        apiExecution.setAccessKey(properties.getAccessKey());
+        apiExecution.setAccessKeySecret(properties.getAccessKeySecret());
+        apiExecution.setTokenTimeout(properties.getTokenTimeout());
+        apiExecution.setTokenResidueTime(properties.getTokenResidueTime());
+        apiExecution.setUsedServerTime(properties.isUsedServerTime());
+    }
+
     @Bean
-    public List<JHApiExecution> ApiExecution() {
-        List<JHApiExecution> executions = new ArrayList<>();
-        executions.add(new JHAppApiExecution());
-        executions.add(new JHDataApiExecution());
-        executions.add(new JHFileApiExecution());
-        executions.add(new JHJobApiExecution());
-        executions.add(new JHDepartmentApiExecution());
-        executions.add(new JHUserApiExecution());
-        executions.forEach(t -> {
-            t.setJhApiClient(client);
-            t.setForceGetToken(properties.isForceGetToken());
-            t.setAuthType(properties.getAuthType());
-            t.setAccessKey(properties.getAccessKey());
-            t.setAccessKeySecret(properties.getAccessKeySecret());
-            t.setTokenTimeout(properties.getTokenTimeout());
-            t.setTokenResidueTime(properties.getTokenResidueTime());
-            t.setUsedServerTime(properties.isUsedServerTime());
-        });
-        return executions;
+    public JHAppApiExecution appApiExecution() {
+        JHAppApiExecution jhAppApiExecution = new JHAppApiExecution();
+        init(jhAppApiExecution);
+        return jhAppApiExecution;
+    }
+
+    @Bean
+    public JHDataApiExecution dataApiExecution() {
+        JHDataApiExecution dataApiExecution = new JHDataApiExecution();
+        init(dataApiExecution);
+        return dataApiExecution;
+    }
+
+
+    @Bean
+    public JHFileApiExecution fileApiExecution() {
+        JHFileApiExecution fileApiExecution = new JHFileApiExecution();
+        init(fileApiExecution);
+        return fileApiExecution;
+    }
+
+    @Bean
+    public JHJobApiExecution jobApiExecution() {
+        JHJobApiExecution jobApiExecution = new JHJobApiExecution();
+        init(jobApiExecution);
+        return jobApiExecution;
+    }
+
+    @Bean
+    public JHDepartmentApiExecution departmentApiExecution() {
+        JHDepartmentApiExecution departmentApiExecution = new JHDepartmentApiExecution();
+        init(departmentApiExecution);
+        return departmentApiExecution;
+    }
+
+    @Bean
+    public JHUserApiExecution userApiExecution() {
+        JHUserApiExecution userApiExecution = new JHUserApiExecution();
+        init(userApiExecution);
+        return userApiExecution;
     }
 }
