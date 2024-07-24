@@ -12,6 +12,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * openapi执行器自动配置
  *
@@ -27,59 +30,24 @@ public class JHOpenapiExecutionAutoconfigure {
     private final JHApiClient client;
 
     @Bean
-    public JHAppApiExecution appApiExecution() {
-        JHAppApiExecution execution = new JHAppApiExecution(client);
-        execution.setTokenTimeout(properties.getTokenTimeout());
-        execution.setTokenResidueTime(properties.getTokenResidueTime());
-        execution.setUsedServerTime(properties.isUsedServerTime());
-        return execution;
-    }
-
-    @Bean
-    public JHDataApiExecution dataApiExecution() {
-        JHDataApiExecution execution = new JHDataApiExecution(client);
-        execution.setTokenTimeout(properties.getTokenTimeout());
-        execution.setTokenResidueTime(properties.getTokenResidueTime());
-        execution.setUsedServerTime(properties.isUsedServerTime());
-        return execution;
-    }
-
-
-    @Bean
-    public JHFileApiExecution fileApiExecution() {
-        JHFileApiExecution execution = new JHFileApiExecution(client);
-        execution.setTokenTimeout(properties.getTokenTimeout());
-        execution.setTokenResidueTime(properties.getTokenResidueTime());
-        execution.setUsedServerTime(properties.isUsedServerTime());
-        return execution;
-    }
-
-    @Bean
-    public JHJobApiExecution jobApiExecution() {
-        JHJobApiExecution execution = new JHJobApiExecution(client);
-        execution.setTokenTimeout(properties.getTokenTimeout());
-        execution.setTokenResidueTime(properties.getTokenResidueTime());
-        execution.setUsedServerTime(properties.isUsedServerTime());
-        return execution;
-    }
-
-
-    @Bean
-    public JHDepartmentApiExecution departmentApiExecution() {
-        JHDepartmentApiExecution execution = new JHDepartmentApiExecution(client);
-        execution.setTokenTimeout(properties.getTokenTimeout());
-        execution.setTokenResidueTime(properties.getTokenResidueTime());
-        execution.setUsedServerTime(properties.isUsedServerTime());
-        return execution;
-    }
-
-
-    @Bean
-    public JHUserApiExecution userApiExecution() {
-        JHUserApiExecution execution = new JHUserApiExecution(client);
-        execution.setTokenTimeout(properties.getTokenTimeout());
-        execution.setTokenResidueTime(properties.getTokenResidueTime());
-        execution.setUsedServerTime(properties.isUsedServerTime());
-        return execution;
+    public List<JHApiExecution> ApiExecution() {
+        List<JHApiExecution> executions = new ArrayList<>();
+        executions.add(new JHAppApiExecution());
+        executions.add(new JHDataApiExecution());
+        executions.add(new JHFileApiExecution());
+        executions.add(new JHJobApiExecution());
+        executions.add(new JHDepartmentApiExecution());
+        executions.add(new JHUserApiExecution());
+        executions.forEach(t -> {
+            t.setJhApiClient(client);
+            t.setForceGetToken(properties.isForceGetToken());
+            t.setAuthType(properties.getAuthType());
+            t.setAccessKey(properties.getAccessKey());
+            t.setAccessKeySecret(properties.getAccessKeySecret());
+            t.setTokenTimeout(properties.getTokenTimeout());
+            t.setTokenResidueTime(properties.getTokenResidueTime());
+            t.setUsedServerTime(properties.isUsedServerTime());
+        });
+        return executions;
     }
 }

@@ -1,7 +1,5 @@
 package com.jhinno.sdk.openapi.api.job;
 
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
@@ -10,8 +8,10 @@ import com.jhinno.sdk.openapi.api.JHApiExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.api.file.FileInfo;
 import com.jhinno.sdk.openapi.client.JHApiClient;
+import com.jhinno.sdk.openapi.utils.JsonUtil;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-
+import com.jhinno.sdk.openapi.utils.CollectionUtil;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +20,7 @@ import java.util.Map;
  * @author yanlongqi
  * @date 2024/2/5 18:44
  */
+@NoArgsConstructor
 public class JHJobApiExecution extends JHApiExecution {
 
     /**
@@ -48,7 +49,7 @@ public class JHJobApiExecution extends JHApiExecution {
         }
         Map<String, Object> map = new HashMap<>(2);
         map.put("appId", appId);
-        map.put("params", JSONUtil.toJsonStr(params));
+        map.put("params", JsonUtil.objectToString(params));
         String path = JHApiClient.getUrl(JobPathConstant.JOB_SUBMIT_PATH, map);
         List<Map<String, String>> result = post(path, username, new TypeReference<ResponseResult<List<Map<String, String>>>>() {
         });
@@ -102,7 +103,7 @@ public class JHJobApiExecution extends JHApiExecution {
             params.put("status", status.getStatus());
         }
         if (CollectionUtil.isNotEmpty(condition)) {
-            params.put("condition", JSONUtil.toJsonStr(params));
+            params.put("condition", JsonUtil.objectToString(params));
         }
         String path = JHApiClient.getUrl(JobPathConstant.JOB_PAGE_PATH, params);
         return get(path, username, new TypeReference<ResponseResult<PageJobInfo>>() {

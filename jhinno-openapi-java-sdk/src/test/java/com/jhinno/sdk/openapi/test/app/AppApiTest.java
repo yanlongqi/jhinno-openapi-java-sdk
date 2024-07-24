@@ -1,6 +1,5 @@
 package com.jhinno.sdk.openapi.test.app;
 
-import cn.hutool.core.lang.ConsoleTable;
 import com.jhinno.sdk.openapi.api.app.*;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
 import org.junit.Test;
@@ -157,14 +156,7 @@ public class AppApiTest {
     @Test
     public void testGetAppList() {
         List<AppInfo> appList = jhAppApiExecution.getAppList("jhadmin");
-
-        ConsoleTable consoleTable = ConsoleTable.create();
-        consoleTable.setSBCMode(false);
-        consoleTable.addHeader("id", "name", "type", "category", "protocol");
-        for (AppInfo appInfo : appList) {
-            consoleTable.addBody(appInfo.getId(), appInfo.getName(), appInfo.getType(), appInfo.getCategory(), appInfo.getProtocol());
-        }
-        consoleTable.print();
+        System.out.println(appList);
     }
 
 

@@ -1,6 +1,5 @@
 package com.jhinno.sdk.openapi.api.app;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
@@ -8,6 +7,8 @@ import com.jhinno.sdk.openapi.ServiceException;
 import com.jhinno.sdk.openapi.api.JHApiExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
+import com.jhinno.sdk.openapi.utils.CollectionUtil;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.Map;
  * @author yanlongqi
  * @date 2024/2/1 16:26
  */
+@NoArgsConstructor
 public class JHAppApiExecution extends JHApiExecution {
 
     /**

@@ -1,17 +1,23 @@
 package com.jhinno.sdk.openapi.api;
 
-import cn.hutool.crypto.symmetric.AES;
-import cn.hutool.http.ContentType;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.jhinno.sdk.openapi.ArgsException;
-import com.jhinno.sdk.openapi.CommonConstant;
-import com.jhinno.sdk.openapi.ServiceException;
+import com.jhinno.sdk.openapi.*;
 import com.jhinno.sdk.openapi.api.app.JHAppApiExecution;
 import com.jhinno.sdk.openapi.api.auth.AuthPathConstant;
+import com.jhinno.sdk.openapi.client.DefaultHttpClientConfig;
 import com.jhinno.sdk.openapi.client.JHApiClient;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 import com.jhinno.sdk.openapi.api.app.AppPathConstant;
+import org.apache.http.entity.ContentType;
 
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,6 +39,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2024/1/30 19:39
  * @see JHAppApiExecution
  */
+@Data
+@NoArgsConstructor
 public class JHApiExecution {
 
     /**
@@ -43,18 +51,39 @@ public class JHApiExecution {
     /**
      * token的超时时间
      */
-    private int tokenTimeout = CommonConstant.DEFAULT_TOKEN_EFFECTIVE_TIME;
+    private int tokenTimeout = DefaultHttpClientConfig.DEFAULT_TOKEN_EFFECTIVE_TIME;
 
     /**
      * token提前获取的时间
      */
-    private int tokenResidueTime = CommonConstant.DEFAULT_TOKEN_RESIDUE_TIME;
+    private int tokenResidueTime = DefaultHttpClientConfig.DEFAULT_TOKEN_RESIDUE_TIME;
 
 
     /**
      * 是否使用服务器时间，开启可能会导致请求过慢，但是不会太慢，默认token会有缓存
      */
-    private boolean isUsedServerTime = CommonConstant.DEFAULT_IS_USED_SERVER_TIME;
+    private boolean isUsedServerTime = DefaultHttpClientConfig.DEFAULT_IS_USED_SERVER_TIME;
+
+    /**
+     * 是否强制获取用户的token，默认{@link DefaultHttpClientConfig#DEFAULT_IS_FORCE_GET_TOKEN},
+     * 如果强制获取token，则每次请求都去获取token；
+     */
+    private boolean isForceGetToken = DefaultHttpClientConfig.DEFAULT_IS_FORCE_GET_TOKEN;
+
+    /**
+     * 接口请求的认证类型
+     */
+    private AuthType authType = AuthType.ACCESS_SECRET_MODE;
+
+    /**
+     * 访问密钥
+     */
+    private String accessKey;
+
+    /**
+     * 访问密钥密码
+     */
+    private String accessKeySecret;
 
 
     /**
@@ -66,46 +95,11 @@ public class JHApiExecution {
         this.jhApiClient = jhApiClient;
     }
 
+
     /**
      * 用户令牌的缓存
      */
     private static final Map<String, TokenInfo> TOKEN_INFO_MAP = new ConcurrentHashMap<>(20);
-
-    /**
-     * 设置在JHApiClient实例的实例
-     *
-     * @param jhApiClient 客户端实例
-     */
-    public void setJHApiClient(JHApiClient jhApiClient) {
-        this.jhApiClient = jhApiClient;
-    }
-
-
-    /**
-     * 设置token超时的时间，单位：分钟
-     *
-     * @param tokenTimeout token的超时时间
-     */
-    public void setTokenTimeout(int tokenTimeout) {
-        this.tokenTimeout = tokenTimeout;
-    }
-
-    /**
-     * 设置提前获取token的时间，单位：分钟
-     *
-     * @param tokenResidueTime 提前获取token的时间
-     */
-    public void setTokenResidueTime(int tokenResidueTime) {
-        this.tokenResidueTime = tokenResidueTime;
-    }
-
-
-    /**
-     * 是否使用服务器时间
-     */
-    public boolean isUsedServerTime() {
-        return isUsedServerTime;
-    }
 
     /**
      * 设置是否使用服务器时间
@@ -120,10 +114,9 @@ public class JHApiExecution {
      * 获取用户的Token
      *
      * @param username 用户名
-     * @param isForce  是否强制获取toke
      * @return 用户的token
      */
-    public String getToken(String username, boolean isForce) {
+    public String getToken(String username) {
         if (StringUtils.isBlank(username)) {
             throw new ArgsException("用户名称不能为空！");
         }
@@ -131,14 +124,23 @@ public class JHApiExecution {
 
         // 防止因为服务器时间的问题二导致token不可用，可以通过此配置提前获取token
         int tokenEffectiveTime = (tokenTimeout - tokenResidueTime) * 60 * 1000;
+
         // 如果是强制获取、用户令牌为空、用户令牌过期等，则获取令牌
-        if (isForce || tokenInfo == null || System.currentTimeMillis() - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime) {
+        if (isForceGetToken || tokenInfo == null || System.currentTimeMillis() - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime) {
             Map<String, Object> params = new HashMap<>(2);
             params.put("timeout", tokenTimeout);
-            long currentTimeMillis = isUsedServerTime ? jhApiClient.requestTimeMillis() : System.currentTimeMillis();
-            AES aes = new AES(CommonConstant.DEFAULT_AES_KEY.getBytes());
-            String base64 = aes.encryptBase64(String.format("%s,%s", username, currentTimeMillis));
-            params.put("username", base64);
+            String currentTimeMillis = getCurrentTimeMillis();
+            String beforeEncryption = String.format(CommonConstant.TokenUserFormat, username, currentTimeMillis);
+            try {
+                SecretKeySpec secretKey = new SecretKeySpec(CommonConstant.DEFAULT_AES_KEY.getBytes(StandardCharsets.UTF_8), CommonConstant.AES_ALGORITHM);
+                Cipher cipher = Cipher.getInstance(CommonConstant.AES_ECB_PADDING);
+                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+                byte[] encryptBytes = cipher.doFinal(beforeEncryption.getBytes(StandardCharsets.UTF_8));
+                params.put("username", Base64.getEncoder().encodeToString(encryptBytes));
+            } catch (Exception e) {
+                throw new ClientException("AES加密失败，失败原因：" + e.getMessage(), e);
+            }
+
             String url = JHApiClient.getUrl(AuthPathConstant.AUTH_TOKEN_PATH, params);
             Map<String, String> token = get(url, new TypeReference<ResponseResult<Map<String, String>>>() {
             });
@@ -151,14 +153,16 @@ public class JHApiExecution {
         return tokenInfo.getToken();
     }
 
+
     /**
-     * 获取用户的Token，获取缓存，不强制获取
-     *
-     * @param username 用户名
-     * @return 用户的token
+     * @return
      */
-    public String getToken(String username) {
-        return getToken(username, false);
+    private String getCurrentTimeMillis() {
+        if (authType == AuthType.ACCESS_SECRET_MODE || !isUsedServerTime) {
+            return String.valueOf(System.currentTimeMillis());
+        }
+        // todo 获取服务器的时间
+        return "";
     }
 
 
@@ -166,20 +170,57 @@ public class JHApiExecution {
      * 构建一个带token的请求头
      *
      * @param username      用户名
-     * @param isContentType 是否携带默认的Content-type，默认为{@link ContentType#JSON}
+     * @param isContentType 是否携带默认的Content-type，默认为{@link ContentType#APPLICATION_JSON}
      * @return 请求头
      */
-    protected Map<String, String> getHeaders(String username, boolean isContentType) {
-        Map<String, String> headers = new HashMap<>();
+    protected Map<String, Object> getHeaders(String username, boolean isContentType) {
+        Map<String, Object> headers = new HashMap<>();
         // 默认请求json数据
         if (isContentType) {
-            headers.put("Content-type", ContentType.JSON.getValue());
+            headers.put("Content-type", ContentType.APPLICATION_JSON.getMimeType());
         }
-        if (StringUtils.isBlank(username)) {
-            return headers;
+        if (authType == AuthType.ACCESS_SECRET_MODE) {
+            if (StringUtils.isBlank(accessKey)) {
+                throw new ClientException("AccessKey不能为空");
+            }
+            if (StringUtils.isBlank(accessKeySecret)) {
+                throw new ClientException("AccessKeySecret不能为空");
+            }
+            headers.put(CommonConstant.ACCESS_KEY, accessKey);
+
+            if (StringUtils.isBlank(username)) {
+                username = StringUtils.EMPTY;
+            }
+            headers.put(CommonConstant.USERNAME, username);
+
+            String currentTimeMillis = getCurrentTimeMillis();
+            headers.put(CommonConstant.CURRENT_TIME_MILLIS, currentTimeMillis);
+            headers.put(CommonConstant.SIGNATURE, getsSignature(username, currentTimeMillis));
+        } else if (authType == AuthType.TOKEN_MODE && StringUtils.isNotBlank(username)) {
+            headers.put("token", getToken(username));
         }
-        headers.put("token", getToken(username));
         return headers;
+    }
+
+
+    /**
+     * 获取签名
+     *
+     * @param username          用户名
+     * @param currentTimeMillis 时间戳
+     * @return 签名
+     */
+    public String getsSignature(String username, String currentTimeMillis) {
+        SecretKeySpec secretKey = new SecretKeySpec(accessKeySecret.getBytes(StandardCharsets.UTF_8), CommonConstant.HMAC_SHA_256_ALGORITHM);
+        try {
+            Mac mac = Mac.getInstance(CommonConstant.HMAC_SHA_256_ALGORITHM);
+            mac.init(secretKey);
+            String beforeSignature = String.format(CommonConstant.SIGNATURE_FORMAT, accessKey, username, currentTimeMillis);
+            byte[] digest = mac.doFinal(beforeSignature.getBytes(StandardCharsets.UTF_8));
+            return Hex.encodeHexString(digest);
+        } catch (Exception e) {
+            throw new ClientException("签名加密失败，失败信息：" + e.getMessage(), e);
+        }
     }
 
     /**
@@ -188,7 +229,7 @@ public class JHApiExecution {
      * @param username 用户名
      * @return 请求头
      */
-    protected Map<String, String> getHeaders(String username) {
+    protected Map<String, Object> getHeaders(String username) {
         return getHeaders(username, true);
     }
 
@@ -381,7 +422,7 @@ public class JHApiExecution {
 
 
     /**
-     * 退出用户的登录，释放许可
+     * 退出用户的登录，释放许可，当用户退出登录后，建议清除用户的token信息
      *
      * @param username 用户名
      */

@@ -1,6 +1,6 @@
 package com.jhinno.sdk.openapi.test.file;
 
-import cn.hutool.core.lang.ConsoleTable;
+
 import com.jhinno.sdk.openapi.api.file.FileInfo;
 import com.jhinno.sdk.openapi.api.file.JHFileApiExecution;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class FileApiTest {
 
-    private static final JHFileApiExecution execution = new JHFileApiExecution(JHClientConfig.client);
+    private static final JHFileApiExecution execution = (JHFileApiExecution) JHClientConfig.jhApiClientMap.get(JHFileApiExecution.class);;
 
 
     /**
@@ -51,13 +51,7 @@ public class FileApiTest {
     @Test
     public void testGetFileList() {
         List<FileInfo> fileList = execution.getFileList("jhadmin", "$HOME");
-        ConsoleTable consoleTable = ConsoleTable.create();
-        consoleTable.setSBCMode(false);
-        consoleTable.addHeader("fileName", "fileType", "owner", "read", "write", "execute", "path");
-        for (FileInfo fileInfo : fileList) {
-            consoleTable.addBody(fileInfo.getFileName(), fileInfo.getFileType(), fileInfo.getOwner(), fileInfo.getRead().toString(), fileInfo.getWrite().toString(), fileInfo.getExecute().toString(), fileInfo.getPath());
-        }
-        consoleTable.print();
+        System.out.println(fileList);
     }
 
     /**
@@ -92,9 +86,9 @@ public class FileApiTest {
      */
     @Test
     public void testUploadFile() throws IOException {
-        File file = new File("C:\\Users\\yanlongqi\\Desktop\\双色球.xls");
+        File file = new File("C:\\Users\\yanlongqi\\Desktop\\LdapAdminv1830.exe");
         FileInputStream fileInputStream = new FileInputStream(file);
-        execution.uploadFile("jhadmin", fileInputStream, file.getName(), "$HOME/temp", true);
+        execution.uploadFile("jhadmin", fileInputStream, file.getName(), "$HOME", true);
     }
 
 

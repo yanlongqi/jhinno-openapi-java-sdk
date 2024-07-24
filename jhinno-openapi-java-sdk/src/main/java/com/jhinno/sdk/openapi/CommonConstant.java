@@ -16,17 +16,11 @@ public class CommonConstant {
      */
     public static final String FAILED = "failed";
 
-
     /**
-     * 默认的token有效时间（单位：分钟）
+     * AES获取Token格式
      */
-    public static final int DEFAULT_TOKEN_EFFECTIVE_TIME = 30;
+    public static final String TokenUserFormat = "%s,%s";
 
-
-    /**
-     * token 默认剩余时间
-     */
-    public static final int DEFAULT_TOKEN_RESIDUE_TIME = 5;
 
     /**
      * 获取token时AES加密的默认key
@@ -39,7 +33,60 @@ public class CommonConstant {
     public static final String NORMAL_CHARACTER_COMMA = ",";
 
     /**
-     * 是否使用服务器的时间
+     * 签名key
      */
-    public static final boolean DEFAULT_IS_USED_SERVER_TIME = false;
+
+    public static final String SIGNATURE = "signature";
+
+    /**
+     * 集成方Key
+     */
+    public static final String ACCESS_KEY = "accessKey";
+
+    /**
+     * 用户名
+     */
+    public static final String USERNAME = "username";
+
+    /**
+     * 时间戳
+     */
+    public static final String CURRENT_TIME_MILLIS = "currentTimeMillis";
+
+    /**
+     * 签名加密格式
+     * <ul>
+     *     <li> accessKey </li>
+     *     <li> username </li>
+     *     <li> currentTimeMillis </li>
+     * </ul>
+     */
+    public static final String SIGNATURE_FORMAT = "#%s#%s#%s#";
+
+    /**
+     * HmacSHA256 算法
+     */
+    public static final String HMAC_SHA_256_ALGORITHM = "HmacSHA256";
+
+    /**
+     * AES 算法
+     */
+    public static final String AES_ALGORITHM = "AES";
+
+    /**
+     * AES ECB Padding
+     */
+    public static final String AES_ECB_PADDING = "AES/ECB/PKCS5Padding";
+
+    /**
+     * 标准日期时间格式，精确到秒：yyyy-MM-dd HH:mm:ss
+     */
+    public static final String NORM_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+
+
+    /**
+     * Rest请求JSON编码
+     */
+    public static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
+
 }

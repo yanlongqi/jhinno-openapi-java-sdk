@@ -1,6 +1,5 @@
 package com.jhinno.sdk.openapi.api.file;
 
-import cn.hutool.core.collection.CollectionUtil;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
@@ -8,14 +7,11 @@ import com.jhinno.sdk.openapi.ServiceException;
 import com.jhinno.sdk.openapi.api.JHApiExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
+import com.jhinno.sdk.openapi.utils.CollectionUtil;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
 
 import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +22,7 @@ import java.util.Map;
  * @author yanlongqi
  * @date 2024/2/4 18:58
  */
+@NoArgsConstructor
 public class JHFileApiExecution extends JHApiExecution {
 
     public JHFileApiExecution(JHApiClient jhApiClient) {
@@ -189,17 +186,14 @@ public class JHFileApiExecution extends JHApiExecution {
         if (StringUtils.isBlank(uploadPath)) {
             throw new ArgsException("uploadPath是必填参数");
         }
-        MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-        builder.setCharset(StandardCharsets.UTF_8);
-        builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-        builder.addBinaryBody("file", is, ContentType.MULTIPART_FORM_DATA, fileName);
+        Map<String, Object> body = new HashMap<>(3);
+
         if (isCover != null) {
-            builder.addTextBody("isCover", isCover.toString());
+            body.put("isCover", isCover);
         }
-        builder.addTextBody("uploadPath", uploadPath);
-        HttpPost httpPost = new HttpPost(jhApiClient.getUrl(FilePathConstant.FILE_UPLOAD_PATH));
-        httpPost.setEntity(builder.build());
-        ResponseResult<Object> result = jhApiClient.request(httpPost, getHeaders(username, false), new TypeReference<ResponseResult<Object>>() {
+        body.put("uploadPath", uploadPath);
+
+        ResponseResult<Object> result = jhApiClient.upload(FilePathConstant.FILE_UPLOAD_PATH, "file", fileName, is, getHeaders(username, false), body, new TypeReference<ResponseResult<Object>>() {
         });
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
             throw new ServiceException(FilePathConstant.FILE_UPLOAD_PATH, result.getCode(), result.getMessage());

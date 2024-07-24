@@ -5,6 +5,7 @@ import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.api.JHApiExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.Map;
  * @author yanlongqi
  * @date 2024/2/6 17:37
  */
+@NoArgsConstructor
 public class JHDepartmentApiExecution extends JHApiExecution {
 
     /**

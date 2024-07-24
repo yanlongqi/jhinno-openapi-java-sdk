@@ -6,6 +6,7 @@ import com.jhinno.sdk.openapi.api.JHApiExecution;
 import com.jhinno.sdk.openapi.api.PageResult;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.HashMap;
@@ -19,6 +20,7 @@ import java.util.Map;
  * @author yanlongqi
  * @date 2024/2/6 17:37
  */
+@NoArgsConstructor
 public class JHUserApiExecution extends JHApiExecution {
     /**
      * 获取一个执行器的实例

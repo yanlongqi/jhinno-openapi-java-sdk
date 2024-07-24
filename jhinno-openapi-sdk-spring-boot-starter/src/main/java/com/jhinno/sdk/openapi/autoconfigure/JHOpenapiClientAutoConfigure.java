@@ -1,6 +1,7 @@
 package com.jhinno.sdk.openapi.autoconfigure;
 
 import com.jhinno.sdk.openapi.client.JHApiClient;
+import com.jhinno.sdk.openapi.client.JHApiHttpClientImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -8,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * openapi客户端自动配置
+ *
  * @author yanlongqi
  * @date 2024/6/4 16:01
  */
@@ -18,15 +20,18 @@ public class JHOpenapiClientAutoConfigure {
 
     @Bean
     @ConditionalOnMissingBean
-    public JHApiClient jhApiClient(JHOpenapiProperties properties){
-        return JHApiClient.build(
-                properties.getServerUrl(),
-                properties.getMaxTotal(),
-                properties.getMaxPerRout(),
-                properties.getSocketTimeout(),
-                properties.getConnectTimeout(),
-                properties.getConnectRequestTimeout()
-        );
+    public JHApiClient jhApiClient(JHOpenapiProperties properties) {
+        JHApiClient jhApiClient = new JHApiClient(properties.getServerUrl());
+        JHApiHttpClientImpl jhApiHttpClient = new JHApiHttpClientImpl();
+        jhApiHttpClient.setMaxPerRoute(properties.getMaxPerRout());
+        jhApiHttpClient.setSocketTimeout(properties.getSocketTimeout());
+        jhApiHttpClient.setMaxTotal(properties.getMaxTotal());
+        jhApiHttpClient.setConnectTimeout(properties.getConnectTimeout());
+        jhApiHttpClient.setConnectRequestTimeout(properties.getConnectRequestTimeout());
+        jhApiHttpClient.init();
+        jhApiHttpClient.createHttpClients();
+        jhApiClient.setApiHttpClient(jhApiHttpClient);
+        return jhApiClient;
     }
 
 }
