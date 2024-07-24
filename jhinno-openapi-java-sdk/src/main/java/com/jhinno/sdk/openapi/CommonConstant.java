@@ -1,5 +1,9 @@
 package com.jhinno.sdk.openapi;
 
+import com.fasterxml.jackson.databind.util.StdDateFormat;
+
+import java.text.DateFormat;
+
 /**
  * @author yanlongqi
  * @date 2024/1/31 10:17
@@ -83,10 +87,10 @@ public class CommonConstant {
      */
     public static final String NORM_DATETIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
 
-
     /**
-     * Rest请求JSON编码
+     * 时间转换
      */
-    public static final String CONTENT_TYPE_APPLICATION_JSON = "application/json";
+    public static final DateFormat HTTP_DATETIME_FORMAT = new StdDateFormat();
+
 
 }

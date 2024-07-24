@@ -8,6 +8,7 @@ import com.jhinno.sdk.openapi.ClientErrorCode;
 import com.jhinno.sdk.openapi.ClientException;
 import com.jhinno.sdk.openapi.CommonConstant;
 import com.jhinno.sdk.openapi.api.ResponseResult;
+import com.jhinno.sdk.openapi.api.auth.AuthPathConstant;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
@@ -90,7 +91,7 @@ public class JHApiClient {
             InputStream content = apiHttpClient.get(getUrl(path), headers);
             return mapper.readValue(content, type);
         } catch (IOException e) {
-            throw new ClientException(e.getMessage());
+            throw new ClientException(e.getMessage(), e);
         }
     }
 
@@ -181,7 +182,7 @@ public class JHApiClient {
             InputStream content = apiHttpClient.post(getUrl(path), bodyStr, headers);
             return mapper.readValue(content, type);
         } catch (IOException e) {
-            throw new ClientException(e.getMessage());
+            throw new ClientException(e.getMessage(), e);
         }
     }
 
@@ -210,7 +211,7 @@ public class JHApiClient {
             InputStream content = apiHttpClient.put(getUrl(path), bodyStr, headers);
             return mapper.readValue(content, type);
         } catch (IOException e) {
-            throw new ClientException(e.getMessage());
+            throw new ClientException(e.getMessage(), e);
         }
     }
 
@@ -275,7 +276,7 @@ public class JHApiClient {
             InputStream content = apiHttpClient.delete(getUrl(path), headers);
             return mapper.readValue(content, type);
         } catch (IOException e) {
-            throw new ClientException(e.getMessage());
+            throw new ClientException(e.getMessage(), e);
         }
     }
 
@@ -316,7 +317,16 @@ public class JHApiClient {
             InputStream content = apiHttpClient.upload(getUrl(path), keyName, fileName, is, body, headers);
             return mapper.readValue(content, type);
         } catch (IOException e) {
-            throw new ClientException(e.getMessage());
+            throw new ClientException(e.getMessage(), e);
+        }
+    }
+
+    public String getAppformServerCurrentTimeMillis() {
+        try {
+            long currentTimeMillis = apiHttpClient.getAppformServerCurrentTimeMillis(getUrl(AuthPathConstant.PING));
+            return String.valueOf(currentTimeMillis);
+        } catch (IOException e) {
+            throw new ClientException(e.getMessage(), e);
         }
     }
 }

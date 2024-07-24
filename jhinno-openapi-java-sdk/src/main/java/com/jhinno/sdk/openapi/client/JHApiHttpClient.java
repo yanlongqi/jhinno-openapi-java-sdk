@@ -1,6 +1,8 @@
 package com.jhinno.sdk.openapi.client;
 
 
+import com.jhinno.sdk.openapi.AuthType;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
@@ -67,5 +69,16 @@ public interface JHApiHttpClient {
      */
     InputStream upload(String url, String keyName, String fileName, InputStream is, Map<String, Object> body, Map<String, Object> headers) throws IOException;
 
+
+    /**
+     * 获取Appform服务器当前的时间
+     * <p/>
+     * {@link AuthType#TOKEN_MODE}模式，并且打开了获取服务器时间的开关需要实现改方法
+     *
+     * @return 服务器的时间
+     */
+    default long getAppformServerCurrentTimeMillis(String url) throws IOException {
+        return System.currentTimeMillis();
+    }
 
 }

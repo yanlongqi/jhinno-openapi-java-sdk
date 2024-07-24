@@ -2,9 +2,11 @@ package com.jhinno.sdk.openapi.client;
 
 import com.jhinno.sdk.openapi.ClientErrorCode;
 import com.jhinno.sdk.openapi.ClientException;
+import com.jhinno.sdk.openapi.CommonConstant;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -31,6 +33,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.Map;
 
 @Data
@@ -203,5 +206,28 @@ public class JHApiHttpClientImpl implements JHApiHttpClient {
         HttpPost httpPost = new HttpPost(url);
         httpPost.setEntity(builder.build());
         return request(httpPost, headers).getContent();
+    }
+
+
+    @Override
+    public long getAppformServerCurrentTimeMillis(String url) throws IOException {
+        HttpGet httpGet = new HttpGet(url);
+        httpGet.setConfig(requestConfig);
+        try {
+            HttpResponse response = closeableHttpClient.execute(httpGet);
+            Header header = response.getFirstHeader("Date");
+            if (header == null) {
+                throw new ClientException("获取时间戳响应为空！");
+            }
+            String value = header.getValue();
+            if (StringUtils.isBlank(value)) {
+                throw new ClientException("获取时间戳响应头为空！");
+            }
+            return CommonConstant.HTTP_DATETIME_FORMAT.parse(value).getTime();
+        } catch (ParseException e) {
+            throw new ClientException("时间格式获取失败，失败原因：" + e.getMessage(), e);
+        }finally {
+            httpGet.releaseConnection();
+        }
     }
 }

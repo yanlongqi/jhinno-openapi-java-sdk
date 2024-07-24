@@ -161,8 +161,7 @@ public class JHApiExecution {
         if (authType == AuthType.ACCESS_SECRET_MODE || !isUsedServerTime) {
             return String.valueOf(System.currentTimeMillis());
         }
-        // todo 获取服务器的时间
-        return "";
+        return jhApiClient.getAppformServerCurrentTimeMillis();
     }
 
 
