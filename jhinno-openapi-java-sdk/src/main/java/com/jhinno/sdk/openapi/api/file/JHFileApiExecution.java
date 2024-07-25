@@ -11,6 +11,9 @@ import com.jhinno.sdk.openapi.utils.CollectionUtil;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -212,6 +215,55 @@ public class JHFileApiExecution extends JHApiExecution {
      */
     public void uploadFile(String username, InputStream is, String fileName, String uploadPath) {
         uploadFile(username, is, fileName, uploadPath, null);
+    }
+
+    /**
+     * @param username   用户名
+     * @param path       本地文件路径
+     * @param fileName   文件名
+     * @param uploadPath 上传路径，服务器路径
+     * @param isCover    是否覆盖（非必填，默认：false）
+     */
+    public void uploadFile(String username, String path, String fileName, String uploadPath, Boolean isCover) throws FileNotFoundException {
+        if (StringUtils.isBlank(path)) {
+            throw new ArgsException("path是必填参数");
+        }
+        File file = new File(path);
+        FileInputStream fileInputStream = new FileInputStream(file);
+        uploadFile(username, fileInputStream, fileName, uploadPath, isCover);
+    }
+
+
+    /**
+     * @param username   用户名
+     * @param path       本地文件路径
+     * @param fileName   文件名
+     * @param uploadPath 上传路径，服务器路径
+     */
+    public void uploadFile(String username, String path, String fileName, String uploadPath) throws FileNotFoundException {
+        uploadFile(username, path, fileName, uploadPath, null);
+    }
+
+
+    /**
+     * @param username   用户名
+     * @param path       本地文件路径
+     * @param uploadPath 上传路径，服务器路径
+     * @param isCover    是否覆盖（非必填，默认：false）
+     */
+    public void uploadFile(String username, String path, String uploadPath, Boolean isCover) throws FileNotFoundException {
+        File file = new File(path);
+        uploadFile(username, path, file.getName(), uploadPath, isCover);
+    }
+
+    /**
+     * @param username   用户名
+     * @param path       本地文件路径
+     * @param uploadPath 上传路径，服务器路径
+     */
+    public void uploadFile(String username, String path, String uploadPath) throws FileNotFoundException {
+        File file = new File(path);
+        uploadFile(username, path, file.getName(), uploadPath, null);
     }
 
 
