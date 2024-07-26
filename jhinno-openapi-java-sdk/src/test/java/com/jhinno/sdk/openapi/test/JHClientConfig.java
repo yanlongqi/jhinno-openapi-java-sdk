@@ -24,7 +24,7 @@ public class JHClientConfig {
     /**
      * 初始化JHApi客户端
      */
-    public static final JHApiClient client = new JHApiClient("https://172.17.0.5/appform");
+    public static final JHApiClient client = new JHApiClient("https://172.17.0.6/appform");
 
     public static final Map<Class<? extends JHApiExecution>, JHApiExecution> jhApiClientMap = new HashMap<>();
 
@@ -43,7 +43,7 @@ public class JHClientConfig {
 
         jhApiClientMap.forEach((k, v) -> {
             v.setJhApiClient(client);
-            v.setAuthType(AuthType.ACCESS_SECRET_MODE);
+            v.setAuthType(AuthType.TOKEN_MODE);
             v.setAccessKey(ACCESS_KEY);
             v.setAccessKeySecret(ACCESS_KEY_SECRET);
             v.setUsedServerTime(true);

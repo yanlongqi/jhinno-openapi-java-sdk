@@ -2,6 +2,7 @@ package com.jhinno.sdk.openapi.api.app;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
+import com.jhinno.sdk.openapi.AuthType;
 import com.jhinno.sdk.openapi.CommonConstant;
 import com.jhinno.sdk.openapi.ServiceException;
 import com.jhinno.sdk.openapi.api.JHApiExecution;
@@ -35,8 +36,10 @@ public class JHAppApiExecution extends JHApiExecution {
 
     /**
      * 启动一个会话
+     *
+     * <h4>一、通过JHClient启动</h4>
      * <p>
-     * 改方法返回一个重要的参数{@link AppStartedInfo#getJhappUrl()}（拉起景行客户端协议的URL）。
+     * 方法返回一个重要的参数{@link AppStartedInfo#getJhappUrl()}（拉起景行客户端协议的URL）。
      * <p>
      * 测试：将该URL复制粘贴到浏览器的地址栏进行访问即可启动会话。
      *
@@ -61,6 +64,16 @@ public class JHAppApiExecution extends JHApiExecution {
      *  iframe.src = "{@link AppStartedInfo#getJhappUrl()}";
      * </pre>
      *
+     * <p>
+     * 注意：如果使用JHAppClient启动应用的，并且没有做浏览器端和服务器没有做时间同步，
+     * 那么 {@link AppStartRequest#setCurrentTimestamp(String)} 参数必传，
+     * 并使用js生产的时间，具体的参数见 {@link AppStartRequest#setCurrentTimestamp(String)}
+     *
+     * <h4>通过浏览器启动</h4>
+     * <pre class="code">
+     *  window.open("{@link AppStartedInfo#getWebSessionUrl()}}")
+     * </pre>
+     *
      * @param username        用户名
      * @param appId           应用拆
      * @param appStartRequest 启动参数
@@ -73,7 +86,26 @@ public class JHAppApiExecution extends JHApiExecution {
         if (CollectionUtil.isEmpty(data)) {
             throw new ServiceException(path, 500, "获取到的会话信息为空");
         }
-        return data.get(0);
+
+        AppStartedInfo appStartedInfo = data.get(0);
+
+        String webSessionUrlPath = AppPathConstant.WEB_SESSION_URL_PATH.replace("{desktopId}", appStartedInfo.getDesktopId());
+        String url = getJhApiClient().getUrl(webSessionUrlPath);
+
+        Map<String, Object> params = new HashMap<>();
+        AuthType authType = getAuthType();
+        if (authType == AuthType.TOKEN_MODE) {
+            params.put(CommonConstant.TOKEN, getToken(username));
+        } else if (authType == AuthType.ACCESS_SECRET_MODE) {
+            params.put(CommonConstant.USERNAME, username);
+            params.put(CommonConstant.ACCESS_KEY, getAccessKey());
+            String currentTimeMillis = getCurrentTimeMillis();
+            params.put(CommonConstant.CURRENT_TIME_MILLIS, currentTimeMillis);
+            params.put(CommonConstant.SIGNATURE, getsSignature(username, currentTimeMillis));
+        }
+        url = JHApiClient.getUrl(url, params);
+        appStartedInfo.setWebSessionUrl(url);
+        return appStartedInfo;
     }
 
     /**

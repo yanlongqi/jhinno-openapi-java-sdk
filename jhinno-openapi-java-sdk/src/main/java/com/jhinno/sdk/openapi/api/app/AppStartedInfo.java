@@ -34,4 +34,9 @@ public class AppStartedInfo {
      * 作业id（有可能出现，但不是太明白）
      */
     private String jobId;
+
+    /**
+     * WEB 启动会话URL
+     */
+    private String webSessionUrl;
 }

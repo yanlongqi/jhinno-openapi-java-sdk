@@ -91,4 +91,10 @@ public class AppPathConstant {
      * 获取应用链接URL
      */
     public static final String APPS_GET_URL_PATH = "/ws/api/apps/{appName}/url";
+
+
+    /**
+     * WEB启动会话URL
+     */
+    public static final String WEB_SESSION_URL_PATH = "/pageapi/apps/webclient/gui/{desktopId}";
 }

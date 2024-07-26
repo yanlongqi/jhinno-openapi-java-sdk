@@ -12,6 +12,7 @@ import com.jhinno.sdk.openapi.utils.JsonUtil;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import com.jhinno.sdk.openapi.utils.CollectionUtil;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -355,7 +356,7 @@ public class JHJobApiExecution extends JHApiExecution {
             throw new ArgsException("jobId不能为空！");
         }
         String path = JobPathConstant.JOB_PEEK_PATH.replace("{jobId}", jobId);
-        ResponseResult<String> result = jhApiClient.get(path, getHeaders(username), new TypeReference<ResponseResult<String>>() {
+        ResponseResult<String> result = getJhApiClient().get(path, getHeaders(username), new TypeReference<ResponseResult<String>>() {
         });
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
             throw new ServiceException(path, result.getCode(), result.getMessage());

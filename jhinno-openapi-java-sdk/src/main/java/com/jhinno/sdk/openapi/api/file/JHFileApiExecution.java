@@ -196,8 +196,16 @@ public class JHFileApiExecution extends JHApiExecution {
         }
         body.put("uploadPath", uploadPath);
 
-        ResponseResult<Object> result = jhApiClient.upload(FilePathConstant.FILE_UPLOAD_PATH, "file", fileName, is, getHeaders(username, false), body, new TypeReference<ResponseResult<Object>>() {
-        });
+        ResponseResult<Object> result = getJhApiClient().upload(
+                FilePathConstant.FILE_UPLOAD_PATH,
+                "file",
+                fileName,
+                is,
+                getHeaders(username, false),
+                body,
+                new TypeReference<ResponseResult<Object>>() {
+                }
+        );
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
             throw new ServiceException(FilePathConstant.FILE_UPLOAD_PATH, result.getCode(), result.getMessage());
         }

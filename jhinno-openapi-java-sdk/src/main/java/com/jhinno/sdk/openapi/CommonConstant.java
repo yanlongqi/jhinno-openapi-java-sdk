@@ -57,6 +57,12 @@ public class CommonConstant {
      */
     public static final String CURRENT_TIME_MILLIS = "currentTimeMillis";
 
+
+    /**
+     * TOKEN
+     */
+    public static final String TOKEN = "token";
+
     /**
      * 签名加密格式
      * <ul>

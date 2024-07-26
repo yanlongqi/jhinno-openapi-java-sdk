@@ -43,10 +43,11 @@ import java.util.concurrent.ConcurrentHashMap;
 @NoArgsConstructor
 public class JHApiExecution {
 
+
     /**
      * JHApiClient实例
      */
-    public JHApiClient jhApiClient;
+    private JHApiClient jhApiClient;
 
     /**
      * token的超时时间
@@ -157,7 +158,7 @@ public class JHApiExecution {
     /**
      * @return
      */
-    private String getCurrentTimeMillis() {
+    public String getCurrentTimeMillis() {
         if (authType == AuthType.ACCESS_SECRET_MODE || !isUsedServerTime) {
             return String.valueOf(System.currentTimeMillis());
         }
@@ -196,7 +197,7 @@ public class JHApiExecution {
             headers.put(CommonConstant.CURRENT_TIME_MILLIS, currentTimeMillis);
             headers.put(CommonConstant.SIGNATURE, getsSignature(username, currentTimeMillis));
         } else if (authType == AuthType.TOKEN_MODE && StringUtils.isNotBlank(username)) {
-            headers.put("token", getToken(username));
+            headers.put(CommonConstant.TOKEN, getToken(username));
         }
         return headers;
     }
