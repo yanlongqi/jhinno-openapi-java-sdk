@@ -86,12 +86,14 @@ public class JHAppApiExecution extends JHApiExecution {
         if (CollectionUtil.isEmpty(data)) {
             throw new ServiceException(path, 500, "获取到的会话信息为空");
         }
-
         AppStartedInfo appStartedInfo = data.get(0);
+        appStartedInfo.setWebSessionUrl(getWebSessionUrl(username, appStartedInfo.getDesktopId()));
+        return appStartedInfo;
+    }
 
-        String webSessionUrlPath = AppPathConstant.WEB_SESSION_URL_PATH.replace("{desktopId}", appStartedInfo.getDesktopId());
+    public String getWebSessionUrl(String username, String desktopId) {
+        String webSessionUrlPath = AppPathConstant.WEB_SESSION_URL_PATH.replace("{desktopId}", desktopId);
         String url = getJhApiClient().getUrl(webSessionUrlPath);
-
         Map<String, Object> params = new HashMap<>();
         AuthType authType = getAuthType();
         if (authType == AuthType.TOKEN_MODE) {
@@ -103,9 +105,7 @@ public class JHAppApiExecution extends JHApiExecution {
             params.put(CommonConstant.CURRENT_TIME_MILLIS, currentTimeMillis);
             params.put(CommonConstant.SIGNATURE, getsSignature(username, currentTimeMillis));
         }
-        url = JHApiClient.getUrl(url, params);
-        appStartedInfo.setWebSessionUrl(url);
-        return appStartedInfo;
+        return JHApiClient.getUrl(url, params);
     }
 
     /**
@@ -298,7 +298,10 @@ public class JHAppApiExecution extends JHApiExecution {
         if (CollectionUtil.isEmpty(list)) {
             throw new ServiceException(path, 500, "获取到的会话信息为空");
         }
-        return list.get(0);
+
+        AppStartedInfo appStartedInfo = list.get(0);
+        appStartedInfo.setWebSessionUrl(getWebSessionUrl(username, sessionId));
+        return appStartedInfo;
     }
 
 
