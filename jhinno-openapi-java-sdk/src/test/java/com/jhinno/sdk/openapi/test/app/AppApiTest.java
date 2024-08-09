@@ -168,4 +168,21 @@ public class AppApiTest {
         System.out.println(jhAppApiExecution.getAppUrl("jhadmin", "myjobmana"));
     }
 
+
+    /**
+     * 测试根据文件后缀取应用列表
+     */
+    @Test
+    public void testGetAppInfoSuffixList() {
+        System.out.println(jhAppApiExecution.getAppInfoSuffixList("test", ".sh"));
+    }
+
+
+    /**
+     * 测试根据用途获取应用列表
+     */
+    @Test
+    public void testGetUseLabelList() {
+        System.out.println(jhAppApiExecution.getUseLabelList("jhadmin"));
+    }
 }

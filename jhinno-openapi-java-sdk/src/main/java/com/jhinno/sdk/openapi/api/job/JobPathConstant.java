@@ -86,6 +86,8 @@ public class JobPathConstant {
 
     /**
      * 获取作业表单
+     * <p/>
+     * 该接口目前在Solutions下面维护，未经过产品的测试
      */
     public static final String JOB_GET_APP_FORM_PATH = "/ws/api/jobs/{appId}/form_params";
 }

@@ -12,6 +12,7 @@ import com.jhinno.sdk.openapi.utils.CollectionUtil;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -393,7 +394,7 @@ public class JHAppApiExecution extends JHApiExecution {
     /**
      * 获取应用链接
      *
-     * @param username 应户名
+     * @param username 用户名
      * @param appName  应用名
      * @return 应用链接地址
      */
@@ -408,5 +409,62 @@ public class JHAppApiExecution extends JHApiExecution {
             throw new ServiceException(path, 500, "应用信息为空！");
         }
         return apps.get(0).get("url");
+    }
+
+    /**
+     * 根据文件后缀查询应用
+     *
+     * @param username 用户名
+     * @param suffixes 文件后缀列表
+     * @return 应用列表
+     */
+    public List<AppstoreAppInfo> getAppInfoSuffixList(String username, String... suffixes) {
+        return getAppInfoSuffixList(username, Arrays.asList(suffixes));
+    }
+
+    /**
+     * 根据文件后缀查询应用
+     *
+     * @param username 用户名
+     * @param suffixes 文件后缀列表
+     * @return 应用列表
+     */
+    public List<AppstoreAppInfo> getAppInfoSuffixList(String username, List<String> suffixes) {
+        Map<String, Object> params = new HashMap<>(1);
+        if (CollectionUtil.isNotEmpty(suffixes)) {
+            params.put("suffixes", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, suffixes));
+        }
+        String path = JHApiClient.getUrl(AppPathConstant.APPS_SUFFIXES_PATH, params);
+        return get(path, username, new TypeReference<ResponseResult<List<AppstoreAppInfo>>>() {
+        });
+    }
+
+    /**
+     * 根据用途查询应用
+     *
+     * @param username 用户名
+     * @param labels   用途列表
+     * @return 应用列表
+     */
+    public List<UseLabelInfo> getUseLabelList(String username, String... labels) {
+        return getUseLabelList(username, Arrays.asList(labels));
+    }
+
+
+    /**
+     * 根据用途查询应用
+     *
+     * @param username 用户名
+     * @param labels   用途列表
+     * @return 应用列表
+     */
+    public List<UseLabelInfo> getUseLabelList(String username, List<String> labels) {
+        Map<String, Object> params = new HashMap<>(1);
+        if (CollectionUtil.isNotEmpty(labels)) {
+            params.put("use_labels", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, labels));
+        }
+        String path = JHApiClient.getUrl(AppPathConstant.APP_USE_LABEL_PATH, params);
+        return get(path, username, new TypeReference<ResponseResult<List<UseLabelInfo>>>() {
+        });
     }
 }

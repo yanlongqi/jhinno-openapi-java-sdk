@@ -97,4 +97,20 @@ public class AppPathConstant {
      * WEB启动会话URL
      */
     public static final String WEB_SESSION_URL_PATH = "/pageapi/apps/webclient/gui/{desktopId}";
+
+
+    /**
+     * 根据用途查询应用
+     * <p/>
+     * 该接口目前在Solutions下面维护，未经过产品的测试
+     */
+    public static final String APP_USE_LABEL_PATH = "/ws/api/app/use_label/apps";
+
+
+    /**
+     * 根据文件后缀查询应用
+     * <p/>
+     * 该接口目前在Solutions下面维护，未经过产品的测试
+     */
+    public static final String APPS_SUFFIXES_PATH = "/ws/api/apps/suffixes";
 }
