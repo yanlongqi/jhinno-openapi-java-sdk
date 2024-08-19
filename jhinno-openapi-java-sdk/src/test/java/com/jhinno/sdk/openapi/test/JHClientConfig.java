@@ -24,13 +24,13 @@ public class JHClientConfig {
     /**
      * 初始化JHApi客户端
      */
-    public static final JHApiClient client = new JHApiClient("https://192.168.38.160/appform");
+    public static final JHApiClient client = new JHApiClient("https://172.17.0.5/appform");
 
     public static final Map<Class<? extends JHApiExecution>, JHApiExecution> jhApiClientMap = new HashMap<>();
 
-    public static final String ACCESS_KEY = "35154207caa94be582e75da31ec8e9f2";
+    public static final String ACCESS_KEY = "3f03747f147942bd8debd81b6c9c6a80";
 
-    public static final String ACCESS_KEY_SECRET = "2cdb5ecbe51543ad9a08ad21c32e2dd9";
+    public static final String ACCESS_KEY_SECRET = "e0681859b91c499eb1d2c8e09cea3242";
 
     static {
         client.initDefaultApiClient();

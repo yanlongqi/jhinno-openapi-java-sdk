@@ -13,7 +13,14 @@ public class JHOpenApiConfig {
     private final JHApiClient client;
     private final JHOpenapiProperties properties;
 
-    public <T extends JHApiExecution> T initJHApiExecution(T execution) {
+    /**
+     * 配置执行器
+     *
+     * @param execution 执行器
+     * @param <T>       执行器类型
+     * @return 配置的执行器
+     */
+    public <T extends JHApiExecution> T configJHApiExecution(T execution) {
         execution.setJhApiClient(client);
         execution.setForceGetToken(properties.isForceGetToken());
         execution.setAuthType(properties.getAuthType());
