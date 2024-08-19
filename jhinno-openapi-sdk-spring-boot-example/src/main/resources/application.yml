@@ -1,0 +1,6 @@
+jhinno:
+  openapi:
+    server-url: https://172.17.0.5/appform
+    auth-type: access_secret_mode
+    access-key: 3f03747f147942bd8debd81b6c9c6a80
+    access-key-secret: e0681859b91c499eb1d2c8e09cea3242
