@@ -26,22 +26,7 @@
 
 建议在您的项目中使用Jhinno OpenAPI SDK for Java的方法是从Maven中使用它。：
 
-#### 方法一：通过Maven仓库安装
-
-> 添加仓库地址（改方案为备用方案，后续会上传至Maven中央仓库，目前不影响正常使用）
-
-```xml
-
-<repositories>
-    <repository>
-        <id>jhinno-nexus</id>
-        <name>jhinno-nexus</name>
-        <url>https://jhinno-nexus.yuchat.top/repository/maven-releases</url>
-    </repository>
-</repositories>
-```
-
-#### 方法二：通过命令将jar包导入本地Maven仓库
+#### 方法一：通过命令将jar包导入本地Maven仓库（无网络开发额外配置）
 
 ```shell
 
@@ -62,6 +47,14 @@ mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/
 > - jhinno-openapi-sdk-spring-boot-starter-x.x.x.jar 为SDK的spring-boot-starter的jar包。
 > - jhinno-openapi-sdk-spring-boot-starter-x.x.x-sources.jar 为SDK的spring-boot-starter的源码包。
 
+#### 方法二：通过源码导入（无网络开发额外配置）
+
+```shell
+git clone https://github.com/yanlongqi/jhinno-openapi-java-sdk.git
+cd jhinno-openapi-java-sdk
+mvn clean install
+```
+
 ### 2.1.2 引入`jhinno-openapi-sdk-spring-boot-starter`坐标
 
 ```xml
@@ -69,7 +62,7 @@ mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/
 <dependency>
     <groupId>com.jhinno</groupId>
     <artifactId>jhinno-openapi-sdk-spring-boot-starter</artifactId>
-    <version>1.0.1</version>
+    <version>${最新的版本号}</version>
 </dependency>
 ```
 
@@ -100,7 +93,8 @@ jhinno.openapi.auth-type=access_secret_mode
 
 > 注：
 > - 其中`jhinno.openapi.server-url`为景行接口服务的BaseUrl；
-> - `auth-type` 认证类型，`token_mode`(Token认证) 和 `access_secret_mode`（AccessKey认证）；Appform Release 6.2 `token_mode`作为过渡，将会弃用；
+> - `auth-type` 认证类型，`token_mode`(Token认证) 和 `access_secret_mode`（AccessKey认证）；Appform Release 6.2 `token_mode`
+    作为过渡，将会弃用；
 > - `jhinno.openapi.used-server-time`是否获取服务器时间来请求token，关闭可提高获取token的时间，但打开有可能因为服务器时间不准确而导致token获取失败的问题。
 > - `access-key` 和 `access-key-secret` 作为访问接口的凭证，需要提供集成商名称、系统名称、负责人姓名、负责电话电话信息申请。
 > - 更多配置见`com.jhinno.sdk.openapi.autoconfigure.JHOpenapiProperties`源码。
@@ -135,22 +129,7 @@ public class DemoUserSDK {
 
 建议在您的项目中使用Jhinno OpenAPI SDK for Java的方法是从Maven中使用它。：
 
-#### 方法一：通过Maven仓库安装
-
-> 添加仓库地址（改方案为备用方案，后续会上传至Maven中央仓库，目前不影响正常使用）
-
-```xml
-
-<repositories>
-    <repository>
-        <id>jhinno-nexus</id>
-        <name>jhinno-nexus</name>
-        <url>https://jhinno-nexus.yuchat.top/repository/maven-releases</url>
-    </repository>
-</repositories>
-```
-
-#### 方法二：通过命令将jar包导入本地Maven仓库
+#### 方法一：通过命令将jar包导入本地Maven仓库（无网络开发额外配置）
 
 ```shell
 
@@ -164,6 +143,14 @@ mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/
 > - jhinno-openapi-java-sdk-x.x.x.jar 为SDK的jar包。
 > - jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看SDK代码的注释。
 
+#### 方法二：通过源码导入（无网络开发额外配置）
+
+```shell
+git clone https://github.com/yanlongqi/jhinno-openapi-java-sdk.git
+cd jhinno-openapi-java-sdk
+mvn clean install
+```
+
 ### 2.2.2 引入`jhinno-openapi-java-sdk`坐标
 
 ```xml
@@ -171,7 +158,7 @@ mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/
 <dependency>
     <groupId>com.jhinno</groupId>
     <artifactId>jhinno-openapi-java-sdk</artifactId>
-    <version>1.0.1</version>
+    <version>${最新的版本号}</version>
 </dependency>
 ```
 
@@ -244,7 +231,7 @@ public class DemoUserSDK {
 <dependency>
     <groupId>com.jhinno</groupId>
     <artifactId>jhinno-openapi-java-sdk</artifactId>
-    <version>2.0.0</version>
+    <version>${最新的版本号}</version>
 </dependency>
 ```
 
@@ -349,7 +336,7 @@ public class JHAppApiExecution extends JHApiExecution {
 一旦您检出代码，就可以使用Maven构建它。使用以下命令进行构建：
 
 ```shell
-mvn clean package -DskipTests -P product
+mvn clean package
 ```
 
 # 5. 代码贡献
