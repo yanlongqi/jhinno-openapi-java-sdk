@@ -1,22 +1,22 @@
 # 1. Jhinno OpenAPI SDK for Java
 
-针对Java的景行API SDK使Java开发人员能够轻松使用景行API接口。您可以在几分钟内开始通过Maven或jar文件使用它。
+针对 Java 的景行 API SDK 使 Java 开发人员能够轻松使用景行 API 接口。您可以在几分钟内开始通过 Maven 或 jar 文件使用它。
 
 - [仓库地址：https://github.com/yanlongqi/jhinno-openapi-java-sdk](https://github.com/yanlongqi/jhinno-openapi-java-sdk)
 - [开发文档：https://jhinno-sdk-doc.yuchat.top/apidocs](https://jhinno-sdk-doc.yuchat.top/apidocs)
-- [jar包下载：https://github.com/yanlongqi/jhinno-openapi-java-sdk/releases](https://github.com/yanlongqi/jhinno-openapi-java-sdk/releases)
+- [jar 包下载：https://github.com/yanlongqi/jhinno-openapi-java-sdk/releases](https://github.com/yanlongqi/jhinno-openapi-java-sdk/releases)
 
 ## 1.1 必要条件
 
 - Java 1.8 or later
 - Maven
 
-## 1.2 支持的Appform的版本
+## 1.2 支持的 Appform 的版本
 
 1. JH_Appform_6.0_Release
 2. JH_Appform_6.0_SP1_Release
 3. JH_Appform_6.1_Release
-3. JH_Appform_6.2_Release（6.2以前用1.x.x版本）
+4. JH_Appform_6.2_Release（使用: release-2.0.3）
 
 # 2. 快速开始
 
@@ -24,9 +24,9 @@
 
 ### 2.1.1 安装
 
-建议在您的项目中使用Jhinno OpenAPI SDK for Java的方法是从Maven中使用它。：
+建议在您的项目中使用 Jhinno OpenAPI SDK for Java 的方法是从 Maven 中使用它。：
 
-#### 方法一：通过命令将jar包导入本地Maven仓库（无网络开发额外配置）
+#### 方法一：通过命令将 jar 包导入本地 Maven 仓库
 
 ```shell
 
@@ -42,12 +42,13 @@ mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/
 ```
 
 > 注:
-> - jhinno-openapi-java-sdk-x.x.x.jar 为SDK的jar包。
-> - jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看SDK代码的注释。
-> - jhinno-openapi-sdk-spring-boot-starter-x.x.x.jar 为SDK的spring-boot-starter的jar包。
-> - jhinno-openapi-sdk-spring-boot-starter-x.x.x-sources.jar 为SDK的spring-boot-starter的源码包。
+>
+> - jhinno-openapi-java-sdk-x.x.x.jar 为 SDK 的 jar 包。
+> - jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看 SDK 代码的注释。
+> - jhinno-openapi-sdk-spring-boot-starter-x.x.x.jar 为 SDK 的 spring-boot-starter 的 jar 包。
+> - jhinno-openapi-sdk-spring-boot-starter-x.x.x-sources.jar 为 SDK 的 spring-boot-starter 的源码包。
 
-#### 方法二：通过源码导入（无网络开发额外配置）
+#### 方法二：通过源码导入
 
 ```shell
 git clone https://github.com/yanlongqi/jhinno-openapi-java-sdk.git
@@ -66,11 +67,16 @@ mvn clean install
 </dependency>
 ```
 
+#### 方法三：直接使用 jar 包
+
+如果开发环境没有网络，或者没有使用 maven 的构建工具，则可以使用 jar 包的方式导入。下载`dependency-jar.zip`和`jhinno-openapi-java-sdk-2.0.3-sources.jar`、`jhinno-openapi-java-sdk-2.0.3.jar`导入到你的 java 项目的 lib 里面。如果你的项目是 SpringBoot 项目，则还需要导入`jhinno-openapi-sdk-spring-boot-starter-2.0.3.jar`、`jhinno-openapi-sdk-spring-boot-starter-2.0.3-sources.jar
+`这两个 jar 包。
+
 ### 2.1.3 配置
 
-在SpringBoot的`application.properties`或`application.yml`里面配置
+在 SpringBoot 的`application.properties`或`application.yml`里面配置
 
-#### 2.1.3.1  application.yaml
+#### 2.1.3.1 application.yaml
 
 ```yaml
 jhinno:
@@ -81,7 +87,7 @@ jhinno:
     auth-type: access_secret_mode
 ```
 
-#### 2.1.3.2  application.properties
+#### 2.1.3.2 application.properties
 
 ```properties
 jhinno.openapi.server-url=https://{appform服务器的地址}/appform
@@ -92,10 +98,13 @@ jhinno.openapi.auth-type=access_secret_mode
 ```
 
 > 注：
-> - 其中`jhinno.openapi.server-url`为景行接口服务的BaseUrl；
-> - `auth-type` 认证类型，`token_mode`(Token认证) 和 `access_secret_mode`（AccessKey认证）；Appform Release 6.2 `token_mode`
+>
+> - 其中`jhinno.openapi.server-url`为景行接口服务的 BaseUrl；
+> - `auth-type` 认证类型，`token_mode`(Token 认证) 和 `access_secret_mode`（AccessKey 认证）；Appform Release 6.2 `token_mode`
+
     作为过渡，将会弃用；
-> - `jhinno.openapi.used-server-time`是否获取服务器时间来请求token，关闭可提高获取token的时间，但打开有可能因为服务器时间不准确而导致token获取失败的问题。
+
+> - `jhinno.openapi.used-server-time`是否获取服务器时间来请求 token，关闭可提高获取 token 的时间，但打开有可能因为服务器时间不准确而导致 token 获取失败的问题。
 > - `access-key` 和 `access-key-secret` 作为访问接口的凭证，需要提供集成商名称、系统名称、负责人姓名、负责电话电话信息申请。
 > - 更多配置见`com.jhinno.sdk.openapi.autoconfigure.JHOpenapiProperties`源码。
 
@@ -127,9 +136,9 @@ public class DemoUserSDK {
 
 ### 2.2.1 安装
 
-建议在您的项目中使用Jhinno OpenAPI SDK for Java的方法是从Maven中使用它。：
+建议在您的项目中使用 Jhinno OpenAPI SDK for Java 的方法是从 Maven 中使用它。：
 
-#### 方法一：通过命令将jar包导入本地Maven仓库（无网络开发额外配置）
+#### 方法一：通过命令将 jar 包导入本地 Maven 仓库（无网络开发额外配置）
 
 ```shell
 
@@ -140,8 +149,9 @@ mvn org.apache.maven.plugins:maven-install-plugin:3.1.1:install-file -Dfile="E:/
 ```
 
 > 注:
-> - jhinno-openapi-java-sdk-x.x.x.jar 为SDK的jar包。
-> - jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看SDK代码的注释。
+>
+> - jhinno-openapi-java-sdk-x.x.x.jar 为 SDK 的 jar 包。
+> - jhinno-openapi-java-sdk-x.x.x-sources.jar 为源码包，添加可方便查看 SDK 代码的注释。
 
 #### 方法二：通过源码导入（无网络开发额外配置）
 
@@ -164,7 +174,7 @@ mvn clean install
 
 ### 2.2.3 配置
 
-spring.xml添加以下内容
+spring.xml 添加以下内容
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -218,7 +228,7 @@ public class DemoUserSDK {
 }
 ```
 
-## 2.3 普通java项目
+## 2.3 普通 java 项目
 
 ### 2.3.1 安装
 
@@ -243,7 +253,7 @@ public class DemoUserSDK {
 
 具体的使用步骤如下：
 
-1. 创建一个`JHApiClient`客户端，此为HTTP连接池，为确保资源浪费，需保证全局唯一，每次创建执行器都使用个客户端。
+1. 创建一个`JHApiClient`客户端，此为 HTTP 连接池，为确保资源浪费，需保证全局唯一，每次创建执行器都使用个客户端。
 2. 创建接口的执行器，即：`JHxxxApiExecution`，如：`JHAppApiExecution`。
 3. 调用接口执行器的方法，使用景行接口资源，如下代码片段。
 
@@ -298,14 +308,14 @@ public class DemoUserSDK {
 
 ```
 
-# 3. 支持SDK的扩展
+# 3. 支持 SDK 的扩展
 
-如果是基于景行定制的接口，本SDK没有包含这些方法，因此您可以基于`JHApiExecution`快速进行扩展，具体的扩展步骤如下：
+如果是基于景行定制的接口，本 SDK 没有包含这些方法，因此您可以基于`JHApiExecution`快速进行扩展，具体的扩展步骤如下：
 
 - 新建需要扩展的执行器命名为`JHxxxApiExecution`，并继承`JHApiExecution`；
 - 编写基于接口调用的方法；
 
-父类提供了封装好的`get`、`post`、`put`、`delete`方法，可以直接使用，而不考虑token的问题
+父类提供了封装好的`get`、`post`、`put`、`delete`方法，可以直接使用，而不考虑 token 的问题
 
 ```java
 /**
@@ -333,7 +343,7 @@ public class JHAppApiExecution extends JHApiExecution {
 
 # 4. 构建
 
-一旦您检出代码，就可以使用Maven构建它。使用以下命令进行构建：
+一旦您检出代码，就可以使用 Maven 构建它。使用以下命令进行构建：
 
 ```shell
 mvn clean package
@@ -341,8 +351,8 @@ mvn clean package
 
 # 5. 代码贡献
 
-- 代码必须格式化，使用IDEA自带的格式即可；
-- 请求路径必须放在一个单独的const类中统一维护，具体可参考现有代码提交；
+- 代码必须格式化，使用 IDEA 自带的格式即可；
+- 请求路径必须放在一个单独的 const 类中统一维护，具体可参考现有代码提交；
 - 封装新的接口是需要继承`JHApiExecution`，调用父类的辅助方法辅助封装；
 
 # 6. 作者
