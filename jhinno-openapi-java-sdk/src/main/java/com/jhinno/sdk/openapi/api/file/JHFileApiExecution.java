@@ -15,6 +15,7 @@ import org.apache.commons.lang3.StringUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
@@ -280,11 +281,24 @@ public class JHFileApiExecution implements JHApiExecution {
      * @return 文件地址信息
      */
     public String getFileDownloadUrl(String username, String filePath) {
+        return getFileDownloadUrl(username, filePath, null);
+    }
+
+    /**
+     * 获取文件下载地址
+     *
+     * @param username      用户名
+     * @param filePath      文件路径
+     * @param forceDownload 是否强制下载，打开密级之后未标密的文件无法下载，可以通过设置当前参数为true来强制下载，默认：false
+     * @return 文件地址信息
+     */
+    public String getFileDownloadUrl(String username, String filePath, Boolean forceDownload) {
         if (StringUtils.isBlank(filePath)) {
             throw new ArgsException("filePath不能为空！");
         }
         Map<String, Object> params = new HashMap<>(1);
         params.put("filePath", filePath);
+        params.put("forceDownload", forceDownload);
         String path = JHApiClient.getUrl(FilePathConstant.FILE_DOWNLOAD_PATH, params);
         Map<String, String> downloadInfo = execution.get(path, username,
                 new TypeReference<ResponseResult<Map<String, String>>>() {
@@ -293,6 +307,32 @@ public class JHFileApiExecution implements JHApiExecution {
             return null;
         }
         return downloadInfo.get("url");
+    }
+
+    /**
+     * 获取文件输入流
+     * 
+     * @param username 用户名
+     * @param filePath 文件路径
+     * @return 文件流
+     * @throws IOException
+     */
+    public InputStream getFileInputStream(String username, String filePath) throws IOException {
+        return getFileInputStream(username, filePath, null);
+    }
+
+    /**
+     * 获取文件输入流
+     * 
+     * @param username      用户名
+     * @param filePath      文件路径
+     * @param forceDownload 是否强制下载，打开密级之后未标密的文件无法下载，可以通过设置当前参数为true来强制下载，默认：false
+     * @return 文件流
+     * @throws IOException
+     */
+    public InputStream getFileInputStream(String username, String filePath, Boolean forceDownload) throws IOException {
+        String fileUrl = getFileDownloadUrl(username, filePath, forceDownload);
+        return execution.getJhApiClient().getApiHttpClient().get(fileUrl, null);
     }
 
     /**

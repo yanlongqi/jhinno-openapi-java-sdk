@@ -1,10 +1,10 @@
 package com.jhinno.sdk.openapi.test.file;
 
-
 import com.jhinno.sdk.openapi.api.file.FileInfo;
 import com.jhinno.sdk.openapi.api.file.JHFileApiExecution;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
 import org.junit.Test;
+import java.io.InputStream;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,8 +18,7 @@ import java.util.List;
 public class FileApiTest {
 
     private static final JHFileApiExecution execution = JHClientConfig.API_EXECUTRON_MANAGE
-    .getApiExecution(JHFileApiExecution.class);
-
+            .getApiExecution(JHFileApiExecution.class);
 
     /**
      * 测试重命名文件或文件夹
@@ -45,7 +44,6 @@ public class FileApiTest {
         execution.copyFile("lqyan", "/apps/JHDP/lqyan/PSUserService.class", "/apps/JHDP/lqyan/temp");
     }
 
-
     /**
      * 测试获取文件列表
      */
@@ -63,7 +61,6 @@ public class FileApiTest {
         System.out.println(execution.mkdir("jhadmin", "$HOMEtest1", true));
     }
 
-
     /**
      * 新建文件夹不强制新建
      */
@@ -72,7 +69,6 @@ public class FileApiTest {
         System.out.println(execution.mkdir("lqyan", "/apps/JHDP/lqyan/temp/bbb/ddd"));
     }
 
-
     /**
      * 测试新建文件（接口执行失败）
      */
@@ -80,7 +76,6 @@ public class FileApiTest {
     public void testMkFile() {
         System.out.println(execution.mkFile("lqyan", "/apps/JHDP/lqyan/temp/ddd.txt"));
     }
-
 
     /**
      * 测试文件上传 (是否覆盖存在问题)
@@ -91,7 +86,6 @@ public class FileApiTest {
         FileInputStream fileInputStream = new FileInputStream(file);
         execution.uploadFile("jhadmin", fileInputStream, file.getName(), "$HOME", true);
     }
-
 
     /**
      * 测试上传文件，（不覆盖源文件，如果isCover是true，上传后的文件有数字下标）
@@ -111,12 +105,21 @@ public class FileApiTest {
         System.out.println(execution.getFileDownloadUrl("jhadmin", "$HOME/aa2a.sh"));
     }
 
+    @Test
+    public void testGetFileStream() throws IOException {
+        InputStream in = execution.getFileInputStream("jhadmin", "$HOME/aaa.sh");
+        while (in.available() > 0) {
+            // 读取文件内容
+            int read = in.read();
+            System.out.println("读取文件内容:" + read);
+
+        }
+    }
 
     @Test
     public void testCompress() {
         execution.compress("jhadmin", "$HOME/temp", "$HOME/temp.zip");
     }
-
 
     @Test
     public void testUncompress() {

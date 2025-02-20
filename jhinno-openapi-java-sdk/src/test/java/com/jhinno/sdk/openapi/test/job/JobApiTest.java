@@ -53,7 +53,7 @@ public class JobApiTest {
      */
     @Test
     public void testGetHistoryJobs() {
-        PageJobInfo pages = execution.getHistoryJobs("jhadmin", 1, 5, null, null, null);
+        PageJobInfo pages = execution.getHistoryJobs("jhadmin", 1, 5, null, JobStatusEnum.DONE, null);
         System.out.println(pages);
     }
 
