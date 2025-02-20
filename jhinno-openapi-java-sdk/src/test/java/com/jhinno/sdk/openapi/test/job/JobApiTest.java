@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class JobApiTest {
 
-    private static final JHJobApiExecution execution =  JHClientConfig.API_EXECUTRON_MANAGE
-    .getApiExecution(JHJobApiExecution.class);
+    private static final JHJobApiExecution execution = JHClientConfig.API_EXECUTRON_MANAGE
+            .getApiExecution(JHJobApiExecution.class);
 
     /**
      * 测试提交作业
@@ -31,7 +31,6 @@ public class JobApiTest {
         System.out.println(execution.submit("jhadmin", "common_sub", params));
     }
 
-
     /**
      * 测试根据作业id查询作业文件列表
      */
@@ -40,14 +39,22 @@ public class JobApiTest {
         System.out.println(execution.getJobFilesById("jhadmin", "42"));
     }
 
-
     /**
      * 测试分页查询作业列表
      */
     @Test
     public void testGetJobPage() {
-        PageJobInfo jhadmin = execution.getJobPage("jhadmin", 1, 5, null, JobStatusEnum.DONE, null);
-        System.out.println(jhadmin);
+        PageJobInfo pages = execution.getJobPage("jhadmin", 1, 5, null, JobStatusEnum.DONE, null);
+        System.out.println(pages);
+    }
+
+    /**
+     * 测试查询历史作业列表
+     */
+    @Test
+    public void testGetHistoryJobs() {
+        PageJobInfo pages = execution.getHistoryJobs("jhadmin", 1, 5, null, null, null);
+        System.out.println(pages);
     }
 
     /**
@@ -57,7 +64,6 @@ public class JobApiTest {
     public void tesGetJobDetail() {
         System.out.println(execution.getJobDetail("jhadmin", "42"));
     }
-
 
     /**
      * 测试使用作业名称检索
@@ -75,7 +81,6 @@ public class JobApiTest {
         System.out.println(execution.getJobsByStatus("jhadmin", JobStatusEnum.DONE, 1, 10));
     }
 
-
     /**
      * 测试使用作业拆id列表查询作业
      */
@@ -83,7 +88,6 @@ public class JobApiTest {
     public void testGetJobsByIds() {
         System.out.println(execution.getJobsByIds("jhadmin", Arrays.asList("42", "41")));
     }
-
 
     /**
      * 测试查询作业历史
@@ -93,7 +97,6 @@ public class JobApiTest {
         JobHistoryInfo result = execution.getJobHistory("jhadmin", "42");
         System.out.println(result);
     }
-
 
     /**
      * 测试通过多个子哦也好查询作业历史
@@ -112,7 +115,6 @@ public class JobApiTest {
         String peek = execution.getJobPeek("jhadmin", "45");
         System.out.println("peek = " + peek);
     }
-
 
     /**
      * 测试会话连接（目前没有测试条件）

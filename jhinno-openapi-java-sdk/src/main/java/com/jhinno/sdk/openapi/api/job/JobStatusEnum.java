@@ -28,7 +28,6 @@ public enum JobStatusEnum {
     EXIT("EXIT", "退出"),
     UNKNOWN_UNKWN("UNKNOWN#UNKWN", "状态不明");
 
-
     /**
      * 状态标识
      */
@@ -39,7 +38,6 @@ public enum JobStatusEnum {
      */
     private final String name;
 
-
     /**
      * 使用标号获得JobStatusEnum对象
      *
@@ -49,7 +47,7 @@ public enum JobStatusEnum {
      */
     public static JobStatusEnum getJobStatus(String status) {
         if (StringUtils.isBlank(status)) {
-            throw new ArgsException("作业状态不能为空！");
+            return null;
         }
         for (JobStatusEnum value : values()) {
             if (StringUtils.equals(status, value.getStatus())) {

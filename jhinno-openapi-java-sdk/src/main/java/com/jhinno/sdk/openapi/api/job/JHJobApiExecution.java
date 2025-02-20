@@ -78,7 +78,7 @@ public class JHJobApiExecution implements JHApiExecution {
     /**
      * 分页查询作业列表
      * <p>
-     * 作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件
+     * 注：name、status、condition均为删选条件，condition为 高级筛选
      * </p>
      *
      * @param username  用户名
@@ -116,7 +116,7 @@ public class JHJobApiExecution implements JHApiExecution {
     /**
      * 分页查询作业列表
      * <p>
-     * 作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件
+     * 注：name、status、condition均为删选条件，condition为 高级筛选
      * </p>
      *
      * @param username  用户名
@@ -131,6 +131,66 @@ public class JHJobApiExecution implements JHApiExecution {
     public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, String status,
             Map<String, Object> condition) {
         return getJobPage(username, page, pageSize, name, JobStatusEnum.getJobStatus(status), condition);
+    }
+
+    /**
+     * 分页查询作业列表
+     * <p>
+     * 注：name、status、condition均为删选条件，condition为 高级筛选
+     * </p>
+     * 
+     * @param username  用户名
+     * @param page      页码（非必填，默认：1）
+     * @param pageSize  每页大小（非必填，默认：20）
+     * @param name      作业名（非必填）
+     * @param status    作业名（非必填）
+     * @param condition 作业状态（非必填），取值见{@link JobStatusEnum#getJobStatus(String)}
+     * @return 作业列表
+     * @see JobStatusEnum
+     */
+    public PageJobInfo getHistoryJobs(String username, Integer page, Integer pageSize, String name,
+            JobStatusEnum status, Map<String, Object> condition) {
+
+        Map<String, Object> params = new HashMap<>(5);
+        if (page != null) {
+            params.put("page", page);
+        }
+        if (pageSize != null) {
+            params.put("pageSize", pageSize);
+        }
+        if (StringUtils.isNotBlank(name)) {
+            params.put("jobName", name);
+        }
+        if (status != null) {
+            params.put("status", status.getStatus());
+        }
+        if (CollectionUtil.isNotEmpty(condition)) {
+            params.put("condition", JsonUtil.objectToString(params));
+        }
+
+        String path = JHApiClient.getUrl(JobPathConstant.JOB_HISTORY_JOBS_PATH, params);
+        return execution.get(path, username, new TypeReference<ResponseResult<PageJobInfo>>() {
+        });
+    }
+
+    /**
+     * 分页查询作业列表
+     * <p>
+     * 注：name、status、condition均为删选条件，condition为 高级筛选
+     * </p>
+     * 
+     * @param username  用户名
+     * @param page      页码（非必填，默认：1）
+     * @param pageSize  每页大小（非必填，默认：20）
+     * @param name      作业名（非必填）
+     * @param status    作业名（非必填）
+     * @param condition 作业状态（非必填），取值见{@link JobStatusEnum#getJobStatus(String)}
+     * @return 作业列表
+     * @see JobStatusEnum
+     */
+    public PageJobInfo getHistoryJobs(String username, Integer page, Integer pageSize, String name, String status,
+            Map<String, Object> condition) {
+        return getHistoryJobs(username, page, pageSize, name, JobStatusEnum.getJobStatus(status), condition);
     }
 
     /**
