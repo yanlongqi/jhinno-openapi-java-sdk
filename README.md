@@ -316,7 +316,7 @@ public class JHDemoApiExecution extends JHApiExecution {
 
     public XxxDTO getXXXX(String username, String demoParams) {
 
-        return get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
+        return execution.get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
         });
     }
 }
@@ -338,7 +338,7 @@ public class JHDemoApiExecution extends JHApiExecution {
 
     public XxxDTO getXXXX(String username, String demoParams) {
 
-        return get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
+        return execution.get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
         });
     }
 }
@@ -362,7 +362,7 @@ public class JHDemoApiExecution extends JHApiExecution {
 
     public XxxDTO getXXXX(String username, String demoParams) {
 
-        return get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
+        return execution.get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
         });
     }
 }
