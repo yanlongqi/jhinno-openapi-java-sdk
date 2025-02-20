@@ -3,7 +3,6 @@
 针对 Java 的景行 API SDK 使 Java 开发人员能够轻松使用景行 API 接口。您可以在几分钟内开始通过 Maven 或 jar 文件使用它。
 
 - [仓库地址：https://github.com/yanlongqi/jhinno-openapi-java-sdk](https://github.com/yanlongqi/jhinno-openapi-java-sdk)
-- [开发文档：https://jhinno-sdk-doc.yuchat.top/apidocs](https://jhinno-sdk-doc.yuchat.top/apidocs)
 - [jar 包下载：https://github.com/yanlongqi/jhinno-openapi-java-sdk/releases](https://github.com/yanlongqi/jhinno-openapi-java-sdk/releases)
 
 ## 1.1 必要条件
@@ -17,6 +16,7 @@
 2. JH_Appform_6.0_SP1_Release
 3. JH_Appform_6.1_Release
 4. JH_Appform_6.2_Release（使用: release-2.0.3）
+5. JH_Appform_6.3_Release（使用: release-2.0.4）
 
 # 2. 快速开始
 
@@ -183,24 +183,16 @@ spring.xml 添加以下内容
         <constructor-arg value="https://172.17.0.5/appform"/>
     </bean>
 
-    <bean id="appApiExecution" class="com.jhinno.sdk.openapi.api.app.JHAppApiExecution">
-        <constructor-arg ref="apiClient"/>
+    <bean id="requestExecution" class="com.jhinno.sdk.openapi.api.JHRequestExecution">
+        <constructor-arg ref="apiClient" />
     </bean>
-    <bean id="dataApiExecution" class="com.jhinno.sdk.openapi.api.data.JHDataApiExecution">
-        <constructor-arg ref="apiClient"/>
-    </bean>
-    <bean id="fileApiExecution" class="com.jhinno.sdk.openapi.api.file.JHFileApiExecution">
-        <constructor-arg ref="apiClient"/>
-    </bean>
-    <bean id="jhJobApiExecution" class="com.jhinno.sdk.openapi.api.job.JHJobApiExecution">
-        <constructor-arg ref="apiClient"/>
-    </bean>
-    <bean id="departmentApiExecution" class="com.jhinno.sdk.openapi.api.organization.JHDepartmentApiExecution">
-        <constructor-arg ref="apiClient"/>
-    </bean>
-    <bean id="userApiExecution" class="com.jhinno.sdk.openapi.api.organization.JHUserApiExecution">
-        <constructor-arg ref="apiClient"/>
-    </bean>
+
+    <bean id="appApiExecution" class="com.jhinno.sdk.openapi.api.app.JHAppApiExecution" init-method="init"></bean>
+    <bean id="dataApiExecution" class="com.jhinno.sdk.openapi.api.data.JHDataApiExecution" init-method="init"></bean>
+    <bean id="fileApiExecution" class="com.jhinno.sdk.openapi.api.file.JHFileApiExecution" init-method="init"></bean>
+    <bean id="jhJobApiExecution" class="com.jhinno.sdk.openapi.api.job.JHJobApiExecution" init-method="init"></bean>
+    <bean id="departmentApiExecution" class="com.jhinno.sdk.openapi.api.organization.JHDepartmentApiExecution" init-method="init"></bean>
+    <bean id="userApiExecution" class="com.jhinno.sdk.openapi.api.organization.JHUserApiExecution" init-method="init"></bean>
 </beans>
 ```
 
@@ -259,49 +251,34 @@ public class DemoUserSDK {
 
 ```java
 
-public class DemoUserSDK {
+public class JHApiUtile {
 
     /**
-     * JHApiClient 是一个HTTP连接池，开发者需要复用
-     * 其中https://172.17.0.5/appform为景行API服务的地址
-     * 注意: JHApiClient为内置的http连接池，系统只需要初始化一份即可（单例调用）。
+     * 创建一个API执行器管理器
      */
-    public static final JHApiClient client = new JHApiClient("https://172.17.0.5/appform");
-
-    public static final Map<Class<? extends JHApiExecution>, JHApiExecution> jhApiClientMap = new HashMap<>();
+    public static final JHApiExecutionManage API_EXECUTION_MANAGE = new JHApiExecutionManage("https://192.168.87.24/appform");
 
     public static final String ACCESS_KEY = "3f03747f147942bd8debd81b6c9c6a80";
 
     public static final String ACCESS_KEY_SECRET = "e0681859b91c499eb1d2c8e09cea3242";
 
     static {
-        client.initDefaultApiClient();
-        jhApiClientMap.put(JHAppApiExecution.class, new JHAppApiExecution());
-        jhApiClientMap.put(JHDataApiExecution.class, new JHDataApiExecution());
-        jhApiClientMap.put(JHFileApiExecution.class, new JHFileApiExecution());
-        jhApiClientMap.put(JHJobApiExecution.class, new JHJobApiExecution());
-        jhApiClientMap.put(JHDepartmentApiExecution.class, new JHDepartmentApiExecution());
-        jhApiClientMap.put(JHUserApiExecution.class, new JHUserApiExecution());
-
-        jhApiClientMap.forEach((k, v) -> {
-            v.setJhApiClient(client);
-            v.setAuthType(AuthType.ACCESS_SECRET_MODE);
-            v.setAccessKey(ACCESS_KEY);
-            v.setAccessKeySecret(ACCESS_KEY_SECRET);
-            v.setUsedServerTime(true);
+        // 配置API执行器管理器，设置认证信息等。
+        API_EXECUTRON_MANAGE.configureApiExecution(t -> {
+            // 默认为使用Token模式，如何使用的Token模式，则不需要配置ACCESS_KEY和ACCESS_KEY SECRET
+            // t.setAuthType(AuthType.ACCESS_KEY);
+            t.setAccessKey(ACCESS_KEY);
+            t.setAccessKeySecret(ACCESS_KEY_SECRET);
         });
     }
 
     public static void main(String[] args) {
 
-        // 初始化一个调用调用景行会话服务接口执行器
-        JHAppApiExecution jhAppApiExecution = (JHAppApiExecution) jhApiClientMap.get(JHAppApiExecution.class);
+        // 从API执行器管理器取出调用应用相关接口的执行器
+        JHAppApiExecution jhAppApiExecution = JHClientConfig.API_EXECUTION_MANAGE.getApiExecution(JHAppApiExecution.class);
 
         // 调用启动会话的接口
-        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("jhadmin", "linux_desktop", new AppStartRequest());
-
-        // 打印接口的调用结果
-        System.out.println(appStartedInfo);
+        jhAppApiExecution.desktopStart("jhadmin", "linux_desktop");
     }
 
 }
@@ -317,25 +294,108 @@ public class DemoUserSDK {
 
 父类提供了封装好的`get`、`post`、`put`、`delete`方法，可以直接使用，而不考虑 token 的问题
 
+## 3.1 SpringBoot 项目
+
+### 3.1.1 方式一
+
+通过实现`JHApiExecution`接口，实现自定义的`JHDemoApiExecution`，并注册到 Spring 容器中。
+
 ```java
 /**
- * 注意：一下代码为伪代码，需要根据实际的情况进行修改，其示例代码可参照SDK中JHApiExecution子类的实现
+ * 注意：一下代码为伪代码，需要根据实际的情况进行修改，其示例代码可参照SDK中JHDemoApiExecution子类的实现
  */
-public class JHAppApiExecution extends JHApiExecution {
+@Component
+public class JHDemoApiExecution extends JHApiExecution {
 
-    /**
-     * 获取一个执行器的实例
-     *
-     * @param jhApiClient 请求的客户端
-     */
-    public JHAppApiExecution(JHApiClient jhApiClient) {
-        super(jhApiClient);
+    private JHRequestExecution execution;
+
+    @Override
+    public void init(JHRequestExecution execution) {
+        this.execution = execution;
     }
 
     public XxxDTO getXXXX(String username, String demoParams) {
 
         return get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
         });
+    }
+}
+
+```
+
+### 3.1.2 方式二
+
+通过注入 `JHRequestExecution` 的方式来注入
+
+```java
+/**
+ * 注意：一下代码为伪代码，需要根据实际的情况进行修改，其示例代码可参照SDK中JHDemoApiExecution子类的实现
+ */
+public class JHDemoApiExecution extends JHApiExecution {
+
+    @Autowired
+    private JHRequestExecution execution;
+
+    public XxxDTO getXXXX(String username, String demoParams) {
+
+        return get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
+        });
+    }
+}
+
+```
+
+# 3.2 非 SpringBoot 项目
+
+```java
+/**
+ * 注意：一下代码为伪代码，需要根据实际的情况进行修改，其示例代码可参照SDK中JHDemoApiExecution子类的实现
+ */
+public class JHDemoApiExecution extends JHApiExecution {
+
+    private JHRequestExecution execution;
+
+    @Override
+    public void init(JHRequestExecution execution) {
+        this.execution = execution;
+    }
+
+    public XxxDTO getXXXX(String username, String demoParams) {
+
+        return get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
+        });
+    }
+}
+
+
+public class JHApiUtile {
+
+    public static final JHApiExecutionManage API_EXECUTION_MANAGE = new JHApiExecutionManage("https://192.168.87.24/appform");
+
+    public static final String ACCESS_KEY = "3f03747f147942bd8debd81b6c9c6a80";
+
+    public static final String ACCESS_KEY_SECRET = "e0681859b91c499eb1d2c8e09cea3242";
+
+    static {
+        // 配置API执行器管理器，设置认证信息等。
+        API_EXECUTRON_MANAGE.configureApiExecution(t -> {
+            // 默认为使用Token模式，如何使用的Token模式，则不需要配置ACCESS_KEY和ACCESS_KEY SECRET
+            // t.setAuthType(AuthType.ACCESS_KEY);
+            t.setAccessKey(ACCESS_KEY);
+            t.setAccessKeySecret(ACCESS_KEY_SECRET);
+        });
+
+        // 注册自定义的API执行器，会自动配置你自定义的执行器
+        API_EXECUTRON_MANAGE.registerApiExecution(new JHDemoApiExecution());
+    }
+
+    public static void main(String[] args) {
+
+        // 从API执行器管理器取出调用应用相关接口的执行器
+        JHDemoApiExecution jhAppApiExecution = JHClientConfig.API_EXECUTION_MANAGE.getApiExecution(JHDemoApiExecution.class);
+
+        // 调用启动会话的接口
+        jhAppApiExecution.getXXXX("jhadmin", "xxxx");
     }
 }
 
