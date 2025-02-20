@@ -108,11 +108,9 @@ public class FileApiTest {
     @Test
     public void testGetFileStream() throws IOException {
         InputStream in = execution.getFileInputStream("jhadmin", "$HOME/aaa.sh");
-        while (in.available() > 0) {
-            // 读取文件内容
-            int read = in.read();
-            System.out.println("读取文件内容:" + read);
-
+        byte[] bytes = new byte[1024];
+        while (in.read(bytes) != -1) {
+            System.out.println(new String(bytes));
         }
     }
 
