@@ -1,7 +1,7 @@
 package com.jhinno.sdk.openapi.test;
 
 import com.jhinno.sdk.openapi.AuthType;
-import com.jhinno.sdk.openapi.api.JHApiExecution;
+import com.jhinno.sdk.openapi.JHApiExecutionManage;
 import com.jhinno.sdk.openapi.api.app.JHAppApiExecution;
 import com.jhinno.sdk.openapi.api.data.JHDataApiExecution;
 import com.jhinno.sdk.openapi.api.file.JHFileApiExecution;
@@ -22,31 +22,21 @@ import java.util.Map;
 public class JHClientConfig {
 
     /**
-     * 初始化JHApi客户端
+     * 创建一个API执行器管理器
      */
-    public static final JHApiClient client = new JHApiClient("https://172.17.0.5/appform");
-
-    public static final Map<Class<? extends JHApiExecution>, JHApiExecution> jhApiClientMap = new HashMap<>();
+    public static final JHApiExecutionManage API_EXECUTRON_MANAGE = new JHApiExecutionManage(
+            "https://192.168.87.24/appform");
 
     public static final String ACCESS_KEY = "3f03747f147942bd8debd81b6c9c6a80";
 
     public static final String ACCESS_KEY_SECRET = "e0681859b91c499eb1d2c8e09cea3242";
 
     static {
-        client.initDefaultApiClient();
-        jhApiClientMap.put(JHAppApiExecution.class, new JHAppApiExecution());
-        jhApiClientMap.put(JHDataApiExecution.class, new JHDataApiExecution());
-        jhApiClientMap.put(JHFileApiExecution.class, new JHFileApiExecution());
-        jhApiClientMap.put(JHJobApiExecution.class, new JHJobApiExecution());
-        jhApiClientMap.put(JHDepartmentApiExecution.class, new JHDepartmentApiExecution());
-        jhApiClientMap.put(JHUserApiExecution.class, new JHUserApiExecution());
-
-        jhApiClientMap.forEach((k, v) -> {
-            v.setJhApiClient(client);
-            v.setAuthType(AuthType.ACCESS_SECRET_MODE);
-            v.setAccessKey(ACCESS_KEY);
-            v.setAccessKeySecret(ACCESS_KEY_SECRET);
-            v.setUsedServerTime(true);
+        API_EXECUTRON_MANAGE.configureApiExecution(t -> {
+            // 默认为使用Token模式，如何使用的Token模式，则不需要配置ACCESS_KEY和ACCESS_KEY SECRET
+            // t.setAuthType(AuthType.ACCESS_KEY);
+            t.setAccessKey(ACCESS_KEY);
+            t.setAccessKeySecret(ACCESS_KEY_SECRET);
         });
     }
 

@@ -1,5 +1,6 @@
 package com.jhinno.sdk.openapi.autoconfigure;
 
+import com.jhinno.sdk.openapi.api.JHRequestExecution;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import com.jhinno.sdk.openapi.client.JHApiHttpClientImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -17,7 +18,6 @@ import org.springframework.context.annotation.Configuration;
 @EnableConfigurationProperties(JHOpenapiProperties.class)
 public class JHOpenapiClientAutoConfigure {
 
-
     @Bean
     @ConditionalOnMissingBean
     public JHApiClient jhApiClient(JHOpenapiProperties properties) {
@@ -32,6 +32,19 @@ public class JHOpenapiClientAutoConfigure {
         jhApiHttpClient.createHttpClients();
         jhApiClient.setApiHttpClient(jhApiHttpClient);
         return jhApiClient;
+    }
+
+    @Bean
+    public JHRequestExecution requestExecution(JHApiClient jhApiClient, JHOpenapiProperties properties) {
+        JHRequestExecution requestExecution = new JHRequestExecution(jhApiClient);
+        requestExecution.setForceGetToken(properties.isForceGetToken());
+        requestExecution.setAuthType(properties.getAuthType());
+        requestExecution.setAccessKey(properties.getAccessKey());
+        requestExecution.setAccessKeySecret(properties.getAccessKeySecret());
+        requestExecution.setTokenTimeout(properties.getTokenTimeout());
+        requestExecution.setTokenResidueTime(properties.getTokenResidueTime());
+        requestExecution.setUsedServerTime(properties.isUsedServerTime());
+        return requestExecution;
     }
 
 }

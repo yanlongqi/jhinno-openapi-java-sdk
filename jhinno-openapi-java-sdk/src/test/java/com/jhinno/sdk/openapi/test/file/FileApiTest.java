@@ -17,7 +17,8 @@ import java.util.List;
  */
 public class FileApiTest {
 
-    private static final JHFileApiExecution execution = (JHFileApiExecution) JHClientConfig.jhApiClientMap.get(JHFileApiExecution.class);
+    private static final JHFileApiExecution execution = JHClientConfig.API_EXECUTRON_MANAGE
+    .getApiExecution(JHFileApiExecution.class);
 
 
     /**

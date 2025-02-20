@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.AuthType;
 import com.jhinno.sdk.openapi.CommonConstant;
+import com.jhinno.sdk.openapi.JHApiExecution;
 import com.jhinno.sdk.openapi.ServiceException;
-import com.jhinno.sdk.openapi.api.JHApiExecution;
+import com.jhinno.sdk.openapi.api.JHRequestExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import com.jhinno.sdk.openapi.utils.CollectionUtil;
@@ -23,16 +24,12 @@ import java.util.Map;
  * @author yanlongqi
  * @date 2024/2/1 16:26
  */
-@NoArgsConstructor
-public class JHAppApiExecution extends JHApiExecution {
+public class JHAppApiExecution implements JHApiExecution {
 
-    /**
-     * 获取一个执行器的实例
-     *
-     * @param jhApiClient 请求的客户端
-     */
-    public JHAppApiExecution(JHApiClient jhApiClient) {
-        super(jhApiClient);
+    private JHRequestExecution execution;
+
+    public void init(JHRequestExecution execution) {
+        this.execution = execution;
     }
 
     /**
@@ -47,17 +44,19 @@ public class JHAppApiExecution extends JHApiExecution {
      * <p>
      * 开发阶段，主要有一下几种方式：
      * <ul>
-     *     <li>使用js的 `window.open("{@link AppStartedInfo#getJhappUrl()}")`</li>
-     *     <li>使用HTML的a标签的href</li>
-     *     <li>使用HTML的iframe标签的src</li>
+     * <li>使用js的 `window.open("{@link AppStartedInfo#getJhappUrl()}")`</li>
+     * <li>使用HTML的a标签的href</li>
+     * <li>使用HTML的iframe标签的src</li>
      * </ul>
      * 以下是使用的伪代码：
+     * 
      * <pre class="code">
      *  // 使用a标签实例代码
      *  var a = document.createElement("a");
      *  a.href = "{@link AppStartedInfo#getJhappUrl()}";
      *  a.click();
      * </pre>
+     * 
      * <pre class="code">
      *  // 使用iframe标签实例代码
      *  var iframe = document.createElement("iframe");
@@ -71,6 +70,7 @@ public class JHAppApiExecution extends JHApiExecution {
      * 并使用js生产的时间，具体的参数见 {@link AppStartRequest#setCurrentTimestamp(String)}
      *
      * <h4>通过浏览器启动</h4>
+     * 
      * <pre class="code">
      *  window.open("{@link AppStartedInfo#getWebSessionUrl()}}")
      * </pre>
@@ -82,8 +82,9 @@ public class JHAppApiExecution extends JHApiExecution {
      */
     public AppStartedInfo desktopStart(String username, String appId, AppStartRequest appStartRequest) {
         String path = AppPathConstant.APPS_START_PATH.replace("{appId}", appId);
-        List<AppStartedInfo> data = post(path, username, appStartRequest, new TypeReference<ResponseResult<List<AppStartedInfo>>>() {
-        });
+        List<AppStartedInfo> data = execution.post(path, username, appStartRequest,
+                new TypeReference<ResponseResult<List<AppStartedInfo>>>() {
+                });
         if (CollectionUtil.isEmpty(data)) {
             throw new ServiceException(path, 500, "获取到的会话信息为空");
         }
@@ -94,17 +95,17 @@ public class JHAppApiExecution extends JHApiExecution {
 
     public String getWebSessionUrl(String username, String desktopId) {
         String webSessionUrlPath = AppPathConstant.WEB_SESSION_URL_PATH.replace("{desktopId}", desktopId);
-        String url = getJhApiClient().getUrl(webSessionUrlPath);
+        String url = execution.getJhApiClient().getUrl(webSessionUrlPath);
         Map<String, Object> params = new HashMap<>();
-        AuthType authType = getAuthType();
+        AuthType authType = execution.getAuthType();
         if (authType == AuthType.TOKEN_MODE) {
-            params.put(CommonConstant.TOKEN, getToken(username));
+            params.put(CommonConstant.TOKEN, execution.getToken(username));
         } else if (authType == AuthType.ACCESS_SECRET_MODE) {
             params.put(CommonConstant.USERNAME, username);
-            params.put(CommonConstant.ACCESS_KEY, getAccessKey());
-            String currentTimeMillis = getCurrentTimeMillis();
+            params.put(CommonConstant.ACCESS_KEY, execution.getAccessKey());
+            String currentTimeMillis = execution.getCurrentTimeMillis();
             params.put(CommonConstant.CURRENT_TIME_MILLIS, currentTimeMillis);
-            params.put(CommonConstant.SIGNATURE, getsSignature(username, currentTimeMillis));
+            params.put(CommonConstant.SIGNATURE, execution.getsSignature(username, currentTimeMillis));
         }
         return JHApiClient.getUrl(url, params);
     }
@@ -131,16 +132,16 @@ public class JHAppApiExecution extends JHApiExecution {
      * @return 会话列表
      */
     public List<SessionInfo> getDesktopList(String username) {
-        return get(AppPathConstant.APPS_SESSIONS_ALL_PATH, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
-        });
+        return execution.get(AppPathConstant.APPS_SESSIONS_ALL_PATH, username,
+                new TypeReference<ResponseResult<List<SessionInfo>>>() {
+                });
     }
-
 
     /**
      * 使用参数查询会话列表
      * <ul>
-     *     <li>sessionIds 和 sessionName 不能同时为空</li>
-     *     <li>开启密级后，仅能查看比自己密级低以及和自己密级一致的会话</li>
+     * <li>sessionIds 和 sessionName 不能同时为空</li>
+     * <li>开启密级后，仅能查看比自己密级低以及和自己密级一致的会话</li>
      * </ul>
      *
      * @param username    用户名
@@ -157,10 +158,9 @@ public class JHAppApiExecution extends JHApiExecution {
             params.put("sessionName", sessionName);
         }
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
         });
     }
-
 
     /**
      * 根据会话列表查询会话列表
@@ -179,7 +179,7 @@ public class JHAppApiExecution extends JHApiExecution {
         }
         params.put("sessionIds", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, ids));
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_IDS_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
         });
     }
 
@@ -201,16 +201,16 @@ public class JHAppApiExecution extends JHApiExecution {
         }
         params.put("sessionName", sessionName);
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_NAME_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
         });
     }
 
     /**
      * 会话共享
      * <ul>
-     *     <li>调用该接口需要打开景行会话共享的功能</li>
-     *     <li>observers 和 interacts 不能同时为空</li>
-     *     <li>会话共享有密级限制，仅能将会话共享给比会话密级高的用户</li>
+     * <li>调用该接口需要打开景行会话共享的功能</li>
+     * <li>observers 和 interacts 不能同时为空</li>
+     * <li>会话共享有密级限制，仅能将会话共享给比会话密级高的用户</li>
      * </ul>
      *
      * @param username   用户名
@@ -219,7 +219,8 @@ public class JHAppApiExecution extends JHApiExecution {
      * @param interacts  协作者列表 （非必填）
      * @param isTransfer 是否传递操作权（不确定，需要咨询产品，非必填）
      */
-    public void shareDesktop(String username, String sessionId, List<String> observers, List<String> interacts, String isTransfer) {
+    public void shareDesktop(String username, String sessionId, List<String> observers, List<String> interacts,
+            String isTransfer) {
         if (StringUtils.isBlank(sessionId)) {
             throw new ArgsException("sessionId为必填字段");
         }
@@ -233,16 +234,16 @@ public class JHAppApiExecution extends JHApiExecution {
         if (StringUtils.isBlank(isTransfer)) {
             params.put("isTransfer", isTransfer);
         }
-        String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_SHARE_PATH.replace("{sessionId}", sessionId), params);
-        post(path, username);
+        String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_SHARE_PATH.replace("{sessionId}", sessionId),
+                params);
+        execution.post(path, username);
     }
-
 
     /**
      * 取消会话共享
      * <ul>
-     *     <li>调用该接口需要打开景行会话共享的功能</li>
-     *     <li>开启密级后，仅能操作比自己密级低或者和自己密级一致的会话</li>
+     * <li>调用该接口需要打开景行会话共享的功能</li>
+     * <li>开启密级后，仅能操作比自己密级低或者和自己密级一致的会话</li>
      * </ul>
      *
      * @param username  用户名
@@ -253,14 +254,14 @@ public class JHAppApiExecution extends JHApiExecution {
             throw new ArgsException("sessionId为必填字段");
         }
         String path = AppPathConstant.APPS_SESSIONS_CANCEL_SHARE_PATH.replace("{sessionId}", sessionId);
-        put(path, username);
+        execution.put(path, username);
     }
 
     /**
      * 传递会话操作权
      * <ul>
-     *     <li>调用该接口需要打开景行会话共享的功能</li>
-     *     <li>开启密级后，仅能操作比自己密级低或者和自己密级一致的会话</li>
+     * <li>调用该接口需要打开景行会话共享的功能</li>
+     * <li>开启密级后，仅能操作比自己密级低或者和自己密级一致的会话</li>
      * </ul>
      *
      * @param username  用户名
@@ -278,9 +279,8 @@ public class JHAppApiExecution extends JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("interact", interact);
         path = JHApiClient.getUrl(path, params);
-        put(path, username);
+        execution.put(path, username);
     }
-
 
     /**
      * 连接会话
@@ -294,8 +294,9 @@ public class JHAppApiExecution extends JHApiExecution {
             throw new ArgsException("sessionId为必填字段");
         }
         String path = AppPathConstant.APPS_SESSIONS_CONNECT_JHAPP_PATH.replace("{sessionId}", sessionId);
-        List<AppStartedInfo> list = get(path, username, new TypeReference<ResponseResult<List<AppStartedInfo>>>() {
-        });
+        List<AppStartedInfo> list = execution.get(path, username,
+                new TypeReference<ResponseResult<List<AppStartedInfo>>>() {
+                });
         if (CollectionUtil.isEmpty(list)) {
             throw new ServiceException(path, 500, "获取到的会话信息为空");
         }
@@ -304,7 +305,6 @@ public class JHAppApiExecution extends JHApiExecution {
         appStartedInfo.setWebSessionUrl(getWebSessionUrl(username, sessionId));
         return appStartedInfo;
     }
-
 
     /**
      * 断开会话连接（作业/应用）
@@ -320,9 +320,8 @@ public class JHAppApiExecution extends JHApiExecution {
             throw new ArgsException("sessionId为必填字段");
         }
         String path = AppPathConstant.APPS_SESSIONS_DISCONNECT_PATH.replace("{sessionId}", sessionId);
-        put(path, username);
+        execution.put(path, username);
     }
-
 
     /**
      * 通过应用id批量断开会话（作业/应用）
@@ -340,9 +339,8 @@ public class JHAppApiExecution extends JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("sessionIds", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, sessionIds));
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_DISCONNECT_IDS_PATH, params);
-        put(path, username);
+        execution.put(path, username);
     }
-
 
     /**
      * 注销会话
@@ -358,9 +356,8 @@ public class JHAppApiExecution extends JHApiExecution {
             throw new ArgsException("sessionId为必填字段");
         }
         String path = AppPathConstant.APPS_SESSIONS_DESTROY_PATH.replace("{sessionId}", sessionId);
-        put(path, username);
+        execution.put(path, username);
     }
-
 
     /**
      * 批量注销会话
@@ -375,9 +372,8 @@ public class JHAppApiExecution extends JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("sessionIds", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, sessionIds));
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_DESTROY_IDS_PATH, params);
-        put(path, username);
+        execution.put(path, username);
     }
-
 
     /**
      * 获取当前用户的应用列表
@@ -386,10 +382,10 @@ public class JHAppApiExecution extends JHApiExecution {
      * @return 应用列表
      */
     public List<AppInfo> getAppList(String username) {
-        return get(AppPathConstant.APPS_LIST_PATH, username, new TypeReference<ResponseResult<List<AppInfo>>>() {
-        });
+        return execution.get(AppPathConstant.APPS_LIST_PATH, username,
+                new TypeReference<ResponseResult<List<AppInfo>>>() {
+                });
     }
-
 
     /**
      * 获取应用链接
@@ -403,8 +399,9 @@ public class JHAppApiExecution extends JHApiExecution {
             throw new ArgsException("appName为必填字段");
         }
         String path = AppPathConstant.APPS_GET_URL_PATH.replace("{appName}", appName);
-        List<Map<String, String>> apps = get(path, username, new TypeReference<ResponseResult<List<Map<String, String>>>>() {
-        });
+        List<Map<String, String>> apps = execution.get(path, username,
+                new TypeReference<ResponseResult<List<Map<String, String>>>>() {
+                });
         if (CollectionUtil.isEmpty(apps)) {
             throw new ServiceException(path, 500, "应用信息为空！");
         }
@@ -435,7 +432,7 @@ public class JHAppApiExecution extends JHApiExecution {
             params.put("suffixes", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, suffixes));
         }
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SUFFIXES_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<List<AppstoreAppInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<AppstoreAppInfo>>>() {
         });
     }
 
@@ -450,7 +447,6 @@ public class JHAppApiExecution extends JHApiExecution {
         return getUseLabelList(username, Arrays.asList(labels));
     }
 
-
     /**
      * 根据用途查询应用
      *
@@ -464,7 +460,7 @@ public class JHAppApiExecution extends JHApiExecution {
             params.put("use_labels", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, labels));
         }
         String path = JHApiClient.getUrl(AppPathConstant.APP_USE_LABEL_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<List<UseLabelInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<UseLabelInfo>>>() {
         });
     }
 }

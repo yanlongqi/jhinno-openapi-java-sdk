@@ -16,11 +16,11 @@ import java.util.List;
 
 public class AppApiTest {
 
-
     /**
      * 获得一个调用应用接口的执行器
      */
-    public static final JHAppApiExecution jhAppApiExecution = (JHAppApiExecution) JHClientConfig.jhApiClientMap.get(JHAppApiExecution.class);
+    public static final JHAppApiExecution jhAppApiExecution = JHClientConfig.API_EXECUTRON_MANAGE
+            .getApiExecution(JHAppApiExecution.class);
 
     /**
      * 测测试使用自定义的参数启动jhadmin的Linux桌面
@@ -42,7 +42,6 @@ public class AppApiTest {
         System.out.println(appStartedInfo);
     }
 
-
     /**
      * 测试获取用户jhadmin的会话列表
      */
@@ -61,13 +60,13 @@ public class AppApiTest {
         System.out.println(desktopList);
     }
 
-
     /**
      * 测试根据会话列表查询会话列表
      */
     @Test
     public void testGetDesktopsById() {
-        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsById("jhadmin", Arrays.asList("7649", "7637", "123"));
+        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsById("jhadmin",
+                Arrays.asList("7649", "7637", "123"));
         System.out.println(desktopList);
     }
 
@@ -79,7 +78,6 @@ public class AppApiTest {
         List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsByName("jhadmin", "Windows桌面");
         System.out.println(desktopList);
     }
-
 
     /**
      * 测试会话共享
@@ -105,7 +103,6 @@ public class AppApiTest {
         jhAppApiExecution.transferOperatorRight("jhadmin", "7649", "123");
     }
 
-
     /**
      * 测试链接会话
      */
@@ -114,7 +111,6 @@ public class AppApiTest {
         AppStartedInfo appStartedInfo = jhAppApiExecution.connectJhapp("lqyan", "7666");
         System.out.println(appStartedInfo);
     }
-
 
     /**
      * 测试断开会话的连接
@@ -132,15 +128,13 @@ public class AppApiTest {
         jhAppApiExecution.disconnectSessionByIds("jhadmin", Arrays.asList("123", "456"));
     }
 
-
     /**
      * 测试注销会话
      */
     @Test
     public void testDestroySession() {
-        jhAppApiExecution.destroySession("jhadmin", "4856");
+        jhAppApiExecution.destroySession("jhadmin", "63");
     }
-
 
     /**
      * 测试批量注销会话
@@ -159,7 +153,6 @@ public class AppApiTest {
         System.out.println(appList);
     }
 
-
     /**
      * 测试获取应用链接
      */
@@ -168,7 +161,6 @@ public class AppApiTest {
         System.out.println(jhAppApiExecution.getAppUrl("jhadmin", "myjobmana"));
     }
 
-
     /**
      * 测试根据文件后缀取应用列表
      */
@@ -176,7 +168,6 @@ public class AppApiTest {
     public void testGetAppInfoSuffixList() {
         System.out.println(jhAppApiExecution.getAppInfoSuffixList("test", ".sh"));
     }
-
 
     /**
      * 测试根据用途获取应用列表

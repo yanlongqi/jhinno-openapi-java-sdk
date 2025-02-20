@@ -2,7 +2,8 @@ package com.jhinno.sdk.openapi.api.organization;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
-import com.jhinno.sdk.openapi.api.JHApiExecution;
+import com.jhinno.sdk.openapi.JHApiExecution;
+import com.jhinno.sdk.openapi.api.JHRequestExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import lombok.NoArgsConstructor;
@@ -20,17 +21,13 @@ import java.util.Map;
  * @date 2024/2/6 17:37
  */
 @NoArgsConstructor
-public class JHDepartmentApiExecution extends JHApiExecution {
+public class JHDepartmentApiExecution implements JHApiExecution {
 
-    /**
-     * 获取一个执行器的实例
-     *
-     * @param jhApiClient 请求的客户端
-     */
-    public JHDepartmentApiExecution(JHApiClient jhApiClient) {
-        super(jhApiClient);
+    private JHRequestExecution execution;
+
+    public void init(JHRequestExecution execution) {
+        this.execution = execution;
     }
-
 
     /**
      * 查询用户列表
@@ -39,10 +36,10 @@ public class JHDepartmentApiExecution extends JHApiExecution {
      * @return 用户列表
      */
     public List<Map<String, Object>> getDepartmentList(String username) {
-        return get(DepartmentPathConstant.DEPARTMENT_PATH, username, new TypeReference<ResponseResult<List<Map<String, Object>>>>() {
-        });
+        return execution.get(DepartmentPathConstant.DEPARTMENT_PATH, username,
+                new TypeReference<ResponseResult<List<Map<String, Object>>>>() {
+                });
     }
-
 
     /**
      * 添加部门
@@ -51,9 +48,8 @@ public class JHDepartmentApiExecution extends JHApiExecution {
      * @param departmentInfo 部门信息
      */
     public void addDepartment(String username, AddUpdateDepartment departmentInfo) {
-        post(DepartmentPathConstant.DEPARTMENT_PATH, username, departmentInfo);
+        execution.post(DepartmentPathConstant.DEPARTMENT_PATH, username, departmentInfo);
     }
-
 
     /**
      * 修改部门信息
@@ -66,9 +62,8 @@ public class JHDepartmentApiExecution extends JHApiExecution {
             throw new ArgsException("departmentInfo中的depName不能为空！");
         }
         String path = DepartmentPathConstant.DEPARTMENT_NAME_PATH.replace("{depName}", departmentInfo.getDepName());
-        put(path, username, departmentInfo);
+        execution.put(path, username, departmentInfo);
     }
-
 
     /**
      * 删除部门信息
@@ -81,6 +76,6 @@ public class JHDepartmentApiExecution extends JHApiExecution {
             throw new ArgsException("departmentName不能为空！");
         }
         String path = DepartmentPathConstant.DEPARTMENT_NAME_PATH.replace("{depName}", departmentName);
-        delete(path, username);
+        execution.delete(path, username);
     }
 }

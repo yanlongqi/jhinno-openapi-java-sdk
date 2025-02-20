@@ -3,8 +3,9 @@ package com.jhinno.sdk.openapi.api.file;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
+import com.jhinno.sdk.openapi.JHApiExecution;
 import com.jhinno.sdk.openapi.ServiceException;
-import com.jhinno.sdk.openapi.api.JHApiExecution;
+import com.jhinno.sdk.openapi.api.JHRequestExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import com.jhinno.sdk.openapi.utils.CollectionUtil;
@@ -26,12 +27,13 @@ import java.util.Map;
  * @date 2024/2/4 18:58
  */
 @NoArgsConstructor
-public class JHFileApiExecution extends JHApiExecution {
+public class JHFileApiExecution implements JHApiExecution {
 
-    public JHFileApiExecution(JHApiClient jhApiClient) {
-        super(jhApiClient);
+    private JHRequestExecution execution;
+
+    public void init(JHRequestExecution execution) {
+        this.execution = execution;
     }
-
 
     /**
      * 重命名文件
@@ -50,9 +52,8 @@ public class JHFileApiExecution extends JHApiExecution {
         Map<String, Object> body = new HashMap<>(2);
         body.put("oldFileName", sourceFileNamePath);
         body.put("newFileName", targetFileName);
-        put(FilePathConstant.FILE_RENAME_PATH, username, body);
+        execution.put(FilePathConstant.FILE_RENAME_PATH, username, body);
     }
-
 
     /**
      * 删除文件
@@ -67,9 +68,8 @@ public class JHFileApiExecution extends JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("fileName", sourceFilePath);
         String path = JHApiClient.getUrl(FilePathConstant.FILE_DELETE_PATH, params);
-        delete(path, username);
+        execution.delete(path, username);
     }
-
 
     /**
      * 拷贝文件到目标文件夹
@@ -88,9 +88,8 @@ public class JHFileApiExecution extends JHApiExecution {
         Map<String, Object> body = new HashMap<>(2);
         body.put("sourceFileName", sourceFilePath);
         body.put("targetDirectory", targetDirectoryPath);
-        put(FilePathConstant.FILE_COPY_PATH, username, body);
+        execution.put(FilePathConstant.FILE_COPY_PATH, username, body);
     }
-
 
     /**
      * 获取文件列表
@@ -106,10 +105,9 @@ public class JHFileApiExecution extends JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("dir", dirPath);
         String path = JHApiClient.getUrl(FilePathConstant.FILE_LIST_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<List<FileInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<FileInfo>>>() {
         });
     }
-
 
     /**
      * 创建文件夹
@@ -128,14 +126,14 @@ public class JHFileApiExecution extends JHApiExecution {
         if (isForce != null) {
             body.put("isForce", isForce.toString());
         }
-        Map<String, String> result = post(FilePathConstant.FILE_MKDIR_PATH, username, body, new TypeReference<ResponseResult<Map<String, String>>>() {
-        });
+        Map<String, String> result = execution.post(FilePathConstant.FILE_MKDIR_PATH, username, body,
+                new TypeReference<ResponseResult<Map<String, String>>>() {
+                });
         if (CollectionUtil.isEmpty(result)) {
             return null;
         }
         return result.get("dirPath");
     }
-
 
     /**
      * 新建文件夹，默认不强制新建
@@ -147,7 +145,6 @@ public class JHFileApiExecution extends JHApiExecution {
     public String mkdir(String username, String dirPath) {
         return mkdir(username, dirPath, null);
     }
-
 
     /**
      * 创建文件
@@ -162,8 +159,9 @@ public class JHFileApiExecution extends JHApiExecution {
         }
         Map<String, Object> body = new HashMap<>(1);
         body.put("filePath", filePath);
-        Map<String, String> result = post(FilePathConstant.FILE_MKFILE_PATH, username, body, new TypeReference<ResponseResult<Map<String, String>>>() {
-        });
+        Map<String, String> result = execution.post(FilePathConstant.FILE_MKFILE_PATH, username, body,
+                new TypeReference<ResponseResult<Map<String, String>>>() {
+                });
         if (CollectionUtil.isEmpty(result)) {
             return null;
         }
@@ -195,26 +193,25 @@ public class JHFileApiExecution extends JHApiExecution {
             body.put("isCover", isCover);
         }
         body.put("uploadPath", uploadPath);
-
-        ResponseResult<Object> result = getJhApiClient().upload(
+        ResponseResult<Object> result = execution.getJhApiClient().upload(
                 FilePathConstant.FILE_UPLOAD_PATH,
                 "file",
                 fileName,
                 is,
-                getHeaders(username, false),
+                execution.getHeaders(username, false),
                 body,
                 new TypeReference<ResponseResult<Object>>() {
-                }
-        );
+                });
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
             throw new ServiceException(FilePathConstant.FILE_UPLOAD_PATH, result.getCode(), result.getMessage());
         }
     }
 
-
     /**
      * 上传文件（不覆盖源文件）
-     * <p>源文件目录下存在相同文件则会报错</p>
+     * <p>
+     * 源文件目录下存在相同文件则会报错
+     * </p>
      *
      * @param username   用户名
      * @param is         文件流
@@ -232,7 +229,8 @@ public class JHFileApiExecution extends JHApiExecution {
      * @param uploadPath 上传路径，服务器路径
      * @param isCover    是否覆盖（非必填，默认：false）
      */
-    public void uploadFile(String username, String path, String fileName, String uploadPath, Boolean isCover) throws FileNotFoundException {
+    public void uploadFile(String username, String path, String fileName, String uploadPath, Boolean isCover)
+            throws FileNotFoundException {
         if (StringUtils.isBlank(path)) {
             throw new ArgsException("path是必填参数");
         }
@@ -241,17 +239,16 @@ public class JHFileApiExecution extends JHApiExecution {
         uploadFile(username, fileInputStream, fileName, uploadPath, isCover);
     }
 
-
     /**
      * @param username   用户名
      * @param path       本地文件路径
      * @param fileName   文件名
      * @param uploadPath 上传路径，服务器路径
      */
-    public void uploadFile(String username, String path, String fileName, String uploadPath) throws FileNotFoundException {
+    public void uploadFile(String username, String path, String fileName, String uploadPath)
+            throws FileNotFoundException {
         uploadFile(username, path, fileName, uploadPath, null);
     }
-
 
     /**
      * @param username   用户名
@@ -259,7 +256,8 @@ public class JHFileApiExecution extends JHApiExecution {
      * @param uploadPath 上传路径，服务器路径
      * @param isCover    是否覆盖（非必填，默认：false）
      */
-    public void uploadFile(String username, String path, String uploadPath, Boolean isCover) throws FileNotFoundException {
+    public void uploadFile(String username, String path, String uploadPath, Boolean isCover)
+            throws FileNotFoundException {
         File file = new File(path);
         uploadFile(username, path, file.getName(), uploadPath, isCover);
     }
@@ -273,7 +271,6 @@ public class JHFileApiExecution extends JHApiExecution {
         File file = new File(path);
         uploadFile(username, path, file.getName(), uploadPath, null);
     }
-
 
     /**
      * 获取文件下载地址
@@ -289,8 +286,9 @@ public class JHFileApiExecution extends JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("filePath", filePath);
         String path = JHApiClient.getUrl(FilePathConstant.FILE_DOWNLOAD_PATH, params);
-        Map<String, String> downloadInfo = get(path, username, new TypeReference<ResponseResult<Map<String, String>>>() {
-        });
+        Map<String, String> downloadInfo = execution.get(path, username,
+                new TypeReference<ResponseResult<Map<String, String>>>() {
+                });
         if (CollectionUtil.isEmpty(downloadInfo)) {
             return null;
         }
@@ -319,9 +317,8 @@ public class JHFileApiExecution extends JHApiExecution {
             params.put("compressType", compressType);
         }
         String path = JHApiClient.getUrl(FilePathConstant.FILE_COMPRESS_PATH, params);
-        post(path, username);
+        execution.post(path, username);
     }
-
 
     /**
      * 文件压缩
@@ -344,7 +341,8 @@ public class JHFileApiExecution extends JHApiExecution {
      * @param password       密码
      * @param compressType   压缩类型 （未使用以后扩展）
      */
-    public void uncompress(String username, String sourceFilePath, String targetDirPath, Boolean isCover, String password, String compressType) {
+    public void uncompress(String username, String sourceFilePath, String targetDirPath, Boolean isCover,
+            String password, String compressType) {
         if (StringUtils.isBlank(sourceFilePath)) {
             throw new ArgsException("sourceFilePath不能为空！");
         }
@@ -364,9 +362,8 @@ public class JHFileApiExecution extends JHApiExecution {
             params.put("compressType", compressType);
         }
         String path = JHApiClient.getUrl(FilePathConstant.FILE_UNCOMPRESS_PATH, params);
-        post(path, username);
+        execution.post(path, username);
     }
-
 
     /**
      * 解压文件
@@ -377,7 +374,8 @@ public class JHFileApiExecution extends JHApiExecution {
      * @param isCover        是否覆盖
      * @param password       密码
      */
-    public void uncompress(String username, String sourceFilePath, String targetDirPath, Boolean isCover, String password) {
+    public void uncompress(String username, String sourceFilePath, String targetDirPath, Boolean isCover,
+            String password) {
         uncompress(username, sourceFilePath, targetDirPath, isCover, password, null);
     }
 
@@ -404,5 +402,3 @@ public class JHFileApiExecution extends JHApiExecution {
         uncompress(username, sourceFilePath, targetDirPath, null);
     }
 }
-
-

@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>jhinno-openapi-sdk-spring-boot-starter</artifactId>
-    <version>2.0.3</version>
+    <version>2.0.4</version>
     <packaging>jar</packaging>
     <name>Jhinno OpenAPI SDK for Java SpringBoot Starter</name>
     <description>The Jhinno OpenAPI SDK for Java used for accessing Jhinno OpenApi Service</description>
@@ -21,7 +21,7 @@
         <dependency>
             <groupId>com.jhinno</groupId>
             <artifactId>jhinno-openapi-java-sdk</artifactId>
-            <version>2.0.3</version>
+            <version>2.0.4</version>
         </dependency>
 
         <dependency>

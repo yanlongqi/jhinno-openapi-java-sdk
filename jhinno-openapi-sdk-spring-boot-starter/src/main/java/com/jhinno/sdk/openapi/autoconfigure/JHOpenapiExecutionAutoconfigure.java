@@ -1,13 +1,17 @@
 package com.jhinno.sdk.openapi.autoconfigure;
 
+import com.jhinno.sdk.openapi.JHApiExecution;
+import com.jhinno.sdk.openapi.api.JHRequestExecution;
 import com.jhinno.sdk.openapi.api.app.JHAppApiExecution;
 import com.jhinno.sdk.openapi.api.data.JHDataApiExecution;
 import com.jhinno.sdk.openapi.api.file.JHFileApiExecution;
 import com.jhinno.sdk.openapi.api.job.JHJobApiExecution;
 import com.jhinno.sdk.openapi.api.organization.JHDepartmentApiExecution;
 import com.jhinno.sdk.openapi.api.organization.JHUserApiExecution;
-import com.jhinno.sdk.openapi.utils.JHOpenApiConfig;
+import com.jhinno.sdk.openapi.client.JHApiClient;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,37 +23,45 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 @RequiredArgsConstructor
-public class JHOpenapiExecutionAutoconfigure {
+public class JHOpenapiExecutionAutoconfigure implements BeanPostProcessor {
 
+    private final JHRequestExecution jhRequestExecution;
 
-    @Bean
-    public JHAppApiExecution appApiExecution(JHOpenApiConfig jhOpenApiConfig) {
-        return jhOpenApiConfig.configJHApiExecution(new JHAppApiExecution());
+    public Object postProcessBeforeInitialization(Object bean, String beanName) {
+        if (bean instanceof JHApiExecution) {
+            ((JHApiExecution) bean).init(jhRequestExecution);
+        }
+        return bean;
     }
 
     @Bean
-    public JHDataApiExecution dataApiExecution(JHOpenApiConfig jhOpenApiConfig) {
-        return jhOpenApiConfig.configJHApiExecution(new JHDataApiExecution());
-    }
-
-
-    @Bean
-    public JHFileApiExecution fileApiExecution(JHOpenApiConfig jhOpenApiConfig) {
-        return jhOpenApiConfig.configJHApiExecution(new JHFileApiExecution());
+    public JHAppApiExecution appApiExecution() {
+        return new JHAppApiExecution();
     }
 
     @Bean
-    public JHJobApiExecution jobApiExecution(JHOpenApiConfig jhOpenApiConfig) {
-        return jhOpenApiConfig.configJHApiExecution(new JHJobApiExecution());
+    public JHDataApiExecution dataApiExecution() {
+        return new JHDataApiExecution();
     }
 
     @Bean
-    public JHDepartmentApiExecution departmentApiExecution(JHOpenApiConfig jhOpenApiConfig) {
-        return jhOpenApiConfig.configJHApiExecution(new JHDepartmentApiExecution());
+    public JHFileApiExecution fileApiExecution() {
+        return new JHFileApiExecution();
     }
 
     @Bean
-    public JHUserApiExecution userApiExecution(JHOpenApiConfig jhOpenApiConfig) {
-        return jhOpenApiConfig.configJHApiExecution(new JHUserApiExecution());
+    public JHJobApiExecution jobApiExecution() {
+        return new JHJobApiExecution();
     }
+
+    @Bean
+    public JHDepartmentApiExecution departmentApiExecution() {
+        return new JHDepartmentApiExecution();
+    }
+
+    @Bean
+    public JHUserApiExecution userApiExecution() {
+        return new JHUserApiExecution();
+    }
+
 }

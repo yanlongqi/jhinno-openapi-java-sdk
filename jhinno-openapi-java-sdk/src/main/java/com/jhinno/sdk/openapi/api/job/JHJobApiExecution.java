@@ -3,8 +3,9 @@ package com.jhinno.sdk.openapi.api.job;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
 import com.jhinno.sdk.openapi.CommonConstant;
+import com.jhinno.sdk.openapi.JHApiExecution;
 import com.jhinno.sdk.openapi.ServiceException;
-import com.jhinno.sdk.openapi.api.JHApiExecution;
+import com.jhinno.sdk.openapi.api.JHRequestExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.api.file.FileInfo;
 import com.jhinno.sdk.openapi.client.JHApiClient;
@@ -22,15 +23,12 @@ import java.util.Map;
  * @date 2024/2/5 18:44
  */
 @NoArgsConstructor
-public class JHJobApiExecution extends JHApiExecution {
+public class JHJobApiExecution implements JHApiExecution {
 
-    /**
-     * 获取一个执行器的实例
-     *
-     * @param jhApiClient 请求的客户端
-     */
-    public JHJobApiExecution(JHApiClient jhApiClient) {
-        super(jhApiClient);
+    private JHRequestExecution execution;
+
+    public void init(JHRequestExecution execution) {
+        this.execution = execution;
     }
 
     /**
@@ -52,8 +50,9 @@ public class JHJobApiExecution extends JHApiExecution {
         map.put("appId", appId);
         map.put("params", JsonUtil.objectToString(params));
         String path = JHApiClient.getUrl(JobPathConstant.JOB_SUBMIT_PATH, map);
-        List<Map<String, String>> result = post(path, username, new TypeReference<ResponseResult<List<Map<String, String>>>>() {
-        });
+        List<Map<String, String>> result = execution.post(path, username,
+                new TypeReference<ResponseResult<List<Map<String, String>>>>() {
+                });
         if (CollectionUtil.isEmpty(result)) {
             throw new ServiceException(path, 500, "作业提交返回为空！");
         }
@@ -72,13 +71,15 @@ public class JHJobApiExecution extends JHApiExecution {
             throw new ArgsException("jobId不能为空！");
         }
         String path = JobPathConstant.JOB_FIND_JOB_FILES_PATH.replace("{jobId}", jobId);
-        return get(path, username, new TypeReference<ResponseResult<List<FileInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<FileInfo>>>() {
         });
     }
 
     /**
      * 分页查询作业列表
-     * <p>作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件</p>
+     * <p>
+     * 作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件
+     * </p>
      *
      * @param username  用户名
      * @param page      页码（非必填，默认：1）
@@ -89,7 +90,8 @@ public class JHJobApiExecution extends JHApiExecution {
      * @return 作业列表
      * @see JobStatusEnum
      */
-    public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, JobStatusEnum status, Map<String, Object> condition) {
+    public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, JobStatusEnum status,
+            Map<String, Object> condition) {
         Map<String, Object> params = new HashMap<>(5);
         if (page != null) {
             params.put("page", page);
@@ -107,13 +109,15 @@ public class JHJobApiExecution extends JHApiExecution {
             params.put("condition", JsonUtil.objectToString(params));
         }
         String path = JHApiClient.getUrl(JobPathConstant.JOB_PAGE_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<PageJobInfo>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<PageJobInfo>>() {
         });
     }
 
     /**
      * 分页查询作业列表
-     * <p>作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件</p>
+     * <p>
+     * 作业名、作业状态等为非必填自动，如果为空则没有添加该查询条件
+     * </p>
      *
      * @param username  用户名
      * @param page      页码（非必填，默认：1）
@@ -124,7 +128,8 @@ public class JHJobApiExecution extends JHApiExecution {
      * @return 作业列表
      * @see JobStatusEnum
      */
-    public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, String status, Map<String, Object> condition) {
+    public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, String status,
+            Map<String, Object> condition) {
         return getJobPage(username, page, pageSize, name, JobStatusEnum.getJobStatus(status), condition);
     }
 
@@ -140,10 +145,9 @@ public class JHJobApiExecution extends JHApiExecution {
             throw new ArgsException("jobId不能为空！");
         }
         String path = JobPathConstant.JOB_DETAIL_INFO_PATH.replace("{jobId}", jobId);
-        return get(path, username, new TypeReference<ResponseResult<JobInfo>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<JobInfo>>() {
         });
     }
-
 
     /**
      * 分页检索作业名称查询作业信息
@@ -168,10 +172,9 @@ public class JHJobApiExecution extends JHApiExecution {
         }
 
         String path = JHApiClient.getUrl(JobPathConstant.JOB_LIST_BY_NAME_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<List<JobInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<JobInfo>>>() {
         });
     }
-
 
     /**
      * 分页检索作业状态
@@ -195,11 +198,11 @@ public class JHJobApiExecution extends JHApiExecution {
         if (pageSize != null) {
             params.put("pageSize", pageSize);
         }
-        String path = JHApiClient.getUrl(JobPathConstant.JOB_LIST_BY_STATUS_PATH.replace("{status}", status.getStatus()), params);
-        return get(path, username, new TypeReference<ResponseResult<List<JobInfo>>>() {
+        String path = JHApiClient
+                .getUrl(JobPathConstant.JOB_LIST_BY_STATUS_PATH.replace("{status}", status.getStatus()), params);
+        return execution.get(path, username, new TypeReference<ResponseResult<List<JobInfo>>>() {
         });
     }
-
 
     /**
      * 作业的状态（必填），
@@ -215,7 +218,6 @@ public class JHJobApiExecution extends JHApiExecution {
         return getJobsByStatus(username, JobStatusEnum.getJobStatus(status), page, pageSize);
     }
 
-
     /**
      * 通过作业id列表查询作业列表
      *
@@ -230,14 +232,15 @@ public class JHJobApiExecution extends JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("jobIds", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, jobIds));
         String path = JHApiClient.getUrl(JobPathConstant.JOB_LIST_BY_IDS_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<List<JobInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<JobInfo>>>() {
         });
     }
 
     /**
      * 操作作业
      * <p>
-     * {@link JobActionEnum} 中的 静态方法{@link JobActionEnum#getJobAction(String)}可以将前端的字符转换为{@link JobActionEnum}对象
+     * {@link JobActionEnum} 中的
+     * 静态方法{@link JobActionEnum#getJobAction(String)}可以将前端的字符转换为{@link JobActionEnum}对象
      * <p>
      * 或者使用{@link #action(String, String, String)}直接操作，但最终还是调的这个方法，我们只不过是内部做了转换而已
      *
@@ -254,7 +257,7 @@ public class JHJobApiExecution extends JHApiExecution {
             throw new ArgsException("jobId不能为空！");
         }
         String path = JobPathConstant.JOB_ACTION_PATH.replace("{jobId}", jobId).replace("{action}", action.getAction());
-        put(path, username);
+        execution.put(path, username);
     }
 
     /**
@@ -268,11 +271,11 @@ public class JHJobApiExecution extends JHApiExecution {
         action(username, JobActionEnum.getJobAction(action), jobId);
     }
 
-
     /**
      * 批量操作作业
      * <p>
-     * {@link JobsActionEnum} 中的 静态方法{@link JobsActionEnum#getJobAction(String)}可以将前端的字符转换为{@link JobsActionEnum}对象
+     * {@link JobsActionEnum} 中的
+     * 静态方法{@link JobsActionEnum#getJobAction(String)}可以将前端的字符转换为{@link JobsActionEnum}对象
      * <p>
      * 或者使用{@link #actions(String, String, List)}直接操作，但最终还是调的这个方法，我们只不过是内部做了转换而已
      *
@@ -289,8 +292,9 @@ public class JHJobApiExecution extends JHApiExecution {
         }
         Map<String, Object> params = new HashMap<>(1);
         params.put("jobIds", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, jobIds));
-        String path = JHApiClient.getUrl(JobPathConstant.JOB_ACTION_IDS_PATH.replace("{action}", action.getAction()), params);
-        put(path, username);
+        String path = JHApiClient.getUrl(JobPathConstant.JOB_ACTION_IDS_PATH.replace("{action}", action.getAction()),
+                params);
+        execution.put(path, username);
     }
 
     /**
@@ -304,7 +308,6 @@ public class JHJobApiExecution extends JHApiExecution {
         actions(username, JobsActionEnum.getJobAction(action), jobIds);
     }
 
-
     /**
      * 查询制定作业的作业历史
      *
@@ -317,14 +320,14 @@ public class JHJobApiExecution extends JHApiExecution {
             throw new ArgsException("jobId不能为空！");
         }
         String path = JobPathConstant.JOB_HISTORY_PATH.replace("{jobId}", jobId);
-        List<JobHistoryInfo> list = get(path, username, new TypeReference<ResponseResult<List<JobHistoryInfo>>>() {
-        });
+        List<JobHistoryInfo> list = execution.get(path, username,
+                new TypeReference<ResponseResult<List<JobHistoryInfo>>>() {
+                });
         if (CollectionUtil.isEmpty(list)) {
             throw new ServiceException(path, 500, "历史作业信息不存在！");
         }
         return list.get(0);
     }
-
 
     /**
      * 通过多个id查询作业历史列表
@@ -340,7 +343,7 @@ public class JHJobApiExecution extends JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("jobIds", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, jobIds));
         String path = JHApiClient.getUrl(JobPathConstant.JOB_HISTORY_IDS_PATH, params);
-        return get(path, username, new TypeReference<ResponseResult<List<JobHistoryInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<JobHistoryInfo>>>() {
         });
     }
 
@@ -356,8 +359,9 @@ public class JHJobApiExecution extends JHApiExecution {
             throw new ArgsException("jobId不能为空！");
         }
         String path = JobPathConstant.JOB_PEEK_PATH.replace("{jobId}", jobId);
-        ResponseResult<String> result = getJhApiClient().get(path, getHeaders(username), new TypeReference<ResponseResult<String>>() {
-        });
+        ResponseResult<String> result = execution.getJhApiClient().get(path, execution.getHeaders(username),
+                new TypeReference<ResponseResult<String>>() {
+                });
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
             throw new ServiceException(path, result.getCode(), result.getMessage());
         }
@@ -367,7 +371,6 @@ public class JHJobApiExecution extends JHApiExecution {
         }
         return result.getMessage();
     }
-
 
     /**
      * 连接作业会话
@@ -381,7 +384,7 @@ public class JHJobApiExecution extends JHApiExecution {
             throw new ArgsException("jobId不能为空！");
         }
         String path = JobPathConstant.JOB_CONNECT_SESSION_PATH.replace("{jobId}", jobId);
-        return post(path, username, new TypeReference<ResponseResult<Object>>() {
+        return execution.post(path, username, new TypeReference<ResponseResult<Object>>() {
         });
     }
 
@@ -396,7 +399,7 @@ public class JHJobApiExecution extends JHApiExecution {
             throw new ArgsException("appId不能为空！");
         }
         String path = JobPathConstant.JOB_GET_APP_FORM_PATH.replace("{appId}", appId);
-        return get(path, username, new TypeReference<ResponseResult<List<JobAppFormItemInfo>>>() {
+        return execution.get(path, username, new TypeReference<ResponseResult<List<JobAppFormItemInfo>>>() {
         });
     }
 

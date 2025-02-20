@@ -17,7 +17,8 @@ import java.util.Map;
  */
 public class JobApiTest {
 
-    private static final JHJobApiExecution execution = (JHJobApiExecution) JHClientConfig.jhApiClientMap.get(JHJobApiExecution.class);
+    private static final JHJobApiExecution execution =  JHClientConfig.API_EXECUTRON_MANAGE
+    .getApiExecution(JHJobApiExecution.class);
 
     /**
      * 测试提交作业

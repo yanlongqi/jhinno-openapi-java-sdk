@@ -30,9 +30,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * <p>
  * 对于定制接口，可参考以下步骤封装调用方法
  * <ol>
- *     <li>定义一个const类同来存放接口的路径，方便后期的维护，如：{@link AppPathConstant}</li>
- *     <li>继承{@link JHApiExecution}，如：{@link JHAppApiExecution}</li>
- *     <li>参考{@link JHAppApiExecution}中封装的方法，调用{@link JHApiExecution}中的get、post、put、delete等对新的接口封装</li>
+ * <li>定义一个const类同来存放接口的路径，方便后期的维护，如：{@link AppPathConstant}</li>
+ * <li>继承{@link JHRequestExecution}，如：{@link JHAppApiExecution}</li>
+ * <li>参考{@link JHAppApiExecution}中封装的方法，调用{@link JHRequestExecution}中的get、post、put、delete等对新的接口封装</li>
  * </ol>
  *
  * @author yanlongqi
@@ -41,8 +41,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Data
 @NoArgsConstructor
-public class JHApiExecution {
-
+public class JHRequestExecution {
 
     /**
      * JHApiClient实例
@@ -59,7 +58,6 @@ public class JHApiExecution {
      */
     private int tokenResidueTime = DefaultHttpClientConfig.DEFAULT_TOKEN_RESIDUE_TIME;
 
-
     /**
      * 是否使用服务器时间，开启可能会导致请求过慢，但是不会太慢，默认token会有缓存
      */
@@ -74,7 +72,7 @@ public class JHApiExecution {
     /**
      * 接口请求的认证类型
      */
-    private AuthType authType = AuthType.ACCESS_SECRET_MODE;
+    private AuthType authType = AuthType.TOKEN_MODE;
 
     /**
      * 访问密钥
@@ -86,16 +84,14 @@ public class JHApiExecution {
      */
     private String accessKeySecret;
 
-
     /**
      * 获取一个执行器的实例
      *
      * @param jhApiClient 请求的客户端
      */
-    protected JHApiExecution(JHApiClient jhApiClient) {
+    public JHRequestExecution(JHApiClient jhApiClient) {
         this.jhApiClient = jhApiClient;
     }
-
 
     /**
      * 用户令牌的缓存
@@ -127,13 +123,15 @@ public class JHApiExecution {
         int tokenEffectiveTime = (tokenTimeout - tokenResidueTime) * 60 * 1000;
 
         // 如果是强制获取、用户令牌为空、用户令牌过期等，则获取令牌
-        if (isForceGetToken || tokenInfo == null || System.currentTimeMillis() - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime) {
+        if (isForceGetToken || tokenInfo == null
+                || System.currentTimeMillis() - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime) {
             Map<String, Object> params = new HashMap<>(2);
             params.put("timeout", tokenTimeout);
             String currentTimeMillis = getCurrentTimeMillis();
             String beforeEncryption = String.format(CommonConstant.TokenUserFormat, username, currentTimeMillis);
             try {
-                SecretKeySpec secretKey = new SecretKeySpec(CommonConstant.DEFAULT_AES_KEY.getBytes(StandardCharsets.UTF_8), CommonConstant.AES_ALGORITHM);
+                SecretKeySpec secretKey = new SecretKeySpec(
+                        CommonConstant.DEFAULT_AES_KEY.getBytes(StandardCharsets.UTF_8), CommonConstant.AES_ALGORITHM);
                 Cipher cipher = Cipher.getInstance(CommonConstant.AES_ECB_PADDING);
                 cipher.init(Cipher.ENCRYPT_MODE, secretKey);
                 byte[] encryptBytes = cipher.doFinal(beforeEncryption.getBytes(StandardCharsets.UTF_8));
@@ -154,7 +152,6 @@ public class JHApiExecution {
         return tokenInfo.getToken();
     }
 
-
     /**
      * @return
      */
@@ -165,7 +162,6 @@ public class JHApiExecution {
         return jhApiClient.getAppformServerCurrentTimeMillis();
     }
 
-
     /**
      * 构建一个带token的请求头
      *
@@ -173,7 +169,7 @@ public class JHApiExecution {
      * @param isContentType 是否携带默认的Content-type，默认为{@link ContentType#APPLICATION_JSON}
      * @return 请求头
      */
-    protected Map<String, Object> getHeaders(String username, boolean isContentType) {
+    public Map<String, Object> getHeaders(String username, boolean isContentType) {
         Map<String, Object> headers = new HashMap<>();
         // 默认请求json数据
         if (isContentType) {
@@ -202,7 +198,6 @@ public class JHApiExecution {
         return headers;
     }
 
-
     /**
      * 获取签名
      *
@@ -211,11 +206,13 @@ public class JHApiExecution {
      * @return 签名
      */
     public String getsSignature(String username, String currentTimeMillis) {
-        SecretKeySpec secretKey = new SecretKeySpec(accessKeySecret.getBytes(StandardCharsets.UTF_8), CommonConstant.HMAC_SHA_256_ALGORITHM);
+        SecretKeySpec secretKey = new SecretKeySpec(accessKeySecret.getBytes(StandardCharsets.UTF_8),
+                CommonConstant.HMAC_SHA_256_ALGORITHM);
         try {
             Mac mac = Mac.getInstance(CommonConstant.HMAC_SHA_256_ALGORITHM);
             mac.init(secretKey);
-            String beforeSignature = String.format(CommonConstant.SIGNATURE_FORMAT, accessKey, username, currentTimeMillis);
+            String beforeSignature = String.format(CommonConstant.SIGNATURE_FORMAT, accessKey, username,
+                    currentTimeMillis);
             byte[] digest = mac.doFinal(beforeSignature.getBytes(StandardCharsets.UTF_8));
             return Hex.encodeHexString(digest);
         } catch (Exception e) {
@@ -229,7 +226,7 @@ public class JHApiExecution {
      * @param username 用户名
      * @return 请求头
      */
-    protected Map<String, Object> getHeaders(String username) {
+    public Map<String, Object> getHeaders(String username) {
         return getHeaders(username, true);
     }
 
@@ -262,7 +259,6 @@ public class JHApiExecution {
         return result.getData();
     }
 
-
     /**
      * 发起一个有返回值的POST请求
      *
@@ -282,7 +278,6 @@ public class JHApiExecution {
         return result.getData();
     }
 
-
     /**
      * 发起一个有返回值的POST请求
      *
@@ -296,7 +291,6 @@ public class JHApiExecution {
         return post(path, username, null, type);
     }
 
-
     /**
      * 发起一个没有返回值的POST请求
      *
@@ -306,13 +300,13 @@ public class JHApiExecution {
      * @param <B>      请求体数据类型
      */
     public <B> void post(String path, String username, B body) {
-        ResponseResult<?> result = jhApiClient.post(path, body, getHeaders(username), new TypeReference<ResponseResult<?>>() {
-        });
+        ResponseResult<?> result = jhApiClient.post(path, body, getHeaders(username),
+                new TypeReference<ResponseResult<?>>() {
+                });
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
             throw new ServiceException(path, result.getCode(), result.getMessage());
         }
     }
-
 
     /**
      * 发起一个没有请求体，没有数据返回的POST请求
@@ -324,7 +318,6 @@ public class JHApiExecution {
         post(path, username, new TypeReference<ResponseResult<?>>() {
         });
     }
-
 
     /**
      * 发起一个有返回值的PUT请求
@@ -344,7 +337,6 @@ public class JHApiExecution {
         }
         return result.getData();
     }
-
 
     /**
      * 发起一个有返回值的PUT请求
@@ -368,13 +360,13 @@ public class JHApiExecution {
      * @param <B>      请求体数据类型
      */
     public <B> void put(String path, String username, B body) {
-        ResponseResult<?> result = jhApiClient.put(path, body, getHeaders(username), new TypeReference<ResponseResult<?>>() {
-        });
+        ResponseResult<?> result = jhApiClient.put(path, body, getHeaders(username),
+                new TypeReference<ResponseResult<?>>() {
+                });
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
             throw new ServiceException(path, result.getCode(), result.getMessage());
         }
     }
-
 
     /**
      * 发起一个没有请求体，没有数据返回的PUT请求
@@ -386,7 +378,6 @@ public class JHApiExecution {
         put(path, username, new TypeReference<ResponseResult<?>>() {
         });
     }
-
 
     /**
      * 发起一个DELETE请求，有数据返回
@@ -405,7 +396,6 @@ public class JHApiExecution {
         return result.getData();
     }
 
-
     /**
      * 发起一个DELETE请求，没有数据返回
      *
@@ -413,13 +403,13 @@ public class JHApiExecution {
      * @param username 用户名
      */
     public void delete(String path, String username) {
-        ResponseResult<?> result = jhApiClient.delete(path, getHeaders(username), new TypeReference<ResponseResult<?>>() {
-        });
+        ResponseResult<?> result = jhApiClient.delete(path, getHeaders(username),
+                new TypeReference<ResponseResult<?>>() {
+                });
         if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
             throw new ServiceException(path, result.getCode(), result.getMessage());
         }
     }
-
 
     /**
      * 退出用户的登录，释放许可，当用户退出登录后，建议清除用户的token信息
