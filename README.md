@@ -17,6 +17,7 @@
 3. JH_Appform_6.1_Release
 4. JH_Appform_6.2_Release（使用: release-2.0.3）
 5. JH_Appform_6.3_Release（使用: release-2.0.4）
+5. JH_Appform_6.3_Release（使用: release-2.0.5）
 
 # 2. 快速开始
 
@@ -81,7 +82,7 @@ mvn clean install
 ```yaml
 jhinno:
   openapi:
-    server-url: https://172.17.0.5/appform
+    server-url: https://172.17.0.5
     access-key: xxxxx
     access-key-secret: xxxx
     auth-type: access_secret_mode
@@ -90,7 +91,7 @@ jhinno:
 #### 2.1.3.2 application.properties
 
 ```properties
-jhinno.openapi.server-url=https://{appform服务器的地址}/appform
+jhinno.openapi.server-url=https://{appform服务器的地址}
 jhinno.openapi.access-key=xxxxx
 jhinno.openapi.access-key-secret=xxxx
 jhinno.openapi.auth-type=access_secret_mode
@@ -180,7 +181,7 @@ spring.xml 添加以下内容
 <?xml version="1.0" encoding="utf-8"?>
 <beans>
     <bean id="apiClient" class="com.jhinno.sdk.openapi.client.JHApiClient" init-method="initDefaultApiClient">
-        <constructor-arg value="https://172.17.0.5/appform"/>
+        <constructor-arg value="https://172.17.0.5"/>
     </bean>
 
     <bean id="requestExecution" class="com.jhinno.sdk.openapi.api.JHRequestExecution">
@@ -256,7 +257,7 @@ public class JHApiUtile {
     /**
      * 创建一个API执行器管理器
      */
-    public static final JHApiExecutionManage API_EXECUTION_MANAGE = new JHApiExecutionManage("https://192.168.87.24/appform");
+    public static final JHApiExecutionManage API_EXECUTION_MANAGE = new JHApiExecutionManage("https://192.168.87.24");
 
     public static final String ACCESS_KEY = "3f03747f147942bd8debd81b6c9c6a80";
 
@@ -338,6 +339,7 @@ public class JHDemoApiExecution extends JHApiExecution {
 
     public XxxDTO getXXXX(String username, String demoParams) {
 
+        // ResponseResult<XxxDTO> 可以参照接口文档定义自己的数据传输对象
         return execution.get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
         });
     }
@@ -370,7 +372,7 @@ public class JHDemoApiExecution extends JHApiExecution {
 
 public class JHApiUtile {
 
-    public static final JHApiExecutionManage API_EXECUTION_MANAGE = new JHApiExecutionManage("https://192.168.87.24/appform");
+    public static final JHApiExecutionManage API_EXECUTION_MANAGE = new JHApiExecutionManage("https://192.168.87.24");
 
     public static final String ACCESS_KEY = "3f03747f147942bd8debd81b6c9c6a80";
 
