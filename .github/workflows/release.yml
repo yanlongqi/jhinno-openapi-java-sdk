@@ -1,27 +1,33 @@
-name: Release to Maven Central
+name: 发布到 Maven Central
 
 on:
   release:
-    types: [released]
+    types: [created]
+  # 可选：也可以手动触发
+  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Git Repo
-        uses: actions/checkout@v2
+      - name: 检出代码
+        uses: actions/checkout@v3
       
-      - name: Set up Maven Central Repo
-        uses: actions/setup-java@v1
+      - name: 设置 JDK 1.8
+        uses: actions/setup-java@v3
         with:
-          java-version: 1.8
-          server-id: central
-          server-username: ${{ secrets.OSSRH_USER }}
-          server-password: ${{ secrets.OSSRH_PASSWORD }}
-          gpg-passphrase: ${{ secrets.GPG_PASSWORD }}
+          java-version: '8'
+          distribution: 'temurin'
+          cache: 'maven'
       
-      - name: Configure GPG for CI
+      - name: 配置 GPG 密钥
         run: |
+          # 导入 GPG 密钥
+          echo "${{ secrets.GPG_SECRET }}" | base64 --decode > private.key
+          gpg --batch --import private.key
+          rm private.key
+          
+          # 配置 GPG 为非交互模式
           mkdir -p ~/.gnupg/
           echo "use-agent" > ~/.gnupg/gpg.conf
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
@@ -30,11 +36,47 @@ jobs:
           chmod 600 ~/.gnupg/*
           gpg-connect-agent reloadagent /bye
       
-      - name: Publish to Maven Central Repo
-        uses: samuelmeuli/action-maven-publish@v1
-        with:
-          gpg_private_key: ${{ secrets.GPG_SECRET }}
-          gpg_passphrase: ${{ secrets.GPG_PASSWORD }}
-          nexus_username: ${{ secrets.OSSRH_USER }}
-          nexus_password: ${{ secrets.OSSRH_PASSWORD }}
-          maven_args: "-Dmaven.deploy.skip=false -DaltDeploymentRepository=central::default::https://central.sonatype.com/service/local/staging/deploy/maven2/"
+      - name: 创建 Maven 设置文件
+        run: |
+          cat > settings.xml << EOF
+          <settings>
+            <servers>
+              <server>
+                <id>ossrh</id>
+                <username>${{ secrets.OSSRH_USER }}</username>
+                <password>${{ secrets.OSSRH_PASSWORD }}</password>
+              </server>
+              <!-- 备用服务器 ID，以防某些插件使用不同的 ID -->
+              <server>
+                <id>central</id>
+                <username>${{ secrets.OSSRH_USER }}</username>
+                <password>${{ secrets.OSSRH_PASSWORD }}</password>
+              </server>
+              <server>
+                <id>sonatype-nexus-staging</id>
+                <username>${{ secrets.OSSRH_USER }}</username>
+                <password>${{ secrets.OSSRH_PASSWORD }}</password>
+              </server>
+            </servers>
+            <profiles>
+              <profile>
+                <id>ossrh</id>
+                <activation>
+                  <activeByDefault>true</activeByDefault>
+                </activation>
+                <properties>
+                  <gpg.executable>gpg</gpg.executable>
+                  <gpg.passphrase>${{ secrets.GPG_PASSWORD }}</gpg.passphrase>
+                </properties>
+              </profile>
+            </profiles>
+          </settings>
+          EOF
+      
+      - name: 构建并发布到 Maven Central
+        run: |
+          mvn clean deploy \
+            --batch-mode \
+            --settings settings.xml \
+            -Dgpg.passphrase="${{ secrets.GPG_PASSWORD }}" \
+            -DskipTests=true
