@@ -10,27 +10,24 @@ jobs:
     steps:
       - name: Checkout Git Repo
         uses: actions/checkout@v2
+      
       - name: Set up Maven Central Repo
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-          server-id: sonatype-nexus-staging
+          server-id: central
           server-username: ${{ secrets.OSSRH_USER }}
           server-password: ${{ secrets.OSSRH_PASSWORD }}
           gpg-passphrase: ${{ secrets.GPG_PASSWORD }}
       
       - name: Configure GPG for CI
         run: |
-          # Create .gnupg directory
           mkdir -p ~/.gnupg/
-          # Configure GPG to use non-interactive mode
           echo "use-agent" > ~/.gnupg/gpg.conf
           echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
           echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
-          # Set permissions
           chmod 700 ~/.gnupg
           chmod 600 ~/.gnupg/*
-          # Restart agent
           gpg-connect-agent reloadagent /bye
       
       - name: Publish to Maven Central Repo
@@ -40,3 +37,4 @@ jobs:
           gpg_passphrase: ${{ secrets.GPG_PASSWORD }}
           nexus_username: ${{ secrets.OSSRH_USER }}
           nexus_password: ${{ secrets.OSSRH_PASSWORD }}
+          maven_args: "-Dmaven.deploy.skip=false -DaltDeploymentRepository=central::default::https://central.sonatype.com/service/local/staging/deploy/maven2/"
