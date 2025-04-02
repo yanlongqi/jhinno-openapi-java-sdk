@@ -8,26 +8,11 @@ jobs:
     steps:
       - name: Checkout Git Repo
         uses: actions/checkout@v2
-      - name: Configure GPG Key
-        run: |
-          # Setup GPG
-          echo "${{ secrets.GPG_SECRET }}" | base64 --decode > private.key
-          gpg --batch --import private.key
-          rm private.key
-          
-          # Configure GPG for non-interactive use
-          mkdir -p ~/.gnupg/
-          echo "use-agent" > ~/.gnupg/gpg.conf
-          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
-          echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
-          chmod 700 ~/.gnupg
-          chmod 600 ~/.gnupg/*
-          gpg-connect-agent reloadagent /bye
       - name: Set up Maven Central Repo
         uses: actions/setup-java@v1
         with:
           java-version: 1.8
-          server-id: sonatype-nexus-staging
+          server-id: central
           server-username: ${{ secrets.OSSRH_USER }}
           server-password: ${{ secrets.OSSRH_PASSWORD }}
           gpg-passphrase:  ${{ secrets.GPG_PASSWORD }}
