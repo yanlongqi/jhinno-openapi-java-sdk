@@ -17,7 +17,22 @@ jobs:
           server-id: sonatype-nexus-staging
           server-username: ${{ secrets.OSSRH_USER }}
           server-password: ${{ secrets.OSSRH_PASSWORD }}
-          gpg-passphrase:  ${{ secrets.GPG_PASSWORD }}
+          gpg-passphrase: ${{ secrets.GPG_PASSWORD }}
+      
+      - name: Configure GPG for CI
+        run: |
+          # Create .gnupg directory
+          mkdir -p ~/.gnupg/
+          # Configure GPG to use non-interactive mode
+          echo "use-agent" > ~/.gnupg/gpg.conf
+          echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+          echo "allow-loopback-pinentry" > ~/.gnupg/gpg-agent.conf
+          # Set permissions
+          chmod 700 ~/.gnupg
+          chmod 600 ~/.gnupg/*
+          # Restart agent
+          gpg-connect-agent reloadagent /bye
+      
       - name: Publish to Maven Central Repo
         uses: samuelmeuli/action-maven-publish@v1
         with:
