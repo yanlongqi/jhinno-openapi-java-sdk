@@ -11,18 +11,18 @@ public class UserPathConstant {
     /**
      * 查询用户和修改用户
      */
-    public static final String USERS_PATH = "/ws/api/users";
+    public static final String USERS_PATH = "/appform/ws/api/users";
 
 
     /**
      * 修改用户和删除用户
      */
-    public static final String USERS_USERNAME_PATH = "/ws/api/users/{username}";
+    public static final String USERS_USERNAME_PATH = "/appform/ws/api/users/{username}";
 
 
     /**
      * 用户密码操作
      */
-    public static final String USERS_RESET_PASSWORD_PATH = "/ws/api/users/{username}/password/password_reset";
+    public static final String USERS_RESET_PASSWORD_PATH = "/appform/ws/api/users/{username}/password/password_reset";
 
 }

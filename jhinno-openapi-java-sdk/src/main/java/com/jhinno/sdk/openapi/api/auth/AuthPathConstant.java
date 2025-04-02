@@ -11,22 +11,22 @@ public class AuthPathConstant {
     /**
      * 获取用户token
      */
-    public static final String AUTH_TOKEN_PATH = "/ws/api/auth/token";
+    public static final String AUTH_TOKEN_PATH = "/appform/ws/api/auth/token";
 
     /**
      * 注销token
      */
-    public static final String AUTH_LOGOUT = "/ws/api/auth/logout";
+    public static final String AUTH_LOGOUT = "/appform/ws/api/auth/logout";
 
 
     /**
      * 用户注册
      */
-    public static final String AUTH_REGISTER = "/ws/api/auth/register";
+    public static final String AUTH_REGISTER = "/appform/ws/api/auth/register";
 
     /**
      * 测试服务器是否可用
      */
-    public static final String PING = "/ws/api/ping";
+    public static final String PING = "/appform/ws/api/ping";
 
 }

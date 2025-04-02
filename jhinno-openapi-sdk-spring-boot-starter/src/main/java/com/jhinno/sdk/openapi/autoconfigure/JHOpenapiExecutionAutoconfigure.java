@@ -8,7 +8,6 @@ import com.jhinno.sdk.openapi.api.file.JHFileApiExecution;
 import com.jhinno.sdk.openapi.api.job.JHJobApiExecution;
 import com.jhinno.sdk.openapi.api.organization.JHDepartmentApiExecution;
 import com.jhinno.sdk.openapi.api.organization.JHUserApiExecution;
-import com.jhinno.sdk.openapi.client.JHApiClient;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.config.BeanPostProcessor;

@@ -1,6 +1,6 @@
 jhinno:
   openapi:
-    server-url: https://192.168.87.24/appform
+    server-url: https://192.168.0.22
     auth-type: token_mode
     access-key: 3f03747f147942bd8debd81b6c9c6a80
     access-key-secret: e0681859b91c499eb1d2c8e09cea3242

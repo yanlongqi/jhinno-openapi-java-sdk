@@ -11,11 +11,11 @@ public class DepartmentPathConstant {
     /**
      * 组织
      */
-    public static final String DEPARTMENT_PATH = "/ws/api/deps";
+    public static final String DEPARTMENT_PATH = "/appform/ws/api/deps";
 
 
     /**
      * 组织名称操作组织
      */
-    public static final String DEPARTMENT_NAME_PATH = "/ws/api/deps/{depName}";
+    public static final String DEPARTMENT_NAME_PATH = "/appform/ws/api/deps/{depName}";
 }

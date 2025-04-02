@@ -21,7 +21,7 @@ public class JHFileApiExtendExecution implements JHApiExecution {
         this.execution = execution;
     }
 
-    public static String GET_FILE_ENV_PATH = "/ws/api/files/path/{env}";
+    public static String GET_FILE_ENV_PATH = "/appform/ws/api/files/path/{env}";
 
     public FilePath getFileEnvPath(String username, FileEnvType env, FileSystemType type) {
         Map<String, Object> params = new HashMap<>(1);

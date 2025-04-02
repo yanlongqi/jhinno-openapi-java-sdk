@@ -25,7 +25,7 @@ public class JHClientConfig {
      * 创建一个API执行器管理器
      */
     public static final JHApiExecutionManage API_EXECUTRON_MANAGE = new JHApiExecutionManage(
-            "https://192.168.87.24/appform");
+            "https://192.168.87.24");
 
     public static final String ACCESS_KEY = "3f03747f147942bd8debd81b6c9c6a80";
 

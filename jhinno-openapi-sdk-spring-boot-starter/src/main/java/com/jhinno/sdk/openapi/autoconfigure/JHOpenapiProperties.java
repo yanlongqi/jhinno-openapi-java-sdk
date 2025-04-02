@@ -15,7 +15,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class JHOpenapiProperties {
 
     /**
-     * 接口服务的BaseURL, 列如：https://192.168.87.20/appform
+     * 接口服务的BaseURL, 列如：https://192.168.87.20
      */
     private String serverUrl;
 
