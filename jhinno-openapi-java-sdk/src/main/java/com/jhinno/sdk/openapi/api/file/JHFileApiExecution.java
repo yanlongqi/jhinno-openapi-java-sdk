@@ -180,8 +180,9 @@ public class JHFileApiExecution implements JHApiExecution {
      * @param fileName   文件名称
      * @param uploadPath 上传路径
      * @param isCover    是否覆盖（非必填，默认：false）
+     * @param fileConf   密级（只有开启了密级才需要此参数，可以是密级的中文名，也可以是密级的中文名、英文名、或者密级的key）
      */
-    public void uploadFile(String username, InputStream is, String fileName, String uploadPath, Boolean isCover) {
+    public void uploadFile(String username, InputStream is, String fileName, String uploadPath, Boolean isCover, String fileConf) {
         if (is == null) {
             throw new ArgsException("is是必填参数");
         }
@@ -192,6 +193,9 @@ public class JHFileApiExecution implements JHApiExecution {
 
         if (isCover != null) {
             body.put("isCover", isCover);
+        }
+        if (StringUtils.isNotBlank(fileConf)) {
+            body.put("fileConf", fileConf);
         }
         body.put("uploadPath", uploadPath);
         ResponseResult<Object> result = execution.getJhApiClient().upload(
@@ -209,6 +213,23 @@ public class JHFileApiExecution implements JHApiExecution {
     }
 
     /**
+     * 上传文件
+     * <p>
+     * 如果isCover为空或者为false，源文件目录下存在相同文件则会报错
+     * </p>
+     *
+     * @param username   用户名
+     * @param is         文件流
+     * @param fileName   文件名称
+     * @param uploadPath 上传路径
+     * @param isCover    是否覆盖（非必填，默认：false）
+     */
+    public void uploadFile(String username, InputStream is, String fileName, String uploadPath, Boolean isCover) {
+        uploadFile(username, is, fileName, uploadPath, isCover, null);
+    }
+
+
+    /**
      * 上传文件（不覆盖源文件）
      * <p>
      * 源文件目录下存在相同文件则会报错
@@ -224,6 +245,8 @@ public class JHFileApiExecution implements JHApiExecution {
     }
 
     /**
+     * 上传一个本地的路径
+     *
      * @param username   用户名
      * @param path       本地文件路径
      * @param fileName   文件名
@@ -241,6 +264,11 @@ public class JHFileApiExecution implements JHApiExecution {
     }
 
     /**
+     * 上传一个本地的路径（不覆盖源文件）
+     * <p>
+     * 源文件目录下存在相同文件则会报错
+     * </p>
+     *
      * @param username   用户名
      * @param path       本地文件路径
      * @param fileName   文件名
@@ -252,6 +280,8 @@ public class JHFileApiExecution implements JHApiExecution {
     }
 
     /**
+     * 上传一个本地的路径
+     *
      * @param username   用户名
      * @param path       本地文件路径
      * @param uploadPath 上传路径，服务器路径
@@ -264,6 +294,8 @@ public class JHFileApiExecution implements JHApiExecution {
     }
 
     /**
+     * 上传一个本地的路径（不覆盖源文件）
+     *
      * @param username   用户名
      * @param path       本地文件路径
      * @param uploadPath 上传路径，服务器路径
@@ -311,7 +343,7 @@ public class JHFileApiExecution implements JHApiExecution {
 
     /**
      * 获取文件输入流
-     * 
+     *
      * @param username 用户名
      * @param filePath 文件路径
      * @return 文件流
@@ -323,7 +355,7 @@ public class JHFileApiExecution implements JHApiExecution {
 
     /**
      * 获取文件输入流
-     * 
+     *
      * @param username      用户名
      * @param filePath      文件路径
      * @param forceDownload 是否强制下载，打开密级之后未标密的文件无法下载，可以通过设置当前参数为true来强制下载，默认：false
@@ -382,7 +414,7 @@ public class JHFileApiExecution implements JHApiExecution {
      * @param compressType   压缩类型 （未使用以后扩展）
      */
     public void uncompress(String username, String sourceFilePath, String targetDirPath, Boolean isCover,
-            String password, String compressType) {
+                           String password, String compressType) {
         if (StringUtils.isBlank(sourceFilePath)) {
             throw new ArgsException("sourceFilePath不能为空！");
         }
@@ -415,7 +447,7 @@ public class JHFileApiExecution implements JHApiExecution {
      * @param password       密码
      */
     public void uncompress(String username, String sourceFilePath, String targetDirPath, Boolean isCover,
-            String password) {
+                           String password) {
         uncompress(username, sourceFilePath, targetDirPath, isCover, password, null);
     }
 

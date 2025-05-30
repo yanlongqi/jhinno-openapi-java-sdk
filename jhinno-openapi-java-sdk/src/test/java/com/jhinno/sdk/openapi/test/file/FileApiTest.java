@@ -92,9 +92,20 @@ public class FileApiTest {
      */
     @Test
     public void testUploadFileNoCover() throws IOException {
-        File file = new File("C:\\Users\\yanlongqi\\Desktop\\双色球.xls");
+        File file = new File("C:\\Users\\yanlongqi\\Desktop\\Hash.exe");
         FileInputStream fileInputStream = new FileInputStream(file);
-        execution.uploadFile("jhadmin", fileInputStream, file.getName(), "$HOME/temp");
+        execution.uploadFile("lqyan", fileInputStream, file.getName(), "$HOME/temp");
+    }
+
+
+    /**
+     * 测试上传文件，开启密级的情况
+     */
+    @Test
+    public void testUploadFileConf() throws IOException {
+        File file = new File("C:\\Users\\yanlongqi\\Desktop\\Hash.exe");
+        FileInputStream fileInputStream = new FileInputStream(file);
+        execution.uploadFile("lqyan", fileInputStream, file.getName(), "$HOME/temp111", false,"public");
     }
 
     /**
