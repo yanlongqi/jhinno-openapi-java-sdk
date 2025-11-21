@@ -64,4 +64,9 @@ public class FilePathConstant {
      */
     public static final String FILE_UNCOMPRESS_PATH = "/appform/ws/api/files/uncompress";
 
+    /**
+     * 密级相关请求路径
+     */
+    public static final String FILE_CONF_PATH = "/appform/ws/api/file/conf";
+
 }

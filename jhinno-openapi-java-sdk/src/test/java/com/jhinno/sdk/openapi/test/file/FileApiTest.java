@@ -1,9 +1,12 @@
 package com.jhinno.sdk.openapi.test.file;
 
+import com.jhinno.sdk.openapi.api.file.Confidential;
 import com.jhinno.sdk.openapi.api.file.FileInfo;
 import com.jhinno.sdk.openapi.api.file.JHFileApiExecution;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
+import com.jhinno.sdk.openapi.utils.JsonUtil;
 import org.junit.Test;
+
 import java.io.InputStream;
 
 import java.io.File;
@@ -105,7 +108,7 @@ public class FileApiTest {
     public void testUploadFileConf() throws IOException {
         File file = new File("C:\\Users\\yanlongqi\\Desktop\\Hash.exe");
         FileInputStream fileInputStream = new FileInputStream(file);
-        execution.uploadFile("lqyan", fileInputStream, file.getName(), "$HOME/temp111", false,"public");
+        execution.uploadFile("lqyan", fileInputStream, file.getName(), "$HOME/temp111", false, "public");
     }
 
     /**
@@ -133,5 +136,16 @@ public class FileApiTest {
     @Test
     public void testUncompress() {
         execution.uncompress("jhadmin", "$HOME/temp.zip", "$HOME/test");
+    }
+
+    @Test
+    public void testGetConfList() {
+        List<Confidential> confList = execution.getConfList("yanlongqi");
+        System.out.println(JsonUtil.objectToString(confList));
+    }
+
+    @Test
+    public void testMarkConf() {
+        execution.markConf("yanlongqi", "999999998", "/home/yanlongqi/test.sh");
     }
 }

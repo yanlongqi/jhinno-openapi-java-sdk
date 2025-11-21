@@ -2,9 +2,7 @@ package com.jhinno.sdk.openapi.api.app;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
-import com.jhinno.sdk.openapi.AuthType;
 import com.jhinno.sdk.openapi.CommonConstant;
-import com.jhinno.sdk.openapi.JHApiExecution;
 import com.jhinno.sdk.openapi.ServiceException;
 import com.jhinno.sdk.openapi.api.JHRequestExecution;
 import com.jhinno.sdk.openapi.api.ResponseResult;
@@ -23,13 +21,7 @@ import java.util.Map;
  * @author yanlongqi
  * @date 2024/2/1 16:26
  */
-public class JHAppApiExecution implements JHApiExecution {
-
-    private JHRequestExecution execution;
-
-    public void init(JHRequestExecution execution) {
-        this.execution = execution;
-    }
+public class JHAppApiExecution extends JHRequestExecution {
 
     /**
      * 启动一个会话
@@ -48,20 +40,20 @@ public class JHAppApiExecution implements JHApiExecution {
      * <li>使用HTML的iframe标签的src</li>
      * </ul>
      * 以下是使用的伪代码：
-     * 
-     * <pre class="code">
+     *
+     * <pre>{@code
      *  // 使用a标签实例代码
      *  var a = document.createElement("a");
      *  a.href = "{@link AppStartedInfo#getJhappUrl()}";
      *  a.click();
-     * </pre>
-     * 
-     * <pre class="code">
+     * }</pre>
+     *
+     * <pre>{@code
      *  // 使用iframe标签实例代码
      *  var iframe = document.createElement("iframe");
      *  iframe.style.display = "none";
      *  iframe.src = "{@link AppStartedInfo#getJhappUrl()}";
-     * </pre>
+     * }</pre>
      *
      * <p>
      * 注意：如果使用JHAppClient启动应用的，并且没有做浏览器端和服务器没有做时间同步，
@@ -69,10 +61,10 @@ public class JHAppApiExecution implements JHApiExecution {
      * 并使用js生产的时间，具体的参数见 {@link AppStartRequest#setCurrentTimestamp(String)}
      *
      * <h4>通过浏览器启动</h4>
-     * 
-     * <pre class="code">
+     *
+     * <pre>{@code
      *  window.open("{@link AppStartedInfo#getWebSessionUrl()}}")
-     * </pre>
+     * }</pre>
      *
      * @param username        用户名
      * @param appId           应用拆
@@ -81,7 +73,7 @@ public class JHAppApiExecution implements JHApiExecution {
      */
     public AppStartedInfo desktopStart(String username, String appId, AppStartRequest appStartRequest) {
         String path = AppPathConstant.APPS_START_PATH.replace("{appId}", appId);
-        List<AppStartedInfo> data = execution.post(path, username, appStartRequest,
+        List<AppStartedInfo> data = this.post(path, username, appStartRequest,
                 new TypeReference<ResponseResult<List<AppStartedInfo>>>() {
                 });
         if (CollectionUtil.isEmpty(data)) {
@@ -92,21 +84,14 @@ public class JHAppApiExecution implements JHApiExecution {
         return appStartedInfo;
     }
 
-    public String getWebSessionUrl(String username, String desktopId) {
-        String webSessionUrlPath = AppPathConstant.WEB_SESSION_URL_PATH.replace("{desktopId}", desktopId);
-        String url = execution.getJhApiClient().getUrl(webSessionUrlPath);
-        Map<String, Object> params = new HashMap<>();
-        AuthType authType = execution.getAuthType();
-        if (authType == AuthType.TOKEN_MODE) {
-            params.put(CommonConstant.TOKEN, execution.getToken(username));
-        } else if (authType == AuthType.ACCESS_SECRET_MODE) {
-            params.put(CommonConstant.USERNAME, username);
-            params.put(CommonConstant.ACCESS_KEY, execution.getAccessKey());
-            String currentTimeMillis = execution.getCurrentTimeMillis();
-            params.put(CommonConstant.CURRENT_TIME_MILLIS, currentTimeMillis);
-            params.put(CommonConstant.SIGNATURE, execution.getsSignature(username, currentTimeMillis));
+    public String getWebSessionUrl(String username, String sessionId) {
+        String webSessionUrlPath = AppPathConstant.WEB_SESSION_URL_PATH.replace("{sessionId}", sessionId);
+        Map<String, String> result = this.get(webSessionUrlPath, username, new TypeReference<ResponseResult<Map<String, String>>>() {
+        });
+        if (CollectionUtil.isEmpty(result)) {
+            return null;
         }
-        return JHApiClient.getUrl(url, params);
+        return result.get("url");
     }
 
     /**
@@ -131,7 +116,7 @@ public class JHAppApiExecution implements JHApiExecution {
      * @return 会话列表
      */
     public List<SessionInfo> getDesktopList(String username) {
-        return execution.get(AppPathConstant.APPS_SESSIONS_ALL_PATH, username,
+        return this.get(AppPathConstant.APPS_SESSIONS_ALL_PATH, username,
                 new TypeReference<ResponseResult<List<SessionInfo>>>() {
                 });
     }
@@ -157,7 +142,7 @@ public class JHAppApiExecution implements JHApiExecution {
             params.put("sessionName", sessionName);
         }
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_PATH, params);
-        return execution.get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
+        return this.get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
         });
     }
 
@@ -178,7 +163,7 @@ public class JHAppApiExecution implements JHApiExecution {
         }
         params.put("sessionIds", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, ids));
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_IDS_PATH, params);
-        return execution.get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
+        return this.get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
         });
     }
 
@@ -200,7 +185,7 @@ public class JHAppApiExecution implements JHApiExecution {
         }
         params.put("sessionName", sessionName);
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_NAME_PATH, params);
-        return execution.get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
+        return this.get(path, username, new TypeReference<ResponseResult<List<SessionInfo>>>() {
         });
     }
 
@@ -219,7 +204,7 @@ public class JHAppApiExecution implements JHApiExecution {
      * @param isTransfer 是否传递操作权（不确定，需要咨询产品，非必填）
      */
     public void shareDesktop(String username, String sessionId, List<String> observers, List<String> interacts,
-            String isTransfer) {
+                             String isTransfer) {
         if (StringUtils.isBlank(sessionId)) {
             throw new ArgsException("sessionId为必填字段");
         }
@@ -235,7 +220,7 @@ public class JHAppApiExecution implements JHApiExecution {
         }
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_SHARE_PATH.replace("{sessionId}", sessionId),
                 params);
-        execution.post(path, username);
+        this.post(path, username);
     }
 
     /**
@@ -253,7 +238,7 @@ public class JHAppApiExecution implements JHApiExecution {
             throw new ArgsException("sessionId为必填字段");
         }
         String path = AppPathConstant.APPS_SESSIONS_CANCEL_SHARE_PATH.replace("{sessionId}", sessionId);
-        execution.put(path, username);
+        this.put(path, username);
     }
 
     /**
@@ -278,7 +263,7 @@ public class JHAppApiExecution implements JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("interact", interact);
         path = JHApiClient.getUrl(path, params);
-        execution.put(path, username);
+        this.put(path, username);
     }
 
     /**
@@ -293,7 +278,7 @@ public class JHAppApiExecution implements JHApiExecution {
             throw new ArgsException("sessionId为必填字段");
         }
         String path = AppPathConstant.APPS_SESSIONS_CONNECT_JHAPP_PATH.replace("{sessionId}", sessionId);
-        List<AppStartedInfo> list = execution.get(path, username,
+        List<AppStartedInfo> list = this.get(path, username,
                 new TypeReference<ResponseResult<List<AppStartedInfo>>>() {
                 });
         if (CollectionUtil.isEmpty(list)) {
@@ -319,7 +304,7 @@ public class JHAppApiExecution implements JHApiExecution {
             throw new ArgsException("sessionId为必填字段");
         }
         String path = AppPathConstant.APPS_SESSIONS_DISCONNECT_PATH.replace("{sessionId}", sessionId);
-        execution.put(path, username);
+        this.put(path, username);
     }
 
     /**
@@ -338,7 +323,7 @@ public class JHAppApiExecution implements JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("sessionIds", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, sessionIds));
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_DISCONNECT_IDS_PATH, params);
-        execution.put(path, username);
+        this.put(path, username);
     }
 
     /**
@@ -355,7 +340,7 @@ public class JHAppApiExecution implements JHApiExecution {
             throw new ArgsException("sessionId为必填字段");
         }
         String path = AppPathConstant.APPS_SESSIONS_DESTROY_PATH.replace("{sessionId}", sessionId);
-        execution.put(path, username);
+        this.put(path, username);
     }
 
     /**
@@ -371,7 +356,7 @@ public class JHAppApiExecution implements JHApiExecution {
         Map<String, Object> params = new HashMap<>(1);
         params.put("sessionIds", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, sessionIds));
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SESSIONS_DESTROY_IDS_PATH, params);
-        execution.put(path, username);
+        this.put(path, username);
     }
 
     /**
@@ -381,7 +366,7 @@ public class JHAppApiExecution implements JHApiExecution {
      * @return 应用列表
      */
     public List<AppInfo> getAppList(String username) {
-        return execution.get(AppPathConstant.APPS_LIST_PATH, username,
+        return this.get(AppPathConstant.APPS_LIST_PATH, username,
                 new TypeReference<ResponseResult<List<AppInfo>>>() {
                 });
     }
@@ -398,7 +383,7 @@ public class JHAppApiExecution implements JHApiExecution {
             throw new ArgsException("appName为必填字段");
         }
         String path = AppPathConstant.APPS_GET_URL_PATH.replace("{appName}", appName);
-        List<Map<String, String>> apps = execution.get(path, username,
+        List<Map<String, String>> apps = this.get(path, username,
                 new TypeReference<ResponseResult<List<Map<String, String>>>>() {
                 });
         if (CollectionUtil.isEmpty(apps)) {
@@ -431,7 +416,7 @@ public class JHAppApiExecution implements JHApiExecution {
             params.put("suffixes", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, suffixes));
         }
         String path = JHApiClient.getUrl(AppPathConstant.APPS_SUFFIXES_PATH, params);
-        return execution.get(path, username, new TypeReference<ResponseResult<List<AppstoreAppInfo>>>() {
+        return this.get(path, username, new TypeReference<ResponseResult<List<AppstoreAppInfo>>>() {
         });
     }
 
@@ -459,7 +444,7 @@ public class JHAppApiExecution implements JHApiExecution {
             params.put("use_labels", String.join(CommonConstant.NORMAL_CHARACTER_COMMA, labels));
         }
         String path = JHApiClient.getUrl(AppPathConstant.APP_USE_LABEL_PATH, params);
-        return execution.get(path, username, new TypeReference<ResponseResult<List<UseLabelInfo>>>() {
+        return this.get(path, username, new TypeReference<ResponseResult<List<UseLabelInfo>>>() {
         });
     }
 }

@@ -96,7 +96,7 @@ public class AppPathConstant {
     /**
      * WEB启动会话URL
      */
-    public static final String WEB_SESSION_URL_PATH = "/pageapi/apps/webclient/gui/{desktopId}";
+    public static final String WEB_SESSION_URL_PATH = "/appform/ws/api/apps/webclient/{sessionId}/connect";
 
 
     /**

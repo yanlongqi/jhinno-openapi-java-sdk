@@ -473,4 +473,32 @@ public class JHFileApiExecution implements JHApiExecution {
     public void uncompress(String username, String sourceFilePath, String targetDirPath) {
         uncompress(username, sourceFilePath, targetDirPath, null);
     }
+
+
+    /**
+     * 获取可用的文件吗密级列表
+     *
+     * @param username 用户名
+     * @return 密级列表
+     */
+    public List<Confidential> getConfList(String username) {
+        return execution.get(FilePathConstant.FILE_CONF_PATH, username, new TypeReference<ResponseResult<List<Confidential>>>() {
+        });
+    }
+
+    /**
+     * 文件表表标密
+     *
+     * @param username 用户名
+     * @param conf     密级使用{@link JHFileApiExecution#getConfList(String)}返回的{@link Confidential#conf}
+     * @param path     文件路径
+     *
+     *
+     */
+    public void markConf(String username, String conf, String path) {
+        Map<String, Object> body = new HashMap<>(2);
+        body.put("conf", conf);
+        body.put("path", path);
+        execution.post(FilePathConstant.FILE_CONF_PATH, username, body);
+    }
 }

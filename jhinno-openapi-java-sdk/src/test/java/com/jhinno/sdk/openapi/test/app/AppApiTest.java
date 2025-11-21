@@ -2,6 +2,7 @@ package com.jhinno.sdk.openapi.test.app;
 
 import com.jhinno.sdk.openapi.api.app.*;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
+import com.jhinno.sdk.openapi.utils.JsonUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -13,7 +14,6 @@ import java.util.List;
  * @author yanlongqi
  * @date 2024/2/1 16:47
  */
-
 public class AppApiTest {
 
     /**
@@ -29,8 +29,10 @@ public class AppApiTest {
     public void testStartApp() {
         AppStartRequest appStartRequest = new AppStartRequest();
         appStartRequest.setStartNew(true);
-        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("jhadmin", "linux_desktop", appStartRequest);
-        System.out.println(appStartedInfo);
+        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("yanlongqi", "linux_desktop", appStartRequest);
+        System.out.println("会话ID：" + appStartedInfo.getDesktopId());
+        System.out.println("JhAppURL：" + appStartedInfo.getJhappUrl());
+        System.out.println("WebURL:" + appStartedInfo.getWebSessionUrl());
     }
 
     /**
@@ -149,8 +151,22 @@ public class AppApiTest {
      */
     @Test
     public void testGetAppList() {
-        List<AppInfo> appList = jhAppApiExecution.getAppList("jhadmin");
-        System.out.println(appList);
+        List<AppInfo> appList = jhAppApiExecution.getAppList("yanlongqi");
+        System.out.println("全部列表" + JsonUtil.objectToString(appList));
+
+        // 类型获取
+        System.out.println("系统应用" + JsonUtil.objectToString(AppTypeConstant.AppType.SYSTEM_APP.getAppList(appList)));
+        System.out.println("计算应用" + JsonUtil.objectToString(AppTypeConstant.AppType.BATCH_APP.getAppList(appList)));
+        System.out.println("图形应用" + JsonUtil.objectToString(AppTypeConstant.AppType.DESKTOP_APP.getAppList(appList)));
+
+        // 操作系统分类
+        System.out.println("系统应用" + JsonUtil.objectToString(AppTypeConstant.AppOsType.SYSTEM.getAppList(appList)));
+        System.out.println("Linux应用" + JsonUtil.objectToString(AppTypeConstant.AppOsType.LINUX.getAppList(appList)));
+        System.out.println("Windows应用" + JsonUtil.objectToString(AppTypeConstant.AppOsType.WINDOWS.getAppList(appList)));
+
+        // 应用分类
+        System.out.println("系统应用" + JsonUtil.objectToString(AppTypeConstant.AppCategory.SYSTEM.getAppList(appList)));
+        System.out.println("景行发布应用" + JsonUtil.objectToString(AppTypeConstant.AppCategory.APP.getAppList(appList)));
     }
 
     /**

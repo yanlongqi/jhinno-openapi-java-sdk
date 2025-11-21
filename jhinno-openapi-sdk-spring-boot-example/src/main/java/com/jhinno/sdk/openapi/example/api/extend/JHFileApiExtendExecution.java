@@ -21,20 +21,35 @@ public class JHFileApiExtendExecution implements JHApiExecution {
         this.execution = execution;
     }
 
-    public static String GET_FILE_ENV_PATH = "/appform/ws/api/files/path/{env}";
 
-    public FilePath getFileEnvPath(String username, FileEnvType env, FileSystemType type) {
-        Map<String, Object> params = new HashMap<>(1);
-        if (StringUtils.isNotBlank(type.getType())) {
-            params.put("type", type.getType());
-        }
-        String url = JHApiClient.getUrl(GET_FILE_ENV_PATH.replace("{env}", env.getEnv()), params);
-        return execution.get(url, username, new TypeReference<ResponseResult<FilePath>>() {
-        });
+    /**
+     * 删除作业
+     *
+     * @param username 用户名
+     * @param jobId    作业ID
+     */
+    public void deleteJob(String username, String jobId) {
+        execution.delete("/appform/ws/api/jobs/" + jobId, username);
     }
 
-    public FilePath getFileHomeEnvPath(String username, FileSystemType type) {
-        return getFileEnvPath(username, FileEnvType.HOME_ENV, type);
+    /**
+     * 获取集群的应用的CPU核数和排队作业数
+     *
+     * @param username    用户名
+     * @param jobQueue    队列，没有要求就填写normal
+     * @param jobPlatform 作业查询条件，如：type==LINUX64
+     * @param appName     应用ID，如：common_sub
+     * @return
+     */
+    public JobTooltipDTO getJobTooltipInfo(String username, String jobQueue, String jobPlatform, String appName) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("jobQueue", jobQueue);
+        params.put("jobPlatform", jobPlatform);
+        params.put("isTestApp", false);
+        params.put("appName", appName);
+        String path = JHApiClient.getUrl("/appform/ws/api/jobs/tooltip", params);
+        return execution.get(path, username, new TypeReference<ResponseResult<JobTooltipDTO>>() {
+        });
     }
 
 }

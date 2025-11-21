@@ -20,7 +20,7 @@ public class JHApiExecutionManage {
 
     /**
      * 创建一个带有默认HTTP客户端的API执行管理器
-     * 
+     *
      * @param appformBaseUrl 景行API的URL
      */
     public JHApiExecutionManage(String appformBaseUrl) {
@@ -32,7 +32,7 @@ public class JHApiExecutionManage {
 
     /**
      * 创建一个带有自定义HTTP客户端的API执行管理器
-     * 
+     *
      * @param httpClient     自定义HTTP客户端
      * @param appformBaseUrl 景行API的URL
      */
@@ -61,7 +61,7 @@ public class JHApiExecutionManage {
 
     /**
      * 配置API执行器
-     * 
+     *
      * @param configurator API执行器配置器
      */
     public void configureApiExecution(ApiExecutionConfigurator configurator) {
@@ -70,7 +70,7 @@ public class JHApiExecutionManage {
 
     /**
      * 注册自定义的执行器
-     * 
+     *
      * @param execution 自定义的执行器实例
      */
     public void registerApiExecution(JHApiExecution execution) {
@@ -80,7 +80,7 @@ public class JHApiExecutionManage {
 
     /**
      * 获取一个特定的执行器用于调用接口
-     * 
+     *
      * @param <T>   执行器的类型
      * @param clazz 执行器的类
      * @return 执行器实例
@@ -92,11 +92,11 @@ public class JHApiExecutionManage {
     /**
      * API执行器配置器接口，用于配置API执行器的参数
      */
-    public static interface ApiExecutionConfigurator {
+    public interface ApiExecutionConfigurator {
 
         /**
          * 配置API执行器的参数
-         * 
+         *
          * @param execution API执行器实例
          */
         void configure(JHRequestExecution execution);
