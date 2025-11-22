@@ -28,7 +28,7 @@ public class FileApiTest {
      */
     @Test
     public void testRenameFile() {
-        execution.renameFile("lqyan", "/apps/JHDP/lqyan/temp/PSUserService.class", "aaa.class");
+        execution.renameFile("$HOME/test.sh", "test1.sh");
     }
 
     /**
@@ -36,7 +36,7 @@ public class FileApiTest {
      */
     @Test
     public void testDeleteFile() {
-        execution.deleteFile("lqyan", "/apps/JHDP/lqyan/temp/aaa.class");
+        execution.deleteFile("$HOME/test1/test.sh");
     }
 
     /**
@@ -44,7 +44,7 @@ public class FileApiTest {
      */
     @Test
     public void testCopyFile() {
-        execution.copyFile("lqyan", "/apps/JHDP/lqyan/PSUserService.class", "/apps/JHDP/lqyan/temp");
+        execution.copyFile("$HOME/test.sh", "$HOME/test1");
     }
 
     /**
@@ -52,7 +52,7 @@ public class FileApiTest {
      */
     @Test
     public void testGetFileList() {
-        List<FileInfo> fileList = execution.getFileList("jhadmin", "$HOME");
+        List<FileInfo> fileList = execution.getFileList("$HOME");
         System.out.println(fileList);
     }
 
@@ -61,7 +61,7 @@ public class FileApiTest {
      */
     @Test
     public void testMkdir() {
-        System.out.println(execution.mkdir("jhadmin", "$HOMEtest1", true));
+        System.out.println(execution.mkdir("$HOMEtest1", true));
     }
 
     /**
@@ -69,7 +69,7 @@ public class FileApiTest {
      */
     @Test
     public void testMkdirNoForce() {
-        System.out.println(execution.mkdir("lqyan", "/apps/JHDP/lqyan/temp/bbb/ddd"));
+        System.out.println(execution.mkdir("$HOME/temp/bbb/ddd"));
     }
 
     /**
@@ -77,7 +77,7 @@ public class FileApiTest {
      */
     @Test
     public void testMkFile() {
-        System.out.println(execution.mkFile("lqyan", "/apps/JHDP/lqyan/temp/ddd.txt"));
+        System.out.println(execution.mkFile("$HOME/temp/ddd.txt"));
     }
 
     /**
@@ -85,9 +85,9 @@ public class FileApiTest {
      */
     @Test
     public void testUploadFile() throws IOException {
-        File file = new File("C:\\Users\\yanlongqi\\Desktop\\LdapAdminv1830.exe");
+        File file = new File("D:\\Program Files\\Java\\apache-maven-3.9.11\\conf\\settings.xml");
         FileInputStream fileInputStream = new FileInputStream(file);
-        execution.uploadFile("jhadmin", fileInputStream, file.getName(), "$HOME", true);
+        execution.uploadFile(fileInputStream, file.getName(), "$HOME", true);
     }
 
     /**
@@ -95,9 +95,9 @@ public class FileApiTest {
      */
     @Test
     public void testUploadFileNoCover() throws IOException {
-        File file = new File("C:\\Users\\yanlongqi\\Desktop\\Hash.exe");
+        File file = new File("D:\\Program Files\\Java\\apache-maven-3.9.11\\conf\\settings.xml");
         FileInputStream fileInputStream = new FileInputStream(file);
-        execution.uploadFile("lqyan", fileInputStream, file.getName(), "$HOME/temp");
+        execution.uploadFile(fileInputStream, file.getName(), "$HOME/temp");
     }
 
 
@@ -106,9 +106,9 @@ public class FileApiTest {
      */
     @Test
     public void testUploadFileConf() throws IOException {
-        File file = new File("C:\\Users\\yanlongqi\\Desktop\\Hash.exe");
+        File file = new File("D:\\Program Files\\Java\\apache-maven-3.9.11\\conf\\settings.xml");
         FileInputStream fileInputStream = new FileInputStream(file);
-        execution.uploadFile("lqyan", fileInputStream, file.getName(), "$HOME/temp111", false, "public");
+        execution.uploadFile(fileInputStream, file.getName(), "$HOME/temp111", false, "public");
     }
 
     /**
@@ -116,12 +116,12 @@ public class FileApiTest {
      */
     @Test
     public void testGetFileDownloadUrl() {
-        System.out.println(execution.getFileDownloadUrl("jhadmin", "$HOME/aa2a.sh"));
+        System.out.println(execution.getFileDownloadUrl("$HOME/test.sh"));
     }
 
     @Test
     public void testGetFileStream() throws IOException {
-        InputStream in = execution.getFileInputStream("jhadmin", "$HOME/aaa.sh");
+        InputStream in = execution.getFileInputStream("$HOME/test.sh");
         byte[] bytes = new byte[1024];
         while (in.read(bytes) != -1) {
             System.out.println(new String(bytes));
@@ -130,12 +130,12 @@ public class FileApiTest {
 
     @Test
     public void testCompress() {
-        execution.compress("jhadmin", "$HOME/temp", "$HOME/temp.zip");
+        execution.compress("$HOME/temp", "$HOME/temp.zip");
     }
 
     @Test
     public void testUncompress() {
-        execution.uncompress("jhadmin", "$HOME/temp.zip", "$HOME/test");
+        execution.uncompress("$HOME/temp.zip", "$HOME/test");
     }
 
     @Test
@@ -146,6 +146,6 @@ public class FileApiTest {
 
     @Test
     public void testMarkConf() {
-        execution.markConf("yanlongqi", "999999998", "/home/yanlongqi/test.sh");
+        execution.markConf("999999998", "/home/yanlongqi/test.sh");
     }
 }

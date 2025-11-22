@@ -49,6 +49,18 @@ public class JHUserApiExecution extends JHApiExecutionAbstract {
     }
 
     /**
+     * 分页查询用户列表
+     *
+     * @param keyword  检索关键字
+     * @param depName  部门名称
+     * @param userConf 密级
+     * @return 分页的用户列表
+     */
+    public PageResult<UserInfo> getUserList(String keyword, String depName, String userConf) {
+        return getUserList(null, keyword, depName, userConf);
+    }
+
+    /**
      * 添加用户
      *
      * @param username 用户名
@@ -56,6 +68,15 @@ public class JHUserApiExecution extends JHApiExecutionAbstract {
      */
     public void addUser(String username, AddUpdateUserInfo userInfo) {
         execution.post(UserPathConstant.USERS_PATH, username, userInfo);
+    }
+
+    /**
+     * 添加用户
+     *
+     * @param userInfo 用户信息
+     */
+    public void addUser(AddUpdateUserInfo userInfo) {
+        addUser(null, userInfo);
     }
 
     /**
@@ -70,6 +91,15 @@ public class JHUserApiExecution extends JHApiExecutionAbstract {
         }
         String path = UserPathConstant.USERS_USERNAME_PATH.replace("{username}", userInfo.getUserName());
         execution.put(path, username, userInfo);
+    }
+
+    /**
+     * 修改用户信息
+     *
+     * @param userInfo 用户信息
+     */
+    public void updateUser(AddUpdateUserInfo userInfo) {
+        updateUser(null, userInfo);
     }
 
     /**
@@ -88,8 +118,7 @@ public class JHUserApiExecution extends JHApiExecutionAbstract {
      * @param password               新密码
      * @param type                   类型，（非必填，取值见{@link UpdateUserPasswordType}）
      */
-    public void updateUserPassword(String username, String updatePasswordUsername, String oldPassword, String password,
-                                   String type) {
+    public void updateUserPassword(String username, String updatePasswordUsername, String oldPassword, String password, UpdateUserPasswordType type) {
         if (StringUtils.isBlank(updatePasswordUsername)) {
             throw new ArgsException("updatePasswordUsername不能为空");
         }
@@ -99,10 +128,28 @@ public class JHUserApiExecution extends JHApiExecutionAbstract {
             params.put("oldPassword", oldPassword);
         }
         if (StringUtils.isNotBlank("type")) {
-            params.put("type", type);
+            params.put("type", type.getValue());
         }
         params.put("password", password);
         execution.put(path, username, params);
+    }
+
+    /**
+     * 修改或重置用户密码
+     *
+     * <ul>
+     * <li>当type值为{@link UpdateUserPasswordType#FORCE_UPDATE_PASSWORD_TYPE}重置密码后用户再次登录需要修改密码</li>
+     * <li>当type值为{@link UpdateUserPasswordType#RESET_UPDATE_PASSWORD_TYPE}重置用户的密码</li>
+     * <li>当type值为空时修改用户密码</li>
+     * </ul>
+     *
+     * @param updatePasswordUsername 被修改的用户名
+     * @param oldPassword            旧密码
+     * @param password               新密码
+     * @param type                   类型，（非必填，取值见{@link UpdateUserPasswordType}）
+     */
+    public void updateUserPassword(String updatePasswordUsername, String oldPassword, String password, UpdateUserPasswordType type) {
+        updateUserPassword(null, updatePasswordUsername, oldPassword, password, type);
     }
 
     /**
@@ -113,33 +160,19 @@ public class JHUserApiExecution extends JHApiExecutionAbstract {
      * @param oldPassword            旧密码
      * @param password               新密码
      */
-    public void updateUserPassword(String username, String updatePasswordUsername, String oldPassword,
-                                   String password) {
+    public void updateUserPassword(String username, String updatePasswordUsername, String oldPassword, String password) {
         updateUserPassword(username, updatePasswordUsername, oldPassword, password, null);
     }
 
     /**
-     * 重置用户密码后强制用户修改密码
+     * 修改用户的密码
      *
-     * @param username               用户名
      * @param updatePasswordUsername 被修改的用户名
-     * @param password               新的用户密码
+     * @param oldPassword            旧密码
+     * @param password               新密码
      */
-    public void resetForceUpdatePassword(String username, String updatePasswordUsername, String password) {
-        updateUserPassword(username, updatePasswordUsername, null, password,
-                UpdateUserPasswordType.FORCE_UPDATE_PASSWORD_TYPE);
-    }
-
-    /**
-     * 重置用户名
-     *
-     * @param username               用户名
-     * @param updatePasswordUsername 被修改的用户密码
-     * @param password               新的用户密码
-     */
-    public void resetPassword(String username, String updatePasswordUsername, String password) {
-        updateUserPassword(username, updatePasswordUsername, null, password,
-                UpdateUserPasswordType.RESET_UPDATE_PASSWORD_TYPE);
+    public void updateUserPassword(String updatePasswordUsername, String oldPassword, String password) {
+        updateUserPassword(updatePasswordUsername, oldPassword, password, UpdateUserPasswordType.RESET_UPDATE_PASSWORD_TYPE);
     }
 
     /**
@@ -153,6 +186,15 @@ public class JHUserApiExecution extends JHApiExecutionAbstract {
             throw new ArgsException("deleteUsername不能为空");
         }
         execution.delete(UserPathConstant.USERS_USERNAME_PATH.replace("{username}", deleteUsername), username);
+    }
+
+    /**
+     * 删除用户
+     *
+     * @param deleteUsername 被删除的用户名
+     */
+    public void deleteUser(String deleteUsername) {
+        deleteUser(null, deleteUsername);
     }
 
 }

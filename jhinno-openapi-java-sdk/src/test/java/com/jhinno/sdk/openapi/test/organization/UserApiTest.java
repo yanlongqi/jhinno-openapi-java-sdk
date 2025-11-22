@@ -5,6 +5,7 @@ import com.jhinno.sdk.openapi.api.organization.AddUpdateUserInfo;
 import com.jhinno.sdk.openapi.api.organization.JHUserApiExecution;
 import com.jhinno.sdk.openapi.api.organization.UserInfo;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
+import com.jhinno.sdk.openapi.utils.JsonUtil;
 import org.junit.Test;
 
 /**
@@ -15,8 +16,8 @@ import org.junit.Test;
  */
 public class UserApiTest {
 
-    private static final JHUserApiExecution execution =  JHClientConfig.API_EXECUTION_MANAGE
-    .getApiExecution(JHUserApiExecution.class);
+    private static final JHUserApiExecution execution = JHClientConfig.API_EXECUTION_MANAGE
+            .getApiExecution(JHUserApiExecution.class);
 
 
     /**
@@ -24,8 +25,8 @@ public class UserApiTest {
      */
     @Test
     public void testGetUserList() {
-        PageResult<UserInfo> result = execution.getUserList("jhadmin", null, null, null);
-        System.out.println("result = " + result);
+        PageResult<UserInfo> result = execution.getUserList(null, null, null);
+        System.out.println(JsonUtil.objectToString(result));
     }
 
     /**
@@ -38,7 +39,7 @@ public class UserApiTest {
         addUpdateUserInfo.setUserNameCn("张三3");
         addUpdateUserInfo.setUserPassword("Jhadmin123");
         addUpdateUserInfo.setDepName("defaultDep");
-        execution.addUser("jhadmin", addUpdateUserInfo);
+        execution.addUser(addUpdateUserInfo);
     }
 
 
@@ -48,11 +49,11 @@ public class UserApiTest {
     @Test
     public void updateUser() {
         AddUpdateUserInfo addUpdateUserInfo = new AddUpdateUserInfo();
-        addUpdateUserInfo.setUserName("zhangsan");
+        addUpdateUserInfo.setUserName("zhangsan3");
         addUpdateUserInfo.setUserNameCn("张三1");
         addUpdateUserInfo.setDepName("defaultDep");
         addUpdateUserInfo.setUserPassword("Jhadmin123");
-        execution.updateUser("jhadmin", addUpdateUserInfo);
+        execution.updateUser(addUpdateUserInfo);
     }
 
 
@@ -61,7 +62,7 @@ public class UserApiTest {
      */
     @Test
     public void testDeleteUser() {
-        execution.deleteUser("jhadmin", "zhangsan1");
+        execution.deleteUser("zhangsan3");
     }
 
 
@@ -71,12 +72,7 @@ public class UserApiTest {
     @Test
     public void testUpdateUserPassword() {
         // 修改用户密码，应该是自己的密码需要自己的token修改
-        execution.updateUserPassword("jhadmin", "zhangsan1", "Jhadmin123", "Jhadmin124");
+        execution.updateUserPassword("zhangsan1", "Jhadmin124", "Jhadmin1241");
 
-        // 管理员重置密码
-        execution.resetPassword("jhadmin", "zhangsan2", "Jhadmin125");
-
-        // 管理员重置密码后，强制让用户修改密码（改接口调用报错，不应该传入旧密码）
-        execution.resetForceUpdatePassword("jhadmin", "zhangsan3", "Jhadmin127");
     }
 }

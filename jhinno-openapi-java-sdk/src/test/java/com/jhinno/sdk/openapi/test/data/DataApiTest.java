@@ -14,15 +14,15 @@ import java.util.Arrays;
  */
 public class DataApiTest {
 
-    public static final JHDataApiExecution execution =JHClientConfig.API_EXECUTION_MANAGE
-    .getApiExecution(JHDataApiExecution.class);
+    public static final JHDataApiExecution execution = JHClientConfig.API_EXECUTION_MANAGE
+            .getApiExecution(JHDataApiExecution.class);
 
     /**
      * 测试获取作业数据区目录列表
      */
     @Test
     public void testGetSpoolers() {
-        System.out.println(execution.getSpoolersData("jhadmin"));
+        System.out.println(execution.getSpoolersData());
     }
 
 
@@ -31,7 +31,7 @@ public class DataApiTest {
      */
     @Test
     public void testGetSpoolersDataById() {
-        System.out.println(execution.getSpoolersDataById("jhadmin", "5909"));
+        System.out.println(execution.getSpoolersDataById("157"));
     }
 
 
@@ -40,7 +40,7 @@ public class DataApiTest {
      */
     @Test
     public void testGetSpoolersDataByIds() {
-        System.out.println(execution.getSpoolersDataByIds("jhadmin", Arrays.asList("6799", "6686")));
+        System.out.println(execution.getSpoolersDataByIds(Arrays.asList("157", "6686")));
     }
 
     /**
@@ -48,7 +48,7 @@ public class DataApiTest {
      */
     @Test
     public void testGetSpoolersDataByName() {
-        System.out.println(execution.getSpoolersByName("jhadmin", "common_sub__t1_aaa.sh_20240206103137"));
+        System.out.println(execution.getSpoolersByName("common_sub__t1_test.sh_2511221613073988875752"));
     }
 
 

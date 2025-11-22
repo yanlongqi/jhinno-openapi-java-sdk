@@ -6,6 +6,7 @@ import com.jhinno.sdk.openapi.utils.JsonUtil;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class AppApiTest {
     public void testStartApp() {
         AppStartRequest appStartRequest = new AppStartRequest();
         appStartRequest.setStartNew(true);
-        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart(null, "linux_desktop", appStartRequest);
+        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("linux_desktop", appStartRequest);
         System.out.println("会话ID：" + appStartedInfo.getDesktopId());
         System.out.println("JhAppURL：" + appStartedInfo.getJhappUrl());
         System.out.println("WebURL:" + appStartedInfo.getWebSessionUrl());
@@ -40,7 +41,7 @@ public class AppApiTest {
      */
     @Test
     public void testDefaultParamsStartApp() {
-        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("jhadmin", "linux_desktop");
+        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("linux_desktop");
         System.out.println(appStartedInfo);
     }
 
@@ -49,7 +50,7 @@ public class AppApiTest {
      */
     @Test
     public void testGetSessionsList() {
-        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopList("jhadmin");
+        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopList();
         System.out.println(desktopList);
     }
 
@@ -58,7 +59,7 @@ public class AppApiTest {
      */
     @Test
     public void testGetDesktopsByParams() {
-        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsByParams("jhadmin", null, "Windows桌面");
+        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsByParams(null, "Windows桌面");
         System.out.println(desktopList);
     }
 
@@ -67,8 +68,7 @@ public class AppApiTest {
      */
     @Test
     public void testGetDesktopsById() {
-        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsById("jhadmin",
-                Arrays.asList("7649", "7637", "123"));
+        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsById(Arrays.asList("151", "7637", "123"));
         System.out.println(desktopList);
     }
 
@@ -77,7 +77,7 @@ public class AppApiTest {
      */
     @Test
     public void testGetDesktopsByName() {
-        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsByName("jhadmin", "Windows桌面");
+        List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsByName("Linux桌面");
         System.out.println(desktopList);
     }
 
@@ -86,7 +86,7 @@ public class AppApiTest {
      */
     @Test
     public void testShareDesktop() {
-        jhAppApiExecution.shareDesktop("jhadmin", "7649", null, null, null);
+        jhAppApiExecution.shareDesktop("7649", null, null, null);
     }
 
     /**
@@ -94,7 +94,7 @@ public class AppApiTest {
      */
     @Test
     public void testCancelShare() {
-        jhAppApiExecution.cancelShare("jhadmin", "7649");
+        jhAppApiExecution.cancelShare("7649");
     }
 
     /**
@@ -102,7 +102,7 @@ public class AppApiTest {
      */
     @Test
     public void testTransferOperatorRight() {
-        jhAppApiExecution.transferOperatorRight("jhadmin", "7649", "123");
+        jhAppApiExecution.transferOperatorRight("7649", "123");
     }
 
     /**
@@ -110,7 +110,7 @@ public class AppApiTest {
      */
     @Test
     public void testConnectJhapp() {
-        AppStartedInfo appStartedInfo = jhAppApiExecution.connectJhapp("lqyan", "7666");
+        AppStartedInfo appStartedInfo = jhAppApiExecution.connectJhapp("151");
         System.out.println(appStartedInfo);
     }
 
@@ -119,7 +119,7 @@ public class AppApiTest {
      */
     @Test
     public void testDisconnectSessionInfo() {
-        jhAppApiExecution.disconnectSessionInfo("jhadmin", "7666");
+        jhAppApiExecution.disconnectSessionInfo("151");
     }
 
     /**
@@ -127,7 +127,7 @@ public class AppApiTest {
      */
     @Test
     public void testDisconnectSessionByIds() {
-        jhAppApiExecution.disconnectSessionByIds("jhadmin", Arrays.asList("123", "456"));
+        jhAppApiExecution.disconnectSessionByIds(Arrays.asList("151", "456"));
     }
 
     /**
@@ -135,7 +135,7 @@ public class AppApiTest {
      */
     @Test
     public void testDestroySession() {
-        jhAppApiExecution.destroySession("jhadmin", "63");
+        jhAppApiExecution.destroySession("156");
     }
 
     /**
@@ -143,7 +143,7 @@ public class AppApiTest {
      */
     @Test
     public void testDestroySessionByIds() {
-        jhAppApiExecution.destroySessionByIds("jhadmin", Arrays.asList("123", "456"));
+        jhAppApiExecution.destroySessionByIds(Arrays.asList("123", "456"));
     }
 
     /**
@@ -151,7 +151,7 @@ public class AppApiTest {
      */
     @Test
     public void testGetAppList() {
-        List<AppInfo> appList = jhAppApiExecution.getAppList("yanlongqi");
+        List<AppInfo> appList = jhAppApiExecution.getAppList();
         System.out.println("全部列表" + JsonUtil.objectToString(appList));
 
         // 类型获取
@@ -182,7 +182,7 @@ public class AppApiTest {
      */
     @Test
     public void testGetAppInfoSuffixList() {
-        System.out.println(jhAppApiExecution.getAppInfoSuffixList("test", ".sh"));
+        System.out.println(jhAppApiExecution.getAppInfoSuffixList(Collections.singletonList(".cas")));
     }
 
     /**
@@ -190,6 +190,6 @@ public class AppApiTest {
      */
     @Test
     public void testGetUseLabelList() {
-        System.out.println(jhAppApiExecution.getUseLabelList("jhadmin"));
+        System.out.println(jhAppApiExecution.getUseLabelList());
     }
 }

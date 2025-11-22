@@ -133,4 +133,63 @@ public class JHDataApiExecution extends JHApiExecutionAbstract {
         });
     }
 
+
+    /**
+     * 根据用户scope查询数据目录列表
+     *
+     * @return 用户数据目录列表
+     */
+    public List<SpoolerDataInfo> getSpoolersData() {
+        return getSpoolersData(null);
+    }
+
+    /**
+     * 根据作业id查作业数据目录信息
+     *
+     * @param jobId 作业id
+     * @return 作业目录信息
+     */
+    public SpoolerDataInfo getSpoolersDataById(String jobId) {
+        return getSpoolersDataById(null, jobId);
+    }
+
+    /**
+     * 根据作业id集合查询数据目录列表
+     *
+     * @param jobIds 作业id列表
+     * @return 用户数据目录列表
+     */
+    public List<SpoolerDataInfo> getSpoolersDataByIds(List<String> jobIds) {
+        return getSpoolersDataByIds(null, jobIds);
+    }
+
+    /**
+     * 根据数据目录名称查询数据目录列表
+     *
+     * @param dataName 数据目录名称
+     * @return 作业目录信息
+     */
+    public SpoolerDataInfo getSpoolersByName(String dataName) {
+        return getSpoolersByName(null, dataName);
+    }
+
+    /**
+     * 立即删除作业数据目录
+     *
+     * @param jobId 作业id
+     */
+    public void deleteSpoolerData(String jobId) {
+        deleteSpoolerData(null, jobId);
+    }
+
+    /**
+     * 设置用户数据目录的过期时间，也给以通过设置过期时间来删除用户数据区
+     *
+     * @param jobId          作业id
+     * @param expirationTime 过期时间
+     */
+    public void purgeSpooler(String jobId, Date expirationTime) {
+        purgeSpooler(null, jobId, expirationTime);
+    }
+
 }

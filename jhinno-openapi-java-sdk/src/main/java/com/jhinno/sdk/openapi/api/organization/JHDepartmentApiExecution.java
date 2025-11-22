@@ -34,6 +34,15 @@ public class JHDepartmentApiExecution extends JHApiExecutionAbstract {
     }
 
     /**
+     * 查询用户列表
+     *
+     * @return 用户列表
+     */
+    public List<Map<String, Object>> getDepartmentList() {
+        return getDepartmentList(null);
+    }
+
+    /**
      * 添加部门
      *
      * @param username       用户名
@@ -41,6 +50,15 @@ public class JHDepartmentApiExecution extends JHApiExecutionAbstract {
      */
     public void addDepartment(String username, AddUpdateDepartment departmentInfo) {
         execution.post(DepartmentPathConstant.DEPARTMENT_PATH, username, departmentInfo);
+    }
+
+    /**
+     * 添加部门
+     *
+     * @param departmentInfo 部门信息
+     */
+    public void addDepartment(AddUpdateDepartment departmentInfo) {
+        addDepartment(null, departmentInfo);
     }
 
     /**
@@ -58,6 +76,15 @@ public class JHDepartmentApiExecution extends JHApiExecutionAbstract {
     }
 
     /**
+     * 修改部门信息
+     *
+     * @param departmentInfo 部门信息
+     */
+    public void updateDepartment(AddUpdateDepartment departmentInfo) {
+        updateDepartment(null, departmentInfo);
+    }
+
+    /**
      * 删除部门信息
      *
      * @param username       用户名
@@ -69,5 +96,14 @@ public class JHDepartmentApiExecution extends JHApiExecutionAbstract {
         }
         String path = DepartmentPathConstant.DEPARTMENT_NAME_PATH.replace("{depName}", departmentName);
         execution.delete(path, username);
+    }
+
+    /**
+     * 删除部门信息
+     *
+     * @param departmentName 部门名称
+     */
+    public void deleteDepartment(String departmentName) {
+        deleteDepartment(null, departmentName);
     }
 }

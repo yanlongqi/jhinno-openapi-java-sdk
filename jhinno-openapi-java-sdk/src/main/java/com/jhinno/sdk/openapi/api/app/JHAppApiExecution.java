@@ -445,4 +445,201 @@ public class JHAppApiExecution extends JHApiExecutionAbstract {
         return execution.get(path, username, new TypeReference<ResponseResult<List<UseLabelInfo>>>() {
         });
     }
+
+    /**
+     * 启动一个会话
+     *
+     * @param appId 应用ID
+     * @return JHClient协议链接
+     */
+    public AppStartedInfo desktopStart(String appId) {
+        return desktopStart(appId, new AppStartRequest());
+    }
+
+    /**
+     * 启动一个会话
+     *
+     * @param appId           应用ID
+     * @param appStartRequest 启动参数
+     * @return JHClient协议链接
+     */
+    public AppStartedInfo desktopStart(String appId, AppStartRequest appStartRequest) {
+        return desktopStart(null, appId, appStartRequest);
+    }
+
+    /**
+     * 获取Web会话URL
+     *
+     * @param sessionId 会话ID
+     * @return Web会话URL
+     */
+    public String getWebSessionUrl(String sessionId) {
+        return getWebSessionUrl(null, sessionId);
+    }
+
+    /**
+     * 查询当前用户的会话列表
+     *
+     * @return 会话列表
+     */
+    public List<SessionInfo> getDesktopList() {
+        return getDesktopList(null);
+    }
+
+    /**
+     * 使用参数查询会话列表
+     *
+     * @param sessionIds  会话ID列表（非必填）
+     * @param sessionName 会话名称（非必填）
+     * @return 会话列表
+     */
+    public List<SessionInfo> getDesktopsByParams(List<String> sessionIds, String sessionName) {
+        return getDesktopsByParams(null, sessionIds, sessionName);
+    }
+
+    /**
+     * 根据会话ID列表查询会话列表
+     *
+     * @param ids 会话ID列表
+     * @return 会话列表
+     */
+    public List<SessionInfo> getDesktopsById(List<String> ids) {
+        return getDesktopsById(null, ids);
+    }
+
+    /**
+     * 根据会话名称查询会话
+     *
+     * @param sessionName 会话名称
+     * @return 会话列表
+     */
+    public List<SessionInfo> getDesktopsByName(String sessionName) {
+        return getDesktopsByName(null, sessionName);
+    }
+
+    /**
+     * 会话共享
+     *
+     * @param sessionId  会话ID（必填）
+     * @param observers  观察者列表（非必填）
+     * @param interacts  协作者列表（非必填）
+     * @param isTransfer 是否传递操作权（非必填）
+     */
+    public void shareDesktop(String sessionId, List<String> observers, List<String> interacts, String isTransfer) {
+        shareDesktop(null, sessionId, observers, interacts, isTransfer);
+    }
+
+    /**
+     * 取消会话共享
+     *
+     * @param sessionId 会话ID
+     */
+    public void cancelShare(String sessionId) {
+        cancelShare(null, sessionId);
+    }
+
+    /**
+     * 传递会话操作权
+     *
+     * @param sessionId 会话ID（必填）
+     * @param interact  操作权（必填）
+     */
+    public void transferOperatorRight(String sessionId, String interact) {
+        transferOperatorRight(null, sessionId, interact);
+    }
+
+    /**
+     * 连接会话
+     *
+     * @param sessionId 会话ID
+     * @return JHClient协议链接信息
+     */
+    public AppStartedInfo connectJhapp(String sessionId) {
+        return connectJhapp(null, sessionId);
+    }
+
+    /**
+     * 断开会话连接
+     *
+     * @param sessionId 会话ID
+     */
+    public void disconnectSessionInfo(String sessionId) {
+        disconnectSessionInfo(null, sessionId);
+    }
+
+    /**
+     * 通过应用ID批量断开会话
+     *
+     * @param sessionIds 会话ID列表
+     */
+    public void disconnectSessionByIds(List<String> sessionIds) {
+        disconnectSessionByIds(null, sessionIds);
+    }
+
+    /**
+     * 注销会话
+     *
+     * @param sessionId 会话ID
+     */
+    public void destroySession(String sessionId) {
+        destroySession(null, sessionId);
+    }
+
+    /**
+     * 批量注销会话
+     *
+     * @param sessionIds 会话ID列表
+     */
+    public void destroySessionByIds(List<String> sessionIds) {
+        destroySessionByIds(null, sessionIds);
+    }
+
+    /**
+     * 获取当前用户的应用列表
+     *
+     * @return 应用列表
+     */
+    public List<AppInfo> getAppList() {
+        return getAppList(null);
+    }
+
+    /**
+     * 根据文件后缀查询应用
+     *
+     * @param suffixes 文件后缀列表
+     * @return 应用列表
+     */
+    public List<AppstoreAppInfo> getAppInfoSuffixList(String... suffixes) {
+        return getAppInfoSuffixList(null, suffixes);
+    }
+
+    /**
+     * 根据文件后缀查询应用
+     *
+     * @param suffixes 文件后缀列表
+     * @return 应用列表
+     */
+    public List<AppstoreAppInfo> getAppInfoSuffixList(List<String> suffixes) {
+        return getAppInfoSuffixList(null, suffixes);
+    }
+
+    /**
+     * 根据用途查询应用
+     *
+     * @param labels 用途列表
+     * @return 应用列表
+     */
+    public List<UseLabelInfo> getUseLabelList(String... labels) {
+        return getUseLabelList(null, labels);
+    }
+
+    /**
+     * 根据用途查询应用
+     *
+     * @param labels 用途列表
+     * @return 应用列表
+     */
+    public List<UseLabelInfo> getUseLabelList(List<String> labels) {
+        return getUseLabelList(null, labels);
+    }
 }

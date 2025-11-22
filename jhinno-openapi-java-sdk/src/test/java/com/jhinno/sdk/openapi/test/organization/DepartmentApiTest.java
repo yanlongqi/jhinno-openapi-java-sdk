@@ -14,7 +14,7 @@ import org.junit.Test;
 public class DepartmentApiTest {
 
     private static final JHDepartmentApiExecution execution = JHClientConfig.API_EXECUTION_MANAGE
-    .getApiExecution(JHDepartmentApiExecution.class);
+            .getApiExecution(JHDepartmentApiExecution.class);
 
 
     /**
@@ -22,7 +22,7 @@ public class DepartmentApiTest {
      */
     @Test
     public void testGetDepartment() {
-        System.out.println(execution.getDepartmentList("jhadmin"));
+        System.out.println(execution.getDepartmentList());
     }
 
     /**
@@ -31,10 +31,10 @@ public class DepartmentApiTest {
     @Test
     public void testAddDepartment() {
         AddUpdateDepartment addUpdateDepartment = new AddUpdateDepartment();
-        addUpdateDepartment.setDepName("test2");
-        addUpdateDepartment.setDepNameCN("测试部门2");
+        addUpdateDepartment.setDepName("test1");
+        addUpdateDepartment.setDepNameCN("测试部门1");
         addUpdateDepartment.setParentDepName("defaultDep");
-        execution.addDepartment("jhadmin", addUpdateDepartment);
+        execution.addDepartment(addUpdateDepartment);
     }
 
     /**
@@ -46,7 +46,7 @@ public class DepartmentApiTest {
         addUpdateDepartment.setDepName("test2");
         addUpdateDepartment.setDepNameCN("测试部门2111");
         addUpdateDepartment.setParentDepName("defaultDep");
-        execution.updateDepartment("jhadmin", addUpdateDepartment);
+        execution.updateDepartment(addUpdateDepartment);
     }
 
     /**
@@ -54,6 +54,6 @@ public class DepartmentApiTest {
      */
     @Test
     public void testDeleteDepartment() {
-        execution.deleteDepartment("jhadmin", "test2");
+        execution.deleteDepartment("test1");
     }
 }

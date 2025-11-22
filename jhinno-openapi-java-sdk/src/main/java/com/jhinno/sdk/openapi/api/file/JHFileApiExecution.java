@@ -47,6 +47,16 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
     }
 
     /**
+     * 重命名文件
+     *
+     * @param sourceFileNamePath 源文件路径
+     * @param targetFileName     目标文件路径
+     */
+    public void renameFile(String sourceFileNamePath, String targetFileName) {
+        renameFile(null, sourceFileNamePath, targetFileName);
+    }
+
+    /**
      * 删除文件
      *
      * @param username       用户名
@@ -60,6 +70,15 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
         params.put("fileName", sourceFilePath);
         String path = JHApiClient.getUrl(FilePathConstant.FILE_DELETE_PATH, params);
         execution.delete(path, username);
+    }
+
+    /**
+     * 删除文件
+     *
+     * @param sourceFilePath 源文件路径
+     */
+    public void deleteFile(String sourceFilePath) {
+        deleteFile(null, sourceFilePath);
     }
 
     /**
@@ -83,6 +102,16 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
     }
 
     /**
+     * 拷贝文件到目标文件夹
+     *
+     * @param sourceFilePath      源文件路径
+     * @param targetDirectoryPath 目标文件路径
+     */
+    public void copyFile(String sourceFilePath, String targetDirectoryPath) {
+        copyFile(null, sourceFilePath, targetDirectoryPath);
+    }
+
+    /**
      * 获取文件列表
      *
      * @param username 用户名
@@ -98,6 +127,16 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
         String path = JHApiClient.getUrl(FilePathConstant.FILE_LIST_PATH, params);
         return execution.get(path, username, new TypeReference<ResponseResult<List<FileInfo>>>() {
         });
+    }
+
+    /**
+     * 获取文件列表
+     *
+     * @param dirPath 文件路径
+     * @return 文件列表
+     */
+    public List<FileInfo> getFileList(String dirPath) {
+        return getFileList(null, dirPath);
     }
 
     /**
@@ -138,6 +177,27 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
     }
 
     /**
+     * 创建文件夹
+     *
+     * @param dirPath 文件夹路径
+     * @param isForce 是否强制创建（非必传，默认：false）
+     * @return 新建后的文件路径
+     */
+    public String mkdir(String dirPath, Boolean isForce) {
+        return mkdir(null, dirPath, isForce);
+    }
+
+    /**
+     * 新建文件夹，默认不强制新建
+     *
+     * @param dirPath 文件路径
+     * @return 新建后的文件路径
+     */
+    public String mkdir(String dirPath) {
+        return mkdir(dirPath, true);
+    }
+
+    /**
      * 创建文件
      *
      * @param username 用户名
@@ -157,6 +217,16 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
             return null;
         }
         return result.get("dirPath");
+    }
+
+    /**
+     * 创建文件
+     *
+     * @param filePath 文件路径
+     * @return 新的文件路径
+     */
+    public String mkFile(String filePath) {
+        return mkFile(null, filePath);
     }
 
     /**
@@ -243,8 +313,7 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
      * @param uploadPath 上传路径，服务器路径
      * @param isCover    是否覆盖（非必填，默认：false）
      */
-    public void uploadFile(String username, String path, String fileName, String uploadPath, Boolean isCover)
-            throws FileNotFoundException {
+    public void uploadFile(String username, String path, String fileName, String uploadPath, Boolean isCover) throws FileNotFoundException {
         if (StringUtils.isBlank(path)) {
             throw new ArgsException("path是必填参数");
         }
@@ -267,32 +336,6 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
     public void uploadFile(String username, String path, String fileName, String uploadPath)
             throws FileNotFoundException {
         uploadFile(username, path, fileName, uploadPath, null);
-    }
-
-    /**
-     * 上传一个本地的路径
-     *
-     * @param username   用户名
-     * @param path       本地文件路径
-     * @param uploadPath 上传路径，服务器路径
-     * @param isCover    是否覆盖（非必填，默认：false）
-     */
-    public void uploadFile(String username, String path, String uploadPath, Boolean isCover)
-            throws FileNotFoundException {
-        File file = new File(path);
-        uploadFile(username, path, file.getName(), uploadPath, isCover);
-    }
-
-    /**
-     * 上传一个本地的路径（不覆盖源文件）
-     *
-     * @param username   用户名
-     * @param path       本地文件路径
-     * @param uploadPath 上传路径，服务器路径
-     */
-    public void uploadFile(String username, String path, String uploadPath) throws FileNotFoundException {
-        File file = new File(path);
-        uploadFile(username, path, file.getName(), uploadPath, null);
     }
 
     /**
@@ -380,17 +423,6 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
         }
         String path = JHApiClient.getUrl(FilePathConstant.FILE_COMPRESS_PATH, params);
         execution.post(path, username);
-    }
-
-    /**
-     * 文件压缩
-     *
-     * @param username       用户名
-     * @param sourceDirName  源文件目录(多个文件适用英文逗号隔开)
-     * @param targetFilePath 目标文件路径
-     */
-    public void compress(String username, String sourceDirName, String targetFilePath) {
-        compress(username, sourceDirName, targetFilePath, null);
     }
 
     /**
@@ -490,5 +522,237 @@ public class JHFileApiExecution extends JHApiExecutionAbstract {
         body.put("conf", conf);
         body.put("path", path);
         execution.post(FilePathConstant.FILE_CONF_PATH, username, body);
+    }
+
+
+    /**
+     * 上传文件
+     * <p>
+     * 如果isCover为空或者为false，源文件目录下存在相同文件则会报错
+     * </p>
+     *
+     * @param is         文件流
+     * @param fileName   文件名称
+     * @param uploadPath 上传路径
+     * @param isCover    是否覆盖（非必填，默认：false）
+     * @param fileConf   密级（只有开启了密级才需要此参数，可以是密级的中文名，也可以是密级的中文名、英文名、或者密级的key）
+     */
+    public void uploadFile(InputStream is, String fileName, String uploadPath, Boolean isCover, String fileConf) {
+        uploadFile(null, is, fileName, uploadPath, isCover, fileConf);
+    }
+
+    /**
+     * 上传文件
+     * <p>
+     * 如果isCover为空或者为false，源文件目录下存在相同文件则会报错
+     * </p>
+     *
+     * @param is         文件流
+     * @param fileName   文件名称
+     * @param uploadPath 上传路径
+     * @param isCover    是否覆盖（非必填，默认：false）
+     */
+    public void uploadFile(InputStream is, String fileName, String uploadPath, Boolean isCover) {
+        uploadFile(is, fileName, uploadPath, isCover, null);
+    }
+
+    /**
+     * 上传文件（不覆盖源文件）
+     * <p>
+     * 源文件目录下存在相同文件则会报错
+     * </p>
+     *
+     * @param is         文件流
+     * @param fileName   文件名
+     * @param uploadPath 上传路径
+     */
+    public void uploadFile(InputStream is, String fileName, String uploadPath) {
+        uploadFile(is, fileName, uploadPath, false);
+    }
+
+    /**
+     * 上传一个本地的路径
+     *
+     * @param path       本地文件路径
+     * @param fileName   文件名
+     * @param uploadPath 上传路径，服务器路径
+     * @param isCover    是否覆盖（非必填，默认：false）
+     */
+    public void uploadFile(String path, String fileName, String uploadPath, Boolean isCover) throws FileNotFoundException {
+        if (StringUtils.isBlank(path)) {
+            throw new ArgsException("path是必填参数");
+        }
+        File file = new File(path);
+        FileInputStream fileInputStream = new FileInputStream(file);
+        if (StringUtils.isBlank(fileName)) {
+            fileName = file.getName();
+        }
+        uploadFile(fileInputStream, fileName, uploadPath, isCover);
+    }
+
+    /**
+     * 上传一个本地的路径（不覆盖源文件）
+     * <p>
+     * 源文件目录下存在相同文件则会报错
+     * </p>
+     *
+     * @param path       本地文件路径
+     * @param fileName   文件名
+     * @param uploadPath 上传路径，服务器路径
+     */
+    public void uploadFile(String path, String fileName, String uploadPath) throws FileNotFoundException {
+        uploadFile(path, fileName, uploadPath, false);
+    }
+
+    /**
+     * 上传一个本地的路径
+     *
+     * @param path       本地文件路径
+     * @param uploadPath 上传路径，服务器路径
+     * @param isCover    是否覆盖（非必填，默认：false）
+     */
+    public void uploadFile(String path, String uploadPath, Boolean isCover) throws FileNotFoundException {
+        File file = new File(path);
+        uploadFile(null, path, file.getName(), uploadPath, isCover);
+    }
+
+    /**
+     * 上传一个本地的路径（不覆盖源文件）
+     *
+     * @param path       本地文件路径
+     * @param uploadPath 上传路径，服务器路径
+     */
+    public void uploadFile(String path, String uploadPath) throws FileNotFoundException {
+        uploadFile(path, null, uploadPath);
+    }
+
+    /**
+     * 获取文件下载地址
+     *
+     * @param filePath 文件路径
+     * @return 文件地址信息
+     */
+    public String getFileDownloadUrl(String filePath) {
+        return getFileDownloadUrl(filePath, false);
+    }
+
+    /**
+     * 获取文件下载地址
+     *
+     * @param filePath      文件路径
+     * @param forceDownload 是否强制下载，打开密级之后未标密的文件无法下载，可以通过设置当前参数为true来强制下载，默认：false
+     * @return 文件地址信息
+     */
+    public String getFileDownloadUrl(String filePath, Boolean forceDownload) {
+        return getFileDownloadUrl(null, filePath, forceDownload);
+    }
+
+    /**
+     * 获取文件输入流
+     *
+     * @param filePath 文件路径
+     * @return 文件流
+     * @throws IOException
+     */
+    public InputStream getFileInputStream(String filePath) throws IOException {
+        return getFileInputStream(filePath, false);
+    }
+
+    /**
+     * 获取文件输入流
+     *
+     * @param filePath      文件路径
+     * @param forceDownload 是否强制下载，打开密级之后未标密的文件无法下载，可以通过设置当前参数为true来强制下载，默认：false
+     * @return 文件流
+     * @throws IOException
+     */
+    public InputStream getFileInputStream(String filePath, Boolean forceDownload) throws IOException {
+        return getFileInputStream(null, filePath, forceDownload);
+    }
+
+    /**
+     * 文件压缩
+     *
+     * @param sourceDirName  源文件目录
+     * @param targetFilePath 目标文件路径
+     * @param compressType   压缩类型 （未使用以后扩展）
+     */
+    public void compress(String sourceDirName, String targetFilePath, String compressType) {
+        compress(null, sourceDirName, targetFilePath, compressType);
+    }
+
+    /**
+     * 文件压缩
+     *
+     * @param sourceDirName  源文件目录(多个文件适用英文逗号隔开)
+     * @param targetFilePath 目标文件路径
+     */
+    public void compress(String sourceDirName, String targetFilePath) {
+        compress(sourceDirName, targetFilePath, null);
+    }
+
+    /**
+     * 解压文件
+     *
+     * @param sourceFilePath 源文件路径
+     * @param targetDirPath  目标文件路径
+     * @param isCover        是否覆盖
+     * @param password       密码
+     * @param compressType   压缩类型 （未使用以后扩展）
+     */
+    public void uncompress(String sourceFilePath, String targetDirPath, Boolean isCover, String password, String compressType) {
+        uncompress(null, sourceFilePath, targetDirPath, isCover, password, compressType);
+    }
+
+    /**
+     * 解压文件
+     *
+     * @param sourceFilePath 源文件路径
+     * @param targetDirPath  目标文件路径
+     * @param isCover        是否覆盖
+     * @param password       密码
+     */
+    public void uncompress(String sourceFilePath, String targetDirPath, Boolean isCover, String password) {
+        uncompress(sourceFilePath, targetDirPath, isCover, password, null);
+    }
+
+    /**
+     * 解压文件
+     *
+     * @param sourceFilePath 源文件路径
+     * @param targetDirPath  目标文件路径
+     * @param isCover        是否覆盖
+     */
+    public void uncompress(String sourceFilePath, String targetDirPath, Boolean isCover) {
+        uncompress(sourceFilePath, targetDirPath, isCover, null);
+    }
+
+    /**
+     * 解压文件
+     *
+     * @param sourceFilePath 源文件路径
+     * @param targetDirPath  目标文件路径
+     */
+    public void uncompress(String sourceFilePath, String targetDirPath) {
+        uncompress(sourceFilePath, targetDirPath, false);
+    }
+
+    /**
+     * 获取可用的文件密级列表
+     *
+     * @return 密级列表
+     */
+    public List<Confidential> getConfList() {
+        return getConfList(null);
+    }
+
+    /**
+     * 文件标密
+     *
+     * @param conf 密级使用{@link JHFileApiExecution#getConfList(String)}返回的{@link Confidential#conf}
+     * @param path 文件路径
+     */
+    public void markConf(String conf, String path) {
+        markConf(null, conf, path);
     }
 }
