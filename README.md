@@ -17,7 +17,8 @@
 3. JH_Appform_6.1_Release
 4. JH_Appform_6.2_Release（使用: release-2.0.3）
 5. JH_Appform_6.3_Release（使用: release-2.0.4）
-5. JH_Appform_6.3_Release（使用: release-2.0.5）
+5. JH_Appform_6.4_Release（使用: release-2.0.5）
+6. JH_Appform_6.5_Release（使用: release-2.0.6）
 
 # 2. 快速开始
 
@@ -64,13 +65,15 @@ mvn clean install
 <dependency>
     <groupId>com.jhinno</groupId>
     <artifactId>jhinno-openapi-sdk-spring-boot-starter</artifactId>
-    <version>${最新的版本号}</version>
+    <version>2.0.6</version>
 </dependency>
 ```
 
 #### 方法三：直接使用 jar 包
 
-如果开发环境没有网络，或者没有使用 maven 的构建工具，则可以使用 jar 包的方式导入。下载`dependency-jar.zip`和`jhinno-openapi-java-sdk-2.0.3-sources.jar`、`jhinno-openapi-java-sdk-2.0.3.jar`导入到你的 java 项目的 lib 里面。如果你的项目是 SpringBoot 项目，则还需要导入`jhinno-openapi-sdk-spring-boot-starter-2.0.3.jar`、`jhinno-openapi-sdk-spring-boot-starter-2.0.3-sources.jar
+如果开发环境没有网络，或者没有使用 maven 的构建工具，则可以使用 jar 包的方式导入。下载`dependency-jar.zip`和
+`jhinno-openapi-java-sdk-2.0.3-sources.jar`、`jhinno-openapi-java-sdk-2.0.3.jar`导入到你的 java 项目的 lib 里面。如果你的项目是
+SpringBoot 项目，则还需要导入`jhinno-openapi-sdk-spring-boot-starter-2.0.3.jar`、`jhinno-openapi-sdk-spring-boot-starter-2.0.3-sources.jar
 `这两个 jar 包。
 
 ### 2.1.3 配置
@@ -101,13 +104,29 @@ jhinno.openapi.auth-type=access_secret_mode
 > 注：
 >
 > - 其中`jhinno.openapi.server-url`为景行接口服务的 BaseUrl；
-> - `auth-type` 认证类型，`token_mode`(Token 认证) 和 `access_secret_mode`（AccessKey 认证）；Appform Release 6.2 `token_mode`
+> - `auth-type` 认证类型，`token_mode`(Token 认证) 和 `access_secret_mode`（AccessKey 认证）；Appform Release 6.2
+    `token_mode`
 
     作为过渡，将会弃用；
 
-> - `jhinno.openapi.used-server-time`是否获取服务器时间来请求 token，关闭可提高获取 token 的时间，但打开有可能因为服务器时间不准确而导致 token 获取失败的问题。
+> - `jhinno.openapi.used-server-time`是否获取服务器时间来请求 token，关闭可提高获取 token 的时间，但打开有可能因为服务器时间不准确而导致
+    token 获取失败的问题（token模式配置）。
 > - `access-key` 和 `access-key-secret` 作为访问接口的凭证，需要提供集成商名称、系统名称、负责人姓名、负责电话电话信息申请。
 > - 更多配置见`com.jhinno.sdk.openapi.autoconfigure.JHOpenapiProperties`源码。
+
+```java
+// 新增全局用户获取方式
+@Configuration
+public class ApiConfig implements JHApiRequestHandler {
+
+    @Override
+    public String getCurrentUserName() {
+        return "yanlongqi";
+    }
+}
+
+```
+
 
 ### 2.1.4 使用
 
@@ -129,6 +148,10 @@ public class DemoUserSDK {
         // 调用执行其中想要调用的方法
         List<FileInfo> list = fileApiExecution.getFileList("jhadmin", "$HOME");
         System.out.println(list);
+
+        // 如果配置全局的 JHApiRequestHandler 方式获取用户名，可以不用传userName
+        List<FileInfo> list1 = fileApiExecution.getFileList("$HOME");
+        System.out.println(list1);
     }
 }
 ```
@@ -185,15 +208,17 @@ spring.xml 添加以下内容
     </bean>
 
     <bean id="requestExecution" class="com.jhinno.sdk.openapi.api.JHRequestExecution">
-        <constructor-arg ref="apiClient" />
+        <constructor-arg ref="apiClient"/>
     </bean>
 
-    <bean id="appApiExecution" class="com.jhinno.sdk.openapi.api.app.JHAppApiExecution" init-method="init"></bean>
-    <bean id="dataApiExecution" class="com.jhinno.sdk.openapi.api.data.JHDataApiExecution" init-method="init"></bean>
-    <bean id="fileApiExecution" class="com.jhinno.sdk.openapi.api.file.JHFileApiExecution" init-method="init"></bean>
-    <bean id="jhJobApiExecution" class="com.jhinno.sdk.openapi.api.job.JHJobApiExecution" init-method="init"></bean>
-    <bean id="departmentApiExecution" class="com.jhinno.sdk.openapi.api.organization.JHDepartmentApiExecution" init-method="init"></bean>
-    <bean id="userApiExecution" class="com.jhinno.sdk.openapi.api.organization.JHUserApiExecution" init-method="init"></bean>
+    <bean id="appApiExecution" class="com.jhinno.sdk.openapi.api.app.JHAppApiExecution" init-method="setExecution"></bean>
+    <bean id="dataApiExecution" class="com.jhinno.sdk.openapi.api.data.JHDataApiExecution" init-method="setExecution"></bean>
+    <bean id="fileApiExecution" class="com.jhinno.sdk.openapi.api.file.JHFileApiExecution" init-method="setExecution"></bean>
+    <bean id="jhJobApiExecution" class="com.jhinno.sdk.openapi.api.job.JHJobApiExecution" init-method="setExecution"></bean>
+    <bean id="departmentApiExecution" class="com.jhinno.sdk.openapi.api.organization.JHDepartmentApiExecution"
+          init-method="setExecution"></bean>
+    <bean id="userApiExecution" class="com.jhinno.sdk.openapi.api.organization.JHUserApiExecution"
+          init-method="setExecution"></bean>
 </beans>
 ```
 
@@ -252,36 +277,95 @@ public class DemoUserSDK {
 
 ```java
 
-public class JHApiUtile {
+public class JHClientConfig {
+
+    public static final JHApiRequestHandler REQUEST_HANDLER = new JHApiRequestHandler() {
+        @Override
+        public String getCurrentUserName() {
+            return "yanlongqi";
+        }
+    };
+
+    public static final String APPFORM_SERVER_URL = "https://172.20.0.200";
+    public static final String ACCESS_KEY = "8147c7470bfd4a27952fe750c6bc7cef";
+    public static final String ACCESS_KEY_SECRET = "899b13f590394c3daafc6468fed4b1df";
+
 
     /**
      * 创建一个API执行器管理器
      */
-    public static final JHApiExecutionManage API_EXECUTION_MANAGE = new JHApiExecutionManage("https://192.168.87.24");
+    public static final JHApiExecutionManage API_EXECUTION_MANAGE = new JHApiExecutionManage(APPFORM_SERVER_URL, REQUEST_HANDLER);
 
-    public static final String ACCESS_KEY = "3f03747f147942bd8debd81b6c9c6a80";
-
-    public static final String ACCESS_KEY_SECRET = "e0681859b91c499eb1d2c8e09cea3242";
 
     static {
-        // 配置API执行器管理器，设置认证信息等。
-        API_EXECUTRON_MANAGE.configureApiExecution(t -> {
+        API_EXECUTION_MANAGE.configureApiExecution(t -> {
             // 默认为使用Token模式，如何使用的Token模式，则不需要配置ACCESS_KEY和ACCESS_KEY SECRET
-            // t.setAuthType(AuthType.ACCESS_KEY);
+            t.setAuthType(AuthType.ACCESS_SECRET_MODE);
             t.setAccessKey(ACCESS_KEY);
             t.setAccessKeySecret(ACCESS_KEY_SECRET);
         });
     }
 
-    public static void main(String[] args) {
+}
 
-        // 从API执行器管理器取出调用应用相关接口的执行器
-        JHAppApiExecution jhAppApiExecution = JHClientConfig.API_EXECUTION_MANAGE.getApiExecution(JHAppApiExecution.class);
+public class AppApiTest {
 
-        // 调用启动会话的接口
-        jhAppApiExecution.desktopStart("jhadmin", "linux_desktop");
+    /**
+     * 获得一个调用应用接口的执行器
+     */
+    public static final JHAppApiExecution jhAppApiExecution = JHClientConfig.API_EXECUTION_MANAGE.getApiExecution(JHAppApiExecution.class);
+
+    /**
+     * 测测试使用自定义的参数启动jhadmin的Linux桌面
+     */
+    @Test
+    public void testStartApp() {
+        AppStartRequest appStartRequest = new AppStartRequest();
+        appStartRequest.setStartNew(true);
+        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("linux_desktop", appStartRequest);
+        System.out.println("会话ID：" + appStartedInfo.getDesktopId());
+        System.out.println("JhAppURL：" + appStartedInfo.getJhappUrl());
+        System.out.println("WebURL:" + appStartedInfo.getWebSessionUrl());
     }
 
+    /**
+     * 测试查询用户的应用列表
+     */
+    @Test
+    public void testGetAppList() {
+        List<AppInfo> appList = jhAppApiExecution.getAppList();
+        System.out.println("全部列表：");
+        System.out.println(JsonUtil.objectToString(appList));
+
+        // 类型获取
+        System.out.println("系统应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppType.SYSTEM_APP.getAppList(appList)));
+
+        System.out.println("计算应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppType.BATCH_APP.getAppList(appList)));
+
+        System.out.println("图形应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppType.DESKTOP_APP.getAppList(appList)));
+
+        // 操作系统分类
+        System.out.println("系统应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppOsType.SYSTEM.getAppList(appList)));
+
+        System.out.println("Linux应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppOsType.LINUX.getAppList(appList)));
+
+        System.out.println("Windows应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppOsType.WINDOWS.getAppList(appList)));
+
+        // 应用分类
+        System.out.println("系统应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppCategory.SYSTEM.getAppList(appList)));
+
+        System.out.println("景行发布应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppCategory.APP.getAppList(appList)));
+    }
+
+  
 }
 
 ```
@@ -306,18 +390,11 @@ public class JHApiUtile {
  * 注意：一下代码为伪代码，需要根据实际的情况进行修改，其示例代码可参照SDK中JHDemoApiExecution子类的实现
  */
 @Component
-public class JHDemoApiExecution extends JHApiExecution {
-
-    private JHRequestExecution execution;
-
-    @Override
-    public void init(JHRequestExecution execution) {
-        this.execution = execution;
-    }
-
+public class JHDemoApiExecution extends JHApiExecutionAbstract {
+    
     public XxxDTO getXXXX(String username, String demoParams) {
 
-        return execution.get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
+        return super.execution.get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
         });
     }
 }
@@ -332,7 +409,7 @@ public class JHDemoApiExecution extends JHApiExecution {
 /**
  * 注意：一下代码为伪代码，需要根据实际的情况进行修改，其示例代码可参照SDK中JHDemoApiExecution子类的实现
  */
-public class JHDemoApiExecution extends JHApiExecution {
+public class JHDemoApiExecution {
 
     @Autowired
     private JHRequestExecution execution;
@@ -353,18 +430,11 @@ public class JHDemoApiExecution extends JHApiExecution {
 /**
  * 注意：一下代码为伪代码，需要根据实际的情况进行修改，其示例代码可参照SDK中JHDemoApiExecution子类的实现
  */
-public class JHDemoApiExecution extends JHApiExecution {
-
-    private JHRequestExecution execution;
-
-    @Override
-    public void init(JHRequestExecution execution) {
-        this.execution = execution;
-    }
-
+public class JHDemoApiExecution extends JHApiExecutionAbstract {
+    
     public XxxDTO getXXXX(String username, String demoParams) {
 
-        return execution.get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
+        return super.execution.get("/demo/path", username, new TypeReference<ResponseResult<XxxDTO>>() {
         });
     }
 }

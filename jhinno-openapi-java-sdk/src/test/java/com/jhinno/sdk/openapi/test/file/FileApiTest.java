@@ -20,8 +20,7 @@ import java.util.List;
  */
 public class FileApiTest {
 
-    private static final JHFileApiExecution execution = JHClientConfig.API_EXECUTION_MANAGE
-            .getApiExecution(JHFileApiExecution.class);
+    private static final JHFileApiExecution execution = JHClientConfig.API_EXECUTION_MANAGE.getApiExecution(JHFileApiExecution.class);
 
     /**
      * 测试重命名文件或文件夹
