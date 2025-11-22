@@ -23,13 +23,8 @@ public class JHOpenapiClientAutoConfigure {
     public JHApiClient jhApiClient(JHOpenapiProperties properties) {
         JHApiClient jhApiClient = new JHApiClient(properties.getServerUrl());
         JHApiHttpClientImpl jhApiHttpClient = new JHApiHttpClientImpl();
-        jhApiHttpClient.setMaxPerRoute(properties.getMaxPerRout());
-        jhApiHttpClient.setSocketTimeout(properties.getSocketTimeout());
-        jhApiHttpClient.setMaxTotal(properties.getMaxTotal());
-        jhApiHttpClient.setConnectTimeout(properties.getConnectTimeout());
-        jhApiHttpClient.setConnectRequestTimeout(properties.getConnectRequestTimeout());
-        jhApiHttpClient.init();
-        jhApiHttpClient.createHttpClients();
+        jhApiHttpClient.init(properties.getSocketTimeout(), properties.getConnectTimeout(), properties.getConnectRequestTimeout());
+        jhApiHttpClient.createHttpClients(properties.getMaxTotal(), properties.getMaxPerRout());
         jhApiClient.setApiHttpClient(jhApiHttpClient);
         return jhApiClient;
     }

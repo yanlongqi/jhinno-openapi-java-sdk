@@ -15,7 +15,7 @@ import com.jhinno.sdk.openapi.client.JHApiHttpClient;
 
 public class JHApiExecutionManage {
 
-    public static final Map<Class<? extends JHApiExecution>, JHApiExecution> API_CLIENT_MAP = new HashMap<>();
+    public static final Map<Class<? extends JHApiExecutionAbstract>, JHApiExecutionAbstract> API_CLIENT_MAP = new HashMap<>();
     public final JHRequestExecution EXECUTION;
 
     /**
@@ -48,15 +48,12 @@ public class JHApiExecutionManage {
      * 初始化默认的执行器
      */
     private void initApiExecution() {
-        API_CLIENT_MAP.put(JHAppApiExecution.class, new JHAppApiExecution());
-        API_CLIENT_MAP.put(JHDataApiExecution.class, new JHDataApiExecution());
-        API_CLIENT_MAP.put(JHFileApiExecution.class, new JHFileApiExecution());
-        API_CLIENT_MAP.put(JHJobApiExecution.class, new JHJobApiExecution());
-        API_CLIENT_MAP.put(JHDepartmentApiExecution.class, new JHDepartmentApiExecution());
-        API_CLIENT_MAP.put(JHUserApiExecution.class, new JHUserApiExecution());
-        API_CLIENT_MAP.forEach((key, value) -> {
-            value.init(EXECUTION);
-        });
+        registerApiExecution(new JHAppApiExecution());
+        registerApiExecution(new JHDataApiExecution());
+        registerApiExecution(new JHFileApiExecution());
+        registerApiExecution(new JHJobApiExecution());
+        registerApiExecution(new JHDepartmentApiExecution());
+        registerApiExecution(new JHUserApiExecution());
     }
 
     /**
@@ -73,7 +70,7 @@ public class JHApiExecutionManage {
      *
      * @param execution 自定义的执行器实例
      */
-    public void registerApiExecution(JHApiExecution execution) {
+    public void registerApiExecution(JHApiExecutionAbstract execution) {
         execution.init(EXECUTION);
         API_CLIENT_MAP.put(execution.getClass(), execution);
     }
@@ -85,7 +82,7 @@ public class JHApiExecutionManage {
      * @param clazz 执行器的类
      * @return 执行器实例
      */
-    public <T extends JHApiExecution> T getApiExecution(Class<? extends T> clazz) {
+    public <T extends JHApiExecutionAbstract> T getApiExecution(Class<? extends T> clazz) {
         return (T) API_CLIENT_MAP.get(clazz);
     }
 

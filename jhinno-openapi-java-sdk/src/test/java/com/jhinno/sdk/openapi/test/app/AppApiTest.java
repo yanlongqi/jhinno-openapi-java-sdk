@@ -29,7 +29,7 @@ public class AppApiTest {
     public void testStartApp() {
         AppStartRequest appStartRequest = new AppStartRequest();
         appStartRequest.setStartNew(true);
-        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("yanlongqi", "linux_desktop", appStartRequest);
+        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("jhadmin", "linux_desktop", appStartRequest);
         System.out.println("会话ID：" + appStartedInfo.getDesktopId());
         System.out.println("JhAppURL：" + appStartedInfo.getJhappUrl());
         System.out.println("WebURL:" + appStartedInfo.getWebSessionUrl());

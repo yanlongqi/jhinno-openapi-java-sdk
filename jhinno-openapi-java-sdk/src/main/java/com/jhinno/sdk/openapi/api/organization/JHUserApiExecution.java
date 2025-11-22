@@ -2,8 +2,7 @@ package com.jhinno.sdk.openapi.api.organization;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
-import com.jhinno.sdk.openapi.JHApiExecution;
-import com.jhinno.sdk.openapi.api.JHRequestExecution;
+import com.jhinno.sdk.openapi.JHApiExecutionAbstract;
 import com.jhinno.sdk.openapi.api.PageResult;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
@@ -22,13 +21,7 @@ import java.util.Map;
  * @date 2024/2/6 17:37
  */
 @NoArgsConstructor
-public class JHUserApiExecution implements JHApiExecution {
-
-    private JHRequestExecution execution;
-
-    public void init(JHRequestExecution execution) {
-        this.execution = execution;
-    }
+public class JHUserApiExecution extends JHApiExecutionAbstract {
 
     /**
      * 分页查询用户列表
@@ -96,7 +89,7 @@ public class JHUserApiExecution implements JHApiExecution {
      * @param type                   类型，（非必填，取值见{@link UpdateUserPasswordType}）
      */
     public void updateUserPassword(String username, String updatePasswordUsername, String oldPassword, String password,
-            String type) {
+                                   String type) {
         if (StringUtils.isBlank(updatePasswordUsername)) {
             throw new ArgsException("updatePasswordUsername不能为空");
         }
@@ -121,7 +114,7 @@ public class JHUserApiExecution implements JHApiExecution {
      * @param password               新密码
      */
     public void updateUserPassword(String username, String updatePasswordUsername, String oldPassword,
-            String password) {
+                                   String password) {
         updateUserPassword(username, updatePasswordUsername, oldPassword, password, null);
     }
 

@@ -1,11 +1,7 @@
 package com.jhinno.sdk.openapi.api.file;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.jhinno.sdk.openapi.ArgsException;
-import com.jhinno.sdk.openapi.CommonConstant;
-import com.jhinno.sdk.openapi.JHApiExecution;
-import com.jhinno.sdk.openapi.ServiceException;
-import com.jhinno.sdk.openapi.api.JHRequestExecution;
+import com.jhinno.sdk.openapi.*;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import com.jhinno.sdk.openapi.utils.CollectionUtil;
@@ -28,13 +24,7 @@ import java.util.Map;
  * @date 2024/2/4 18:58
  */
 @NoArgsConstructor
-public class JHFileApiExecution implements JHApiExecution {
-
-    private JHRequestExecution execution;
-
-    public void init(JHRequestExecution execution) {
-        this.execution = execution;
-    }
+public class JHFileApiExecution extends JHApiExecutionAbstract {
 
     /**
      * 重命名文件

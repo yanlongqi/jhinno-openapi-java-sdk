@@ -2,8 +2,7 @@ package com.jhinno.sdk.openapi.api.organization;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.jhinno.sdk.openapi.ArgsException;
-import com.jhinno.sdk.openapi.JHApiExecution;
-import com.jhinno.sdk.openapi.api.JHRequestExecution;
+import com.jhinno.sdk.openapi.JHApiExecutionAbstract;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
@@ -20,13 +19,7 @@ import java.util.Map;
  * @date 2024/2/6 17:37
  */
 @NoArgsConstructor
-public class JHDepartmentApiExecution implements JHApiExecution {
-
-    private JHRequestExecution execution;
-
-    public void init(JHRequestExecution execution) {
-        this.execution = execution;
-    }
+public class JHDepartmentApiExecution extends JHApiExecutionAbstract {
 
     /**
      * 查询用户列表

@@ -1,11 +1,7 @@
 package com.jhinno.sdk.openapi.api.job;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.jhinno.sdk.openapi.ArgsException;
-import com.jhinno.sdk.openapi.CommonConstant;
-import com.jhinno.sdk.openapi.JHApiExecution;
-import com.jhinno.sdk.openapi.ServiceException;
-import com.jhinno.sdk.openapi.api.JHRequestExecution;
+import com.jhinno.sdk.openapi.*;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.api.file.FileInfo;
 import com.jhinno.sdk.openapi.client.JHApiClient;
@@ -23,13 +19,7 @@ import java.util.Map;
  * @date 2024/2/5 18:44
  */
 @NoArgsConstructor
-public class JHJobApiExecution implements JHApiExecution {
-
-    private JHRequestExecution execution;
-
-    public void init(JHRequestExecution execution) {
-        this.execution = execution;
-    }
+public class JHJobApiExecution extends JHApiExecutionAbstract {
 
     /**
      * 提交作业
@@ -91,7 +81,7 @@ public class JHJobApiExecution implements JHApiExecution {
      * @see JobStatusEnum
      */
     public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, JobStatusEnum status,
-            Map<String, Object> condition) {
+                                  Map<String, Object> condition) {
         Map<String, Object> params = new HashMap<>(5);
         if (page != null) {
             params.put("page", page);
@@ -129,7 +119,7 @@ public class JHJobApiExecution implements JHApiExecution {
      * @see JobStatusEnum
      */
     public PageJobInfo getJobPage(String username, Integer page, Integer pageSize, String name, String status,
-            Map<String, Object> condition) {
+                                  Map<String, Object> condition) {
         return getJobPage(username, page, pageSize, name, JobStatusEnum.getJobStatus(status), condition);
     }
 
@@ -138,7 +128,7 @@ public class JHJobApiExecution implements JHApiExecution {
      * <p>
      * 注：name、status、condition均为删选条件，condition为 高级筛选
      * </p>
-     * 
+     *
      * @param username  用户名
      * @param page      页码（非必填，默认：1）
      * @param pageSize  每页大小（非必填，默认：20）
@@ -149,7 +139,7 @@ public class JHJobApiExecution implements JHApiExecution {
      * @see JobStatusEnum
      */
     public PageJobInfo getHistoryJobs(String username, Integer page, Integer pageSize, String name,
-            JobStatusEnum status, Map<String, Object> condition) {
+                                      JobStatusEnum status, Map<String, Object> condition) {
 
         Map<String, Object> params = new HashMap<>(5);
         if (page != null) {
@@ -178,7 +168,7 @@ public class JHJobApiExecution implements JHApiExecution {
      * <p>
      * 注：name、status、condition均为删选条件，condition为 高级筛选
      * </p>
-     * 
+     *
      * @param username  用户名
      * @param page      页码（非必填，默认：1）
      * @param pageSize  每页大小（非必填，默认：20）
@@ -189,7 +179,7 @@ public class JHJobApiExecution implements JHApiExecution {
      * @see JobStatusEnum
      */
     public PageJobInfo getHistoryJobs(String username, Integer page, Integer pageSize, String name, String status,
-            Map<String, Object> condition) {
+                                      Map<String, Object> condition) {
         return getHistoryJobs(username, page, pageSize, name, JobStatusEnum.getJobStatus(status), condition);
     }
 

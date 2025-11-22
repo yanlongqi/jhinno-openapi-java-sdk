@@ -1,11 +1,7 @@
 package com.jhinno.sdk.openapi.api.data;
 
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.jhinno.sdk.openapi.ArgsException;
-import com.jhinno.sdk.openapi.CommonConstant;
-import com.jhinno.sdk.openapi.JHApiExecution;
-import com.jhinno.sdk.openapi.ServiceException;
-import com.jhinno.sdk.openapi.api.JHRequestExecution;
+import com.jhinno.sdk.openapi.*;
 import com.jhinno.sdk.openapi.api.ResponseResult;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import com.jhinno.sdk.openapi.utils.CollectionUtil;
@@ -24,13 +20,7 @@ import java.util.Map;
  * @date 2024/2/4 17:09
  */
 @NoArgsConstructor
-public class JHDataApiExecution implements JHApiExecution {
-
-    private JHRequestExecution execution;
-
-    public void init(JHRequestExecution execution) {
-        this.execution = execution;
-    }
+public class JHDataApiExecution extends JHApiExecutionAbstract {
 
     /**
      * 根据用户scope查询数据目录列表

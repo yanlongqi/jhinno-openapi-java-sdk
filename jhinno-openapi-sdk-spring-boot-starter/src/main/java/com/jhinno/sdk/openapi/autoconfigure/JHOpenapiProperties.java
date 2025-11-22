@@ -8,7 +8,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
  * @author yanlongqi
- * @date 2024/6/4 16:03
  */
 @Data
 @ConfigurationProperties(prefix = CommonConstants.CONFIG_PREFIX)
@@ -20,31 +19,31 @@ public class JHOpenapiProperties {
     private String serverUrl;
 
     /**
-     * 设置连接池的最大连接数，默认{@link DefaultHttpClientConfig#MAX_TOTAL}
+     * 设置连接池的最大连接数
      */
-    private int maxTotal = DefaultHttpClientConfig.MAX_TOTAL;
+    private Integer maxTotal;
 
 
     /**
-     * 设置服务每次能并行接收的请求数量，默认{@link DefaultHttpClientConfig#MAX_PER_ROUTE}
+     * 设置服务每次能并行接收的请求数量
      */
-    private int maxPerRout = DefaultHttpClientConfig.MAX_PER_ROUTE;
+    private Integer maxPerRout;
 
     /**
-     * 设置服务socket连接超时的时间(单位：毫秒)，默认{@link DefaultHttpClientConfig#SOCKET_TIMEOUT}
+     * 设置服务socket连接超时的时间(单位：毫秒)
      */
-    private int socketTimeout = DefaultHttpClientConfig.SOCKET_TIMEOUT;
+    private int socketTimeout;
 
     /**
-     * 设置服务连接超时的时间(单位：毫秒)，默认{@link DefaultHttpClientConfig#CONNECT_TIMEOUT}
+     * 设置服务连接超时的时间(单位：毫秒)
      */
-    private int connectTimeout = DefaultHttpClientConfig.CONNECT_TIMEOUT;
+    private int connectTimeout;
 
 
     /**
-     * 设置服务请求超时的时间(单位：毫秒)，默认{@link DefaultHttpClientConfig#CONNECTION_REQUEST_TIMEOUT}
+     * 设置服务请求超时的时间(单位：毫秒)
      */
-    private int connectRequestTimeout = DefaultHttpClientConfig.CONNECTION_REQUEST_TIMEOUT;
+    private int connectRequestTimeout;
 
 
     /**

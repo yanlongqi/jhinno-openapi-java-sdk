@@ -35,6 +35,7 @@ import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.Map;
+import java.util.Objects;
 
 @Data
 @NoArgsConstructor
@@ -64,61 +65,56 @@ public class JHApiHttpClientImpl implements JHApiHttpClient {
 
 
     /**
-     * Socket连接超时的时间(单位：毫秒，默认：{@link DefaultHttpClientConfig#SOCKET_TIMEOUT})
-     */
-    private int socketTimeout = DefaultHttpClientConfig.SOCKET_TIMEOUT;
-
-    /**
-     * 连接超时的时间(单位：毫秒，默认：{@link DefaultHttpClientConfig#CONNECT_TIMEOUT})
-     */
-    private int connectTimeout = DefaultHttpClientConfig.CONNECT_TIMEOUT;
-
-    /**
-     * 默认请求超时的时间(单位：毫秒，默认：{@link DefaultHttpClientConfig#CONNECTION_REQUEST_TIMEOUT})
-     */
-    private int connectRequestTimeout = DefaultHttpClientConfig.CONNECTION_REQUEST_TIMEOUT;
-
-    /**
-     * 设置最大连接数(默认：{@link DefaultHttpClientConfig#MAX_TOTAL})
-     */
-    private int maxTotal = DefaultHttpClientConfig.MAX_TOTAL;
-
-    /**
-     * 服务每次能并行接收的请求数量(默认：{@link DefaultHttpClientConfig#MAX_PER_ROUTE})
-     */
-    private int maxPerRoute = DefaultHttpClientConfig.MAX_PER_ROUTE;
-
-    /**
      * 初始化一个HTTP客户端实例
      *
      * @return 返回一个可关闭的HTTP客户端示例
      */
-    public void createHttpClients() {
+    public void createHttpClients(Integer maxTotal, Integer maxPerRoute) {
         SSLContextBuilder builder = new SSLContextBuilder();
         try {
             builder.loadTrustMaterial(null, (x509Certificates, s) -> true);
             SSLConnectionSocketFactory sslref = new SSLConnectionSocketFactory(builder.build(), NoopHostnameVerifier.INSTANCE);
-            Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create().register("http", new PlainConnectionSocketFactory()).register("https", sslref).build();
+            Registry<ConnectionSocketFactory> registry = RegistryBuilder.<ConnectionSocketFactory>create()
+                    .register("http", new PlainConnectionSocketFactory())
+                    .register("https", sslref)
+                    .build();
             PoolingHttpClientConnectionManager cm = new PoolingHttpClientConnectionManager(registry);
-            cm.setMaxTotal(maxTotal);
-            cm.setDefaultMaxPerRoute(maxPerRoute);
+            if (Objects.nonNull(maxTotal)) {
+                cm.setMaxTotal(maxTotal);
+            }
+            if (Objects.nonNull(maxPerRoute)) {
+                cm.setDefaultMaxPerRoute(maxPerRoute);
+            }
             closeableHttpClient = HttpClients.custom().setSSLSocketFactory(sslref).setConnectionManager(cm).setConnectionManagerShared(true).build();
         } catch (NoSuchAlgorithmException | KeyManagementException | KeyStoreException e) {
             throw new ClientException(e.getMessage(), ClientErrorCode.SSL_EXCEPTION, e);
         }
     }
 
+    public void createHttpClients() {
+        createHttpClients(null, null);
+    }
+
     /**
      * 初始化客户端
      */
-    public void init() {
-        this.requestConfig = RequestConfig.custom()
-                .setSocketTimeout(socketTimeout)
-                .setConnectTimeout(connectTimeout)
-                .setConnectionRequestTimeout(connectRequestTimeout)
-                .build();
+    public void init(Integer socketTimeout, Integer connectTimeout, Integer connectRequestTimeout) {
+        RequestConfig.Builder custom = RequestConfig.custom();
+        if (Objects.nonNull(socketTimeout)) {
+            custom.setSocketTimeout(socketTimeout);
+        }
+        if (Objects.nonNull(connectTimeout)) {
+            custom.setConnectTimeout(connectTimeout);
+        }
+        if (Objects.nonNull(connectRequestTimeout)) {
+            custom.setConnectionRequestTimeout(connectRequestTimeout);
+        }
+        this.requestConfig = custom.build();
     }
 
+    public void init() {
+        init(null, null, null);
+    }
 
     /**
      * 原始发送请求
@@ -226,7 +222,7 @@ public class JHApiHttpClientImpl implements JHApiHttpClient {
             return CommonConstant.HTTP_DATETIME_FORMAT.parse(value).getTime();
         } catch (ParseException e) {
             throw new ClientException("时间格式获取失败，失败原因：" + e.getMessage(), e);
-        }finally {
+        } finally {
             httpGet.releaseConnection();
         }
     }
