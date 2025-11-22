@@ -44,6 +44,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JHRequestExecution {
 
     /**
+     * 用户令牌的缓存
+     */
+    private static final Map<String, TokenInfo> TOKEN_INFO_MAP = new ConcurrentHashMap<>(20);
+
+    /**
      * JHApiClient实例
      */
     private JHApiClient jhApiClient;
@@ -84,28 +89,48 @@ public class JHRequestExecution {
      */
     private String accessKeySecret;
 
+    private JHApiRequestHandler requestHandler;
+
     /**
      * 获取一个执行器的实例
+     *
+     * @param jhApiClient    请求的客户端
+     * @param requestHandler 请求头处理器
+     */
+    public JHRequestExecution(JHApiClient jhApiClient, JHApiRequestHandler requestHandler) {
+        this.jhApiClient = jhApiClient;
+        this.requestHandler = requestHandler;
+    }
+
+
+    /**
+     * 创建一个默认的请求处理器
      *
      * @param jhApiClient 请求的客户端
      */
     public JHRequestExecution(JHApiClient jhApiClient) {
         this.jhApiClient = jhApiClient;
+        this.requestHandler = new JHApiRequestHandler() {
+        };
+    }
+
+
+    public String getUserName(String userName) {
+        if (StringUtils.isNotBlank(userName)) {
+            return userName;
+        }
+        return requestHandler.getCurrentUserName();
     }
 
     /**
-     * 用户令牌的缓存
-     */
-    private static final Map<String, TokenInfo> TOKEN_INFO_MAP = new ConcurrentHashMap<>(20);
-
-    /**
-     * 设置是否使用服务器时间
+     * 获取当前用户的token
      *
-     * @param usedServerTime 是否使用服务器时间
+     * @return 用户token
      */
-    public void setUsedServerTime(boolean usedServerTime) {
-        isUsedServerTime = usedServerTime;
+    public String getToken() {
+        return getToken(requestHandler.getCurrentUserName());
     }
+
 
     /**
      * 获取用户的Token
@@ -122,9 +147,9 @@ public class JHRequestExecution {
         // 防止因为服务器时间的问题二导致token不可用，可以通过此配置提前获取token
         int tokenEffectiveTime = (tokenTimeout - tokenResidueTime) * 60 * 1000;
 
-        // 如果是强制获取、用户令牌为空、用户令牌过期等，则获取令牌
-        if (isForceGetToken || tokenInfo == null
-                || System.currentTimeMillis() - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime) {
+        // 如果是强制获取用户令牌为空、用户令牌不存在、用户令牌过期等，则获取令牌
+        boolean isGetToken = isForceGetToken || tokenInfo == null || System.currentTimeMillis() - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime;
+        if (isGetToken) {
             Map<String, Object> params = new HashMap<>(2);
             params.put("timeout", tokenTimeout);
             String currentTimeMillis = getCurrentTimeMillis();
@@ -139,13 +164,9 @@ public class JHRequestExecution {
             } catch (Exception e) {
                 throw new ClientException("AES加密失败，失败原因：" + e.getMessage(), e);
             }
-
-            String url = JHApiClient.getUrl(AuthPathConstant.AUTH_TOKEN_PATH, params);
-            Map<String, String> token = get(url, new TypeReference<ResponseResult<Map<String, String>>>() {
-            });
             tokenInfo = new TokenInfo();
             tokenInfo.setUserName(username);
-            tokenInfo.setToken(token.get("token"));
+            tokenInfo.setToken(requestToken(params));
             tokenInfo.setCurrentTimestamp(System.currentTimeMillis());
             TOKEN_INFO_MAP.put(username, tokenInfo);
         }
@@ -153,7 +174,9 @@ public class JHRequestExecution {
     }
 
     /**
-     * @return
+     * 获得当前的时间
+     *
+     * @return 当前时间
      */
     public String getCurrentTimeMillis() {
         if (authType == AuthType.ACCESS_SECRET_MODE || !isUsedServerTime) {
@@ -162,14 +185,37 @@ public class JHRequestExecution {
         return jhApiClient.getAppformServerCurrentTimeMillis();
     }
 
+
     /**
-     * 构建一个带token的请求头
+     * 获得最终的请求头
      *
      * @param username      用户名
      * @param isContentType 是否携带默认的Content-type，默认为{@link ContentType#APPLICATION_JSON}
      * @return 请求头
      */
     public Map<String, Object> getHeaders(String username, boolean isContentType) {
+        Map<String, Object> defaultHeaders = getDefaultHeaders(getUserName(username), isContentType);
+        return requestHandler.getHeaders(defaultHeaders);
+    }
+
+    /**
+     * 获得当前用户的请求头
+     *
+     * @param isContentType 是否携带默认的Content-type，默认为{@link ContentType#APPLICATION_JSON}
+     * @return 请求头
+     */
+    public Map<String, Object> getHeaders(boolean isContentType) {
+        return getHeaders(null, isContentType);
+    }
+
+    /**
+     * 构建一个默认参数的请求头
+     *
+     * @param username      用户名
+     * @param isContentType 是否携带默认的Content-type，默认为{@link ContentType#APPLICATION_JSON}
+     * @return 请求头
+     */
+    private Map<String, Object> getDefaultHeaders(String username, boolean isContentType) {
         Map<String, Object> headers = new HashMap<>();
         // 默认请求json数据
         if (isContentType) {
@@ -196,6 +242,16 @@ public class JHRequestExecution {
             headers.put(CommonConstant.TOKEN, getToken(username));
         }
         return headers;
+    }
+
+    /**
+     * 获得一个签名
+     *
+     * @param currentTimeMillis 时间戳
+     * @return 签名
+     */
+    public String getsSignature(String currentTimeMillis) {
+        return getsSignature(requestHandler.getCurrentUserName(), currentTimeMillis);
     }
 
     /**
@@ -257,6 +313,17 @@ public class JHRequestExecution {
             throw new ServiceException(path, result.getCode(), result.getMessage());
         }
         return result.getData();
+    }
+
+    private String requestToken(Map<String, Object> params) {
+        String url = JHApiClient.getUrl(AuthPathConstant.AUTH_TOKEN_PATH, params);
+        ResponseResult<Map<String, String>> result = jhApiClient.get(url, new TypeReference<ResponseResult<Map<String, String>>>() {
+        });
+        if (StringUtils.equals(result.getResult(), CommonConstant.FAILED)) {
+            throw new ServiceException(url, result.getCode(), result.getMessage());
+        }
+        Map<String, String> token = result.getData();
+        return token.get("token");
     }
 
     /**
@@ -412,12 +479,19 @@ public class JHRequestExecution {
     }
 
     /**
-     * 退出用户的登录，释放许可，当用户退出登录后，建议清除用户的token信息
+     * 退出用户的登录，释放许可
      *
      * @param username 用户名
      */
     public void logout(String username) {
         delete(AuthPathConstant.AUTH_LOGOUT, username);
         TOKEN_INFO_MAP.remove(username);
+    }
+
+    /**
+     * 退出当前用户的登录
+     */
+    public void logout() {
+        logout(requestHandler.getCurrentUserName());
     }
 }

@@ -1,6 +1,6 @@
 jhinno:
   openapi:
-    server-url: https://192.168.0.22
-    auth-type: token_mode
-    access-key: 3f03747f147942bd8debd81b6c9c6a80
-    access-key-secret: e0681859b91c499eb1d2c8e09cea3242
+    server-url: https://172.20.0.200
+    auth-type: access_secret_mode
+    access-key: 8147c7470bfd4a27952fe750c6bc7cef
+    access-key-secret: 899b13f590394c3daafc6468fed4b1df

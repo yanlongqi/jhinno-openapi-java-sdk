@@ -15,7 +15,7 @@ import org.junit.Test;
  */
 public class UserApiTest {
 
-    private static final JHUserApiExecution execution =  JHClientConfig.API_EXECUTRON_MANAGE
+    private static final JHUserApiExecution execution =  JHClientConfig.API_EXECUTION_MANAGE
     .getApiExecution(JHUserApiExecution.class);
 
 

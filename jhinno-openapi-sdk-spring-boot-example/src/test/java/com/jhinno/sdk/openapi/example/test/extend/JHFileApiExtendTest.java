@@ -1,7 +1,9 @@
 package com.jhinno.sdk.openapi.example.test.extend;
 
+import com.jhinno.sdk.openapi.api.app.AppStartedInfo;
 import com.jhinno.sdk.openapi.example.api.extend.FileSystemType;
 import com.jhinno.sdk.openapi.example.api.extend.JHFileApiExtendExecution;
+import com.jhinno.sdk.openapi.utils.JsonUtil;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +26,7 @@ public class JHFileApiExtendTest {
 
     @Test
     void testStartApp() {
-        jhAppApiExecution.desktopStart("jhadmin","linux_desktop");
+        AppStartedInfo linuxDesktop = jhAppApiExecution.desktopStart(null, "linux_desktop");
+        System.out.println(JsonUtil.objectToString(linuxDesktop));
     }
 }

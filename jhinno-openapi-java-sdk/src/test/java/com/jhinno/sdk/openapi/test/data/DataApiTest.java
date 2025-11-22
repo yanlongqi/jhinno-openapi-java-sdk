@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 public class DataApiTest {
 
-    public static final JHDataApiExecution execution =JHClientConfig.API_EXECUTRON_MANAGE
+    public static final JHDataApiExecution execution =JHClientConfig.API_EXECUTION_MANAGE
     .getApiExecution(JHDataApiExecution.class);
 
     /**

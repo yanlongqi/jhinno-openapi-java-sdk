@@ -1,5 +1,6 @@
 package com.jhinno.sdk.openapi.autoconfigure;
 
+import com.jhinno.sdk.openapi.JHApiRequestHandler;
 import com.jhinno.sdk.openapi.api.JHRequestExecution;
 import com.jhinno.sdk.openapi.client.JHApiClient;
 import com.jhinno.sdk.openapi.client.JHApiHttpClientImpl;
@@ -30,8 +31,15 @@ public class JHOpenapiClientAutoConfigure {
     }
 
     @Bean
-    public JHRequestExecution requestExecution(JHApiClient jhApiClient, JHOpenapiProperties properties) {
-        JHRequestExecution requestExecution = new JHRequestExecution(jhApiClient);
+    @ConditionalOnMissingBean
+    public JHApiRequestHandler defaultRequestHandler() {
+        return new JHApiRequestHandler() {
+        };
+    }
+
+    @Bean
+    public JHRequestExecution requestExecution(JHApiClient jhApiClient, JHOpenapiProperties properties, JHApiRequestHandler requestHandler) {
+        JHRequestExecution requestExecution = new JHRequestExecution(jhApiClient, requestHandler);
         requestExecution.setForceGetToken(properties.isForceGetToken());
         requestExecution.setAuthType(properties.getAuthType());
         requestExecution.setAccessKey(properties.getAccessKey());

@@ -19,7 +19,7 @@ public class AppApiTest {
     /**
      * 获得一个调用应用接口的执行器
      */
-    public static final JHAppApiExecution jhAppApiExecution = JHClientConfig.API_EXECUTRON_MANAGE
+    public static final JHAppApiExecution jhAppApiExecution = JHClientConfig.API_EXECUTION_MANAGE
             .getApiExecution(JHAppApiExecution.class);
 
     /**
@@ -29,7 +29,7 @@ public class AppApiTest {
     public void testStartApp() {
         AppStartRequest appStartRequest = new AppStartRequest();
         appStartRequest.setStartNew(true);
-        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("jhadmin", "linux_desktop", appStartRequest);
+        AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart(null, "linux_desktop", appStartRequest);
         System.out.println("会话ID：" + appStartedInfo.getDesktopId());
         System.out.println("JhAppURL：" + appStartedInfo.getJhappUrl());
         System.out.println("WebURL:" + appStartedInfo.getWebSessionUrl());

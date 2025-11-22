@@ -23,11 +23,16 @@ public class JHApiExecutionManage {
      *
      * @param appformBaseUrl 景行API的URL
      */
-    public JHApiExecutionManage(String appformBaseUrl) {
+    public JHApiExecutionManage(String appformBaseUrl, JHApiRequestHandler requestHandler) {
         JHApiClient client = new JHApiClient(appformBaseUrl);
         client.initDefaultApiClient();
-        EXECUTION = new JHRequestExecution(client);
+        EXECUTION = new JHRequestExecution(client, requestHandler);
         initApiExecution();
+    }
+
+    public JHApiExecutionManage(String appformBaseUrl) {
+        this(appformBaseUrl, new JHApiRequestHandler() {
+        });
     }
 
     /**
@@ -71,7 +76,7 @@ public class JHApiExecutionManage {
      * @param execution 自定义的执行器实例
      */
     public void registerApiExecution(JHApiExecutionAbstract execution) {
-        execution.init(EXECUTION);
+        execution.setExecution(EXECUTION);
         API_CLIENT_MAP.put(execution.getClass(), execution);
     }
 
