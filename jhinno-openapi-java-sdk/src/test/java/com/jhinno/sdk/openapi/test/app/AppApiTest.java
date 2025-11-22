@@ -42,7 +42,7 @@ public class AppApiTest {
     @Test
     public void testDefaultParamsStartApp() {
         AppStartedInfo appStartedInfo = jhAppApiExecution.desktopStart("linux_desktop");
-        System.out.println(appStartedInfo);
+        System.out.println(JsonUtil.objectToString(appStartedInfo));
     }
 
     /**
@@ -51,7 +51,7 @@ public class AppApiTest {
     @Test
     public void testGetSessionsList() {
         List<SessionInfo> desktopList = jhAppApiExecution.getDesktopList();
-        System.out.println(desktopList);
+        System.out.println(JsonUtil.objectToString(desktopList));
     }
 
     /**
@@ -60,7 +60,7 @@ public class AppApiTest {
     @Test
     public void testGetDesktopsByParams() {
         List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsByParams(null, "Windows桌面");
-        System.out.println(desktopList);
+        System.out.println(JsonUtil.objectToString(desktopList));
     }
 
     /**
@@ -69,7 +69,7 @@ public class AppApiTest {
     @Test
     public void testGetDesktopsById() {
         List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsById(Arrays.asList("151", "7637", "123"));
-        System.out.println(desktopList);
+        System.out.println(JsonUtil.objectToString(desktopList));
     }
 
     /**
@@ -78,7 +78,7 @@ public class AppApiTest {
     @Test
     public void testGetDesktopsByName() {
         List<SessionInfo> desktopList = jhAppApiExecution.getDesktopsByName("Linux桌面");
-        System.out.println(desktopList);
+        System.out.println(JsonUtil.objectToString(desktopList));
     }
 
     /**
@@ -111,7 +111,7 @@ public class AppApiTest {
     @Test
     public void testConnectJhapp() {
         AppStartedInfo appStartedInfo = jhAppApiExecution.connectJhapp("151");
-        System.out.println(appStartedInfo);
+        System.out.println(JsonUtil.objectToString(appStartedInfo));
     }
 
     /**
@@ -152,21 +152,35 @@ public class AppApiTest {
     @Test
     public void testGetAppList() {
         List<AppInfo> appList = jhAppApiExecution.getAppList();
-        System.out.println("全部列表" + JsonUtil.objectToString(appList));
+        System.out.println("全部列表：");
+        System.out.println(JsonUtil.objectToString(appList));
 
         // 类型获取
-        System.out.println("系统应用" + JsonUtil.objectToString(AppTypeConstant.AppType.SYSTEM_APP.getAppList(appList)));
-        System.out.println("计算应用" + JsonUtil.objectToString(AppTypeConstant.AppType.BATCH_APP.getAppList(appList)));
-        System.out.println("图形应用" + JsonUtil.objectToString(AppTypeConstant.AppType.DESKTOP_APP.getAppList(appList)));
+        System.out.println("系统应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppType.SYSTEM_APP.getAppList(appList)));
+
+        System.out.println("计算应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppType.BATCH_APP.getAppList(appList)));
+
+        System.out.println("图形应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppType.DESKTOP_APP.getAppList(appList)));
 
         // 操作系统分类
-        System.out.println("系统应用" + JsonUtil.objectToString(AppTypeConstant.AppOsType.SYSTEM.getAppList(appList)));
-        System.out.println("Linux应用" + JsonUtil.objectToString(AppTypeConstant.AppOsType.LINUX.getAppList(appList)));
-        System.out.println("Windows应用" + JsonUtil.objectToString(AppTypeConstant.AppOsType.WINDOWS.getAppList(appList)));
+        System.out.println("系统应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppOsType.SYSTEM.getAppList(appList)));
+
+        System.out.println("Linux应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppOsType.LINUX.getAppList(appList)));
+
+        System.out.println("Windows应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppOsType.WINDOWS.getAppList(appList)));
 
         // 应用分类
-        System.out.println("系统应用" + JsonUtil.objectToString(AppTypeConstant.AppCategory.SYSTEM.getAppList(appList)));
-        System.out.println("景行发布应用" + JsonUtil.objectToString(AppTypeConstant.AppCategory.APP.getAppList(appList)));
+        System.out.println("系统应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppCategory.SYSTEM.getAppList(appList)));
+
+        System.out.println("景行发布应用：");
+        System.out.println(JsonUtil.objectToString(AppTypeConstant.AppCategory.APP.getAppList(appList)));
     }
 
     /**
@@ -174,7 +188,7 @@ public class AppApiTest {
      */
     @Test
     public void testGetAppUrl() {
-        System.out.println(jhAppApiExecution.getAppUrl("jhadmin", "myjobmana"));
+        System.out.println(JsonUtil.objectToString(jhAppApiExecution.getAppUrl("jhadmin", "myjobmana")));
     }
 
     /**
@@ -182,7 +196,7 @@ public class AppApiTest {
      */
     @Test
     public void testGetAppInfoSuffixList() {
-        System.out.println(jhAppApiExecution.getAppInfoSuffixList(Collections.singletonList(".cas")));
+        System.out.println(JsonUtil.objectToString(jhAppApiExecution.getAppInfoSuffixList(Collections.singletonList(".cas"))));
     }
 
     /**
@@ -190,6 +204,6 @@ public class AppApiTest {
      */
     @Test
     public void testGetUseLabelList() {
-        System.out.println(jhAppApiExecution.getUseLabelList());
+        System.out.println(JsonUtil.objectToString(jhAppApiExecution.getUseLabelList()));
     }
 }

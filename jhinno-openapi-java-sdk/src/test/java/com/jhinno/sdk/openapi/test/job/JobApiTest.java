@@ -26,7 +26,7 @@ public class JobApiTest {
     @Test
     public void testSubmitJob() {
         Map<String, Object> params = new HashMap<>();
-        params.put("JH_CAS", "$HOME/test.sh");
+        params.put("JH_CAS", "$HOME/test1.sh");
         params.put("JH_NCPU", "1");
         params.put("JH_JOB_CONF", "public");
         System.out.println(execution.submit("yanlongqi", "common_sub", params));

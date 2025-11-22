@@ -3,6 +3,7 @@ package com.jhinno.sdk.openapi.utils;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.jhinno.sdk.openapi.CommonConstant;
 import lombok.SneakyThrows;
 import org.apache.commons.lang3.StringUtils;
@@ -19,6 +20,7 @@ public class JsonUtil {
         OBJECT_MAPPER.setTimeZone(TimeZone.getTimeZone("GMT+8"));
         OBJECT_MAPPER.setDateFormat(new SimpleDateFormat(CommonConstant.NORM_DATETIME_PATTERN));
         OBJECT_MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        OBJECT_MAPPER.enable(SerializationFeature.INDENT_OUTPUT);
     }
 
     @SneakyThrows
