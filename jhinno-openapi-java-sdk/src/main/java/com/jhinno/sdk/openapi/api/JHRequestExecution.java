@@ -142,35 +142,56 @@ public class JHRequestExecution {
         if (StringUtils.isBlank(username)) {
             throw new ArgsException("用户名称不能为空！");
         }
-        TokenInfo tokenInfo = TOKEN_INFO_MAP.get(username);
 
         // 防止因为服务器时间的问题二导致token不可用，可以通过此配置提前获取token
         int tokenEffectiveTime = (tokenTimeout - tokenResidueTime) * 60 * 1000;
 
-        // 如果是强制获取用户令牌为空、用户令牌不存在、用户令牌过期等，则获取令牌
-        boolean isGetToken = isForceGetToken || tokenInfo == null || System.currentTimeMillis() - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime;
-        if (isGetToken) {
-            Map<String, Object> params = new HashMap<>(2);
-            params.put("timeout", tokenTimeout);
-            String currentTimeMillis = getCurrentTimeMillis();
-            String beforeEncryption = String.format(CommonConstant.TokenUserFormat, username, currentTimeMillis);
-            try {
-                SecretKeySpec secretKey = new SecretKeySpec(
-                        CommonConstant.DEFAULT_AES_KEY.getBytes(StandardCharsets.UTF_8), CommonConstant.AES_ALGORITHM);
-                Cipher cipher = Cipher.getInstance(CommonConstant.AES_ECB_PADDING);
-                cipher.init(Cipher.ENCRYPT_MODE, secretKey);
-                byte[] encryptBytes = cipher.doFinal(beforeEncryption.getBytes(StandardCharsets.UTF_8));
-                params.put("username", Base64.getEncoder().encodeToString(encryptBytes));
-            } catch (Exception e) {
-                throw new ClientException("AES加密失败，失败原因：" + e.getMessage(), e);
+        // 使用computeIfAbsent确保原子性操作，避免重复获取token
+        TokenInfo tokenInfo = TOKEN_INFO_MAP.computeIfAbsent(username, this::createNewTokenInfo);
+
+        // 检查token是否过期，如果过期则创建新token
+        long currentTime = System.currentTimeMillis();
+        if (isForceGetToken || currentTime - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime) {
+            synchronized (this) {
+                // 双重检查锁定，确保在同步块中再次检查
+                tokenInfo = TOKEN_INFO_MAP.get(username);
+                if (tokenInfo == null || currentTime - tokenInfo.getCurrentTimestamp() > tokenEffectiveTime || isForceGetToken) {
+                    tokenInfo = createNewTokenInfo(username);
+                    TOKEN_INFO_MAP.put(username, tokenInfo);
+                }
             }
-            tokenInfo = new TokenInfo();
-            tokenInfo.setUserName(username);
-            tokenInfo.setToken(requestToken(params));
-            tokenInfo.setCurrentTimestamp(System.currentTimeMillis());
-            TOKEN_INFO_MAP.put(username, tokenInfo);
         }
+
         return tokenInfo.getToken();
+    }
+
+    /**
+     * 创建新的TokenInfo
+     *
+     * @param username 用户名
+     * @return 新的TokenInfo
+     */
+    private TokenInfo createNewTokenInfo(String username) {
+        Map<String, Object> params = new HashMap<>(2);
+        params.put("timeout", tokenTimeout);
+        String currentTimeMillis = getCurrentTimeMillis();
+        String beforeEncryption = String.format(CommonConstant.TokenUserFormat, username, currentTimeMillis);
+        try {
+            SecretKeySpec secretKey = new SecretKeySpec(
+                    CommonConstant.DEFAULT_AES_KEY.getBytes(StandardCharsets.UTF_8), CommonConstant.AES_ALGORITHM);
+            Cipher cipher = Cipher.getInstance(CommonConstant.AES_ECB_PADDING);
+            cipher.init(Cipher.ENCRYPT_MODE, secretKey);
+            byte[] encryptBytes = cipher.doFinal(beforeEncryption.getBytes(StandardCharsets.UTF_8));
+            params.put("username", Base64.getEncoder().encodeToString(encryptBytes));
+        } catch (Exception e) {
+            throw new ClientException("AES加密失败，失败原因：" + e.getMessage(), e);
+        }
+
+        TokenInfo tokenInfo = new TokenInfo();
+        tokenInfo.setUserName(username);
+        tokenInfo.setToken(requestToken(params));
+        tokenInfo.setCurrentTimestamp(System.currentTimeMillis());
+        return tokenInfo;
     }
 
     /**

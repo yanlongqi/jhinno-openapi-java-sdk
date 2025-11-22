@@ -26,6 +26,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.util.EntityUtils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -146,7 +147,9 @@ public class JHApiHttpClientImpl implements JHApiHttpClient {
         try {
             HttpResponse response = closeableHttpClient.execute(httpRequest);
             int statusCode = response.getStatusLine().getStatusCode();
-            if (response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            if (statusCode != HttpStatus.SC_OK) {
+                // 确保响应实体被完全消费以释放连接
+                EntityUtils.consume(response.getEntity());
                 httpRequest.releaseConnection();
                 throw new ClientException("发送HTTP请求失败，请求码：" + statusCode, ClientErrorCode.REQUEST_ERROR);
             }

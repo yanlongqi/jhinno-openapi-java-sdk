@@ -87,8 +87,7 @@ public class JHApiClient {
         if (StringUtils.isBlank(path)) {
             throw new ArgsException("url不能为空");
         }
-        try {
-            InputStream content = apiHttpClient.get(getUrl(path), headers);
+        try (InputStream content = apiHttpClient.get(getUrl(path), headers)) {
             return mapper.readValue(content, type);
         } catch (IOException e) {
             throw new ClientException(e.getMessage(), e);
@@ -179,8 +178,9 @@ public class JHApiClient {
             if (body != null) {
                 bodyStr = mapper.writeValueAsString(body);
             }
-            InputStream content = apiHttpClient.post(getUrl(path), bodyStr, headers);
-            return mapper.readValue(content, type);
+            try (InputStream content = apiHttpClient.post(getUrl(path), bodyStr, headers)) {
+                return mapper.readValue(content, type);
+            }
         } catch (IOException e) {
             throw new ClientException(e.getMessage(), e);
         }
@@ -208,8 +208,9 @@ public class JHApiClient {
             if (body != null) {
                 bodyStr = mapper.writeValueAsString(body);
             }
-            InputStream content = apiHttpClient.put(getUrl(path), bodyStr, headers);
-            return mapper.readValue(content, type);
+            try (InputStream content = apiHttpClient.put(getUrl(path), bodyStr, headers)) {
+                return mapper.readValue(content, type);
+            }
         } catch (IOException e) {
             throw new ClientException(e.getMessage(), e);
         }
@@ -272,8 +273,7 @@ public class JHApiClient {
         if (StringUtils.isBlank(path)) {
             throw new ArgsException("path不能为空");
         }
-        try {
-            InputStream content = apiHttpClient.delete(getUrl(path), headers);
+        try (InputStream content = apiHttpClient.delete(getUrl(path), headers)) {
             return mapper.readValue(content, type);
         } catch (IOException e) {
             throw new ClientException(e.getMessage(), e);
@@ -314,8 +314,9 @@ public class JHApiClient {
             throw new ArgsException("path不能为空");
         }
         try {
-            InputStream content = apiHttpClient.upload(getUrl(path), keyName, fileName, is, body, headers);
-            return mapper.readValue(content, type);
+            try (InputStream content = apiHttpClient.upload(getUrl(path), keyName, fileName, is, body, headers)) {
+                return mapper.readValue(content, type);
+            }
         } catch (IOException e) {
             throw new ClientException(e.getMessage(), e);
         }
