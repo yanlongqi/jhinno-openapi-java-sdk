@@ -15,13 +15,13 @@ public class JHClientConfig {
     public static final JHApiRequestHandler REQUEST_HANDLER = new JHApiRequestHandler() {
         @Override
         public String getCurrentUserName() {
-            return "yanlongqi";
+            return "lqyan";
         }
     };
 
-    public static final String APPFORM_SERVER_URL = "https://172.20.0.200";
-    public static final String ACCESS_KEY = "8147c7470bfd4a27952fe750c6bc7cef";
-    public static final String ACCESS_KEY_SECRET = "899b13f590394c3daafc6468fed4b1df";
+    public static final String APPFORM_SERVER_URL = "https://192.168.41.12";
+    public static final String ACCESS_KEY = "74e02e60d47343299e4c130ea4a7685d";
+    public static final String ACCESS_KEY_SECRET = "91ff101a1f7542dfb00049c39b4e8995";
 
 
     /**

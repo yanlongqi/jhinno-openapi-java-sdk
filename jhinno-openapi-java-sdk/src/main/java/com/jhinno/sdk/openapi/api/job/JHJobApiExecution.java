@@ -96,7 +96,7 @@ public class JHJobApiExecution extends JHApiExecutionAbstract {
             params.put("status", status.getStatus());
         }
         if (CollectionUtil.isNotEmpty(condition)) {
-            params.put("condition", JsonUtil.objectToString(params));
+            params.put("condition", JsonUtil.objectToString(condition));
         }
         String path = JHApiClient.getUrl(JobPathConstant.JOB_PAGE_PATH, params);
         return execution.get(path, username, new TypeReference<ResponseResult<PageJobInfo>>() {

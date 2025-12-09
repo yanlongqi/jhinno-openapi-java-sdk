@@ -4,10 +4,8 @@ import com.jhinno.sdk.openapi.api.job.*;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 作业相关测试类
@@ -39,12 +37,35 @@ public class JobApiTest {
         System.out.println(execution.getJobFilesById("jhadmin", "42"));
     }
 
+
+    public Map<String, Object> getCondition(List<String> ids) {
+        List<Map<String, Object>> filterItem = ids.stream().map(t -> {
+            Map<String, Object> filterEnum = new HashMap<>();
+            filterEnum.put("field", "id");
+            filterEnum.put("operator", "eq");
+            filterEnum.put("ignoreCase", true);
+            filterEnum.put("value", t);
+            filterEnum.put("type", "string");
+            return filterEnum;
+        }).collect(Collectors.toList());
+
+        Map<String, Object> filters = new HashMap<>();
+        filters.put("type", "enum");
+        filters.put("operator", "contains");
+        filters.put("ignoreCase", true);
+        filters.put("logic", "or");
+        filters.put("field", "id");
+        filters.put("filters", filterItem);
+        return filters;
+    }
+
     /**
      * 测试分页查询作业列表
      */
     @Test
     public void testGetJobPage() {
-        PageJobInfo pages = execution.getJobPage("jhadmin", 1, 5, null, JobStatusEnum.DONE, null);
+        List<String> ids = Arrays.asList("192", "187");
+        PageJobInfo pages = execution.getJobPage("lqyan", 1, 5, null, (JobStatusEnum) null, getCondition(ids));
         System.out.println(pages);
     }
 
