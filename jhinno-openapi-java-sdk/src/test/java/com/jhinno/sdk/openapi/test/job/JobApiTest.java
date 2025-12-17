@@ -2,6 +2,7 @@ package com.jhinno.sdk.openapi.test.job;
 
 import com.jhinno.sdk.openapi.api.job.*;
 import com.jhinno.sdk.openapi.test.JHClientConfig;
+import com.jhinno.sdk.openapi.utils.JsonUtil;
 import org.junit.Test;
 
 import java.util.*;
@@ -107,7 +108,7 @@ public class JobApiTest {
      */
     @Test
     public void testGetJobsByIds() {
-        System.out.println(execution.getJobsByIds("jhadmin", Arrays.asList("42", "41")));
+        System.out.println(JsonUtil.objectToString(execution.getJobsByIds("jhadmin", Arrays.asList("1591", "162"))));
     }
 
     /**
